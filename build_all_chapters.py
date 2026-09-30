@@ -310,6 +310,7 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
     in_skip_region = False
     skip_until_h4 = False
     skip_until_h5 = False
+    skip_inline_until_heading = False  # 用于跳过"核心要义凝练""思考与练习"等内嵌脚手架区域
     in_正文 = False
 
     # 英文副标题（通常在H3后面的第一个H5或H6中）
@@ -320,7 +321,7 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         e = elements[i]
 
         if e['type'] == 'table':
-            if not in_skip_region and in_正文:
+            if not in_skip_region and not skip_inline_until_heading and in_正文:
                 blocks.append({'type': 'table', 'rows': e['rows']})
             i += 1
             continue
@@ -333,9 +334,20 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         style = e['style']
         images = e.get('images', [])
 
+        # 检测内嵌脚手架区域开始（"核心要义凝练"、"思考与练习"等）
+        if style not in ('4', '5', '6') and not in_skip_region:
+            stripped_text = text.strip()
+            if (stripped_text.startswith('核心要义凝练') or
+                stripped_text.startswith('思考与练习') or
+                stripped_text.startswith('章节小节')):
+                skip_inline_until_heading = True
+                i += 1
+                continue
+
         # 检测标题级别
         if style == '4':
-            # H4 级别
+            # H4 级别 → 结束内嵌跳过
+            skip_inline_until_heading = False
             if should_skip_region(text, '4'):
                 in_skip_region = True
                 skip_until_h4 = True
@@ -360,6 +372,8 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
                 continue
 
         if style == '5':
+            # H5 级别 → 结束内嵌跳过
+            skip_inline_until_heading = False
             if not in_skip_region:
                 # 检查是否为需要跳过的H5区域
                 if should_skip_region(text, '5'):
@@ -380,6 +394,8 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
             continue
 
         if style == '6':
+            # H6 级别 → 结束内嵌跳过
+            skip_inline_until_heading = False
             if not in_skip_region and not skip_until_h5 and in_正文:
                 # 脚手架标题不输出
                 if _is_scaffold_heading(text):
@@ -392,7 +408,7 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
             continue
 
         # 非标题段落
-        if in_skip_region or skip_until_h4 or skip_until_h5:
+        if in_skip_region or skip_until_h4 or skip_until_h5 or skip_inline_until_heading:
             # 检查是否遇到了新的非跳过标题
             if style in ('4', '5') and not should_skip_region(text, style):
                 in_skip_region = False
