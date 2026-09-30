@@ -6,9 +6,15 @@ def extract_docx(filepath):
         with z.open('word/document.xml') as f:
             tree = ET.parse(f); root = tree.getroot()
         elements = []
+        # First pass: collect all elements inside tables to skip their paragraphs
+        table_elem_ids = set()
+        for tbl in root.iter('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}tbl'):
+            for child in tbl.iter():
+                table_elem_ids.add(id(child))
         for elem in root.iter():
             tag = elem.tag.split('}')[-1] if '}' in elem.tag else elem.tag
             if tag == 'p':
+                if id(elem) in table_elem_ids: continue
                 ps = elem.find('.//{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pStyle')
                 style = ps.get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val','') if ps is not None else ''
                 texts = [t.text for t in elem.iter('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}t') if t.text]
@@ -232,7 +238,7 @@ def generate_html(ch_num, lec_html, quiz_html, toc_headings):
     nav_parts = []
     for i in range(1,7):
         cls = ' class="active"' if i==ch_num else ''
-        nav_parts.append('<a href="ch'+str(i)+'.html'+cls+'">第'+str(i)+'章</a>')
+        nav_parts.append('<a'+cls+' href="ch'+str(i)+'.html">第'+str(i)+'章</a>')
     nav_links = '\n    '.join(nav_parts)
     prev_h = 'ch'+str(ch_num-1)+'.html' if ch_num>1 else 'javascript:void(0)'
     nxt_h = 'ch'+str(ch_num+1)+'.html' if ch_num<6 else 'javascript:void(0)'
@@ -246,7 +252,7 @@ def generate_html(ch_num, lec_html, quiz_html, toc_headings):
     html += '<link rel="stylesheet" href="style.css">\n</head>\n<body>\n'
     html += '<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>\n'
     html += '<nav class="nav">\n'
-    html += '  <div class="nav-brand" onclick="location.href=\'index.html\'"><div class="nav-logo">ACEpporesso</div><div class="nav-sub">ACE-CPT 系统精读</div></div>\n'
+    html += '  <div class="nav-brand" onclick="location.href=\'index.html\'"><div class="nav-logo">ACEpresso</div><div class="nav-sub">ACE-CPT 系统精读</div></div>\n'
     html += '  <div class="nav-links">'+nav_links+'</div>\n'
     html += '  <div class="nav-actions"><button class="dark-toggle" id="darkToggle">🌙</button><button class="print-btn" onclick="window.print()">🖨️</button></div>\n'
     html += '</nav>\n'
