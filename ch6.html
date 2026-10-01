@@ -318,6 +318,49 @@ tbody tr:hover { background: var(--accent-light); }
   .subsection-heading { font-size: 18px; }
 }
 
+/* 自测判断题区 */
+.quiz-section { padding: 16px 0; }
+.quiz-header h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.quiz-header .quiz-instruction {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}
+.quiz-item {
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}
+.quiz-q { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+.quiz-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.quiz-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.quiz-tip { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+.quiz-wrong { background: #fce4ec; color: #c62828; border-color: #e53935; }
+.quiz-right { background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }
+.quiz-warn { background: #fff8e1; color: #e65100; border-color: #ff8f00; }
+.quiz-scene { background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }
+.quiz-answer {
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}
+.quiz-answer summary {
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}
+.quiz-answer p { margin-top: 6px; }
+[data-theme="dark"] .quiz-tip { background: #1b3a1b; }
+[data-theme="dark"] .quiz-wrong { background: #3a1b1b; }
+[data-theme="dark"] .quiz-right { background: #1b2a3a; }
+[data-theme="dark"] .quiz-warn { background: #3a2a1b; }
+[data-theme="dark"] .quiz-scene { background: #2a1b3a; }
+[data-theme="dark"] .quiz-item { background: var(--surface); }
+
 /* 打印 */
 @media print {
   .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox { display: none !important; }
@@ -1991,7 +2034,11 @@ tbody tr:hover { background: var(--accent-light); }
     </div>
 
     <div id="tab-quiz" class="tab-content">
-      <div class="placeholder">本章自测题目已移除。</div>
+      <div class="quiz-section">
+<div class="quiz-header"><h2>自测练习</h2>
+<p class="quiz-instruction">以下题目基于本章知识要点，点击展开参考答案。</p></div>
+<p style="color:var(--text-secondary);font-size:14px;text-align:center;padding:20px 0;">本章自测题目整理中，敬请期待。</p>
+</div>
     </div>
 
     <div id="tab-sop" class="tab-content">
