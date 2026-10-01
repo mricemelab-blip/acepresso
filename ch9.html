@@ -385,6 +385,154 @@ tbody tr:hover { background: var(--accent-light); }
 }
 .knowledge-overview[open] summary { margin-bottom: 20px; }
 .knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
+
+/* Flip Cards */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -482,6 +630,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -913,12 +1062,202 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>包含全方位力量和稳定性训练可降低非接触性韧带损伤风险。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确包含全方位力量和稳定性训练可降低非接触性损伤风险。</p></details></div>
 </div>
 </div>
-<div class="tab-content" id="tab-sop">
-<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 12 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/12</span>
 </div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="冈上肌、冈下肌、小圆肌、肩胛下肌（SITS）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">肩袖肌群包括哪四块肌肉？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">冈上肌、冈下肌、小圆肌、肩胛下肌（SITS）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="肩关节疼痛（尤其是外展60-120°弧）、前屈疼痛、夜间疼痛、手臂上举受限。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">肩峰下撞击综合征的常见症状是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">肩关节疼痛（尤其是外展60-120°弧）、前屈疼痛、夜间疼痛、手臂上举受限。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免过头投掷动作、大重量推举（超过90°外展）、手臂极度外旋的动作。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">肩关节不稳客户应避免哪些运动？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免过头投掷动作、大重量推举（超过90°外展）、手臂极度外旋的动作。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="核心稳定性训练（如McGill三大练习）、避免腰椎过度屈曲/旋转/侧屈、逐步恢复日常活动。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">下背痛客户的运动建议是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">核心稳定性训练（如McGill三大练习）、避免腰椎过度屈曲/旋转/侧屈、逐步恢复日常活动。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①急性期（控制肿胀、恢复活动度）②肌力恢复期（股四头肌和腘绳肌强化）③功能训练期（本体感觉、敏捷性）④回归运动期。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">前交叉韧带（ACL）重建术后的康复阶段有哪些？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①急性期（控制肿胀、恢复活动度）②肌力恢复期（股四头肌和腘绳肌强化）③功能训练期（本体感觉、敏捷性）④回归运动期。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="腘绳肌移植物：避免早期大阻力屈膝练习；髌腱移植物：注意膝前疼痛，避免深度膝屈曲抗阻训练。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">ACL重建术后，腘绳肌和髌腱移植物在训练上有何差异？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">腘绳肌移植物：避免早期大阻力屈膝练习；髌腱移植物：注意膝前疼痛，避免深度膝屈曲抗阻训练。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="肘关节外侧疼痛，尤其在握拳、拧毛巾、提物时加重。成因：前臂伸肌（尤其桡侧腕短伸肌）反复过度使用导致的肌腱退变。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">网球肘（肱骨外上髁炎）的典型症状和成因是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">肘关节外侧疼痛，尤其在握拳、拧毛巾、提物时加重。成因：前臂伸肌（尤其桡侧腕短伸肌）反复过度使用导致的肌腱退变。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="高尔夫球肘疼痛位于肘关节内侧（肱骨内上髁），涉及前臂屈肌群。网球肘疼痛位于外侧，涉及前臂伸肌群。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">高尔夫球肘（肱骨内上髁炎）与网球肘有何不同？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">高尔夫球肘疼痛位于肘关节内侧（肱骨内上髁），涉及前臂屈肌群。网球肘疼痛位于外侧，涉及前臂伸肌群。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="股四头肌无力（尤其VMO）、髌骨追踪不良、下肢力线异常（膝外翻）、训练量过大、肌肉柔韧性不足。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">髌股关节疼痛综合征（PFPS）的常见原因是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">股四头肌无力（尤其VMO）、髌骨追踪不良、下肢力线异常（膝外翻）、训练量过大、肌肉柔韧性不足。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免深蹲超过90°、大幅弓箭步、跳跃落地时膝外翻的动作、长距离下坡跑。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">PFPS客户应避免哪些训练动作？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免深蹲超过90°、大幅弓箭步、跳跃落地时膝外翻的动作、长距离下坡跑。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="距腓前韧带（ATFL），约占外侧踝扭伤的85%。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">踝关节扭伤最常见于哪个韧带？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">距腓前韧带（ATFL），约占外侧踝扭伤的85%。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="4个：盂肱关节、肩锁关节、胸锁关节、肩胛胸廓连接。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">肩关节复合体有多少个关节/连接？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">4个：盂肱关节、肩锁关节、胸锁关节、肩胛胸廓连接。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
+<div class="tab-content" id="tab-sop"><h4>损伤客户安全训练清单</h4><ol class="sop-list">
+<li>了解客户损伤史和当前状态</li>
+<li>获取医生/物理治疗师的运动许可和限制</li>
+<li>肩部损伤：
+    <ul>
+<li>避免过头大重量推举</li>
+<li>强化肩袖肌群和肩胛稳定肌</li>
+<li>注意肩峰下撞击的体征</li>
+</ul>
+</li>
+<li>下背痛：
+    <ul>
+<li>核心稳定性训练（McGill三大练习）</li>
+<li>避免腰椎过度屈曲/旋转/侧屈</li>
+<li>逐步恢复日常活动</li>
+</ul>
+</li>
+<li>ACL重建术后：
+    <ul>
+<li>遵循康复阶段protocol</li>
+<li>注意移植物类型的训练差异</li>
+</ul>
+</li>
+<li>膝部问题（PFPS）：
+    <ul>
+<li>避免深蹲&gt;90°和膝外翻</li>
+<li>强化股四头肌（尤其VMO）</li>
+</ul>
+</li>
+<li>踝关节：
+    <ul>
+<li>注意ATFL损伤史</li>
+<li>加强本体感觉训练</li>
+</ul>
+</li>
+<li>记录训练中的疼痛评分（0-10）</li>
+<li>疼痛&gt;3分立即调整或停止</li>
+</ol></div>
 <div class="chapter-nav">
 <a class="prev" href="ch8.html">← 上一章</a>
-
 </div>
 </main>
 </div>
@@ -979,6 +1318,29 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+// Flip card logic
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>

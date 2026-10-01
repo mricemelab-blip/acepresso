@@ -328,6 +328,154 @@ tbody tr:hover { background: var(--accent-light); }
   table { break-inside: avoid; }
   .img-figure img { max-width: 80%; }
 }
+
+/* Flip Cards */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -380,6 +528,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -869,9 +1018,210 @@ tbody tr:hover { background: var(--accent-light); }
 </div>
 </div>
 </div>
-<div class="tab-content" id="tab-sop">
-<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 15 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/15</span>
 </div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="生理、智力、情感、精神、社交、环境六个维度，彼此相互影响。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">健康行为的六个维度是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">生理、智力、情感、精神、社交、环境六个维度，彼此相互影响。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="变化前→变化中→行动→维持→终止（或复发），客户可能在不同阶段反复。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">阶段式变化模型（Prochaska）的五个阶段是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">变化前→变化中→行动→维持→终止（或复发），客户可能在不同阶段反复。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="个体对自己完成特定任务能力的信念。自我效能高的人更愿意面对挑战并坚持下去。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">自我效能是什么？它在行为改变中的作用是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">个体对自己完成特定任务能力的信念。自我效能高的人更愿意面对挑战并坚持下去。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①成功体验（最强来源）②替代体验 ③言语劝导 ④情绪和生理状态。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">自我效能的四个来源是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①成功体验（最强来源）②替代体验 ③言语劝导 ④情绪和生理状态。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="内在动机来自活动本身的满足感和愉悦；外在动机来自外部奖励（如金钱、表扬）。内在动机更有利于长期行为维持。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">内在动机和外在动机的区别是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">内在动机来自活动本身的满足感和愉悦；外在动机来自外部奖励（如金钱、表扬）。内在动机更有利于长期行为维持。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="识别并移除引发不良行为的环境线索，同时增加促进健康行为的线索（如在家放置水果、移除零食）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">如何应用控制刺激法帮助客户改变行为？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">识别并移除引发不良行为的环境线索，同时增加促进健康行为的线索（如在家放置水果、移除零食）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="复发是正常现象，不是失败。应将复发视为学习机会，调整计划后继续前进。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">行为改变中的“复发”应该如何看待？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">复发是正常现象，不是失败。应将复发视为学习机会，调整计划后继续前进。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="引导客户加入团体运动、邀请家人朋友参与、寻找行为改变伙伴、加入在线社区。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">如何帮助客户建立有效的外部支持系统？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">引导客户加入团体运动、邀请家人朋友参与、寻找行为改变伙伴、加入在线社区。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="S=具体 M=可测量 A=可实现 R=现实 T=有时限。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">SMART目标的具体含义是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">S=具体 M=可测量 A=可实现 R=现实 T=有时限。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="列出改变的利弊和不改变的利弊，帮助客户清晰看到改变的价值。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">决策平衡表如何帮助客户做出行为改变决策？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">列出改变的利弊和不改变的利弊，帮助客户清晰看到改变的价值。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①建立良好的人际关系 ②使用动机性访谈 ③帮助客户养成运动习惯 ④提高客户自我效能 ⑤使用多种训练方法。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">哪些策略可以有效降低客户流失率？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①建立良好的人际关系 ②使用动机性访谈 ③帮助客户养成运动习惯 ④提高客户自我效能 ⑤使用多种训练方法。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="表达共情、发展不一致、避免争辩、顺应阻抗、支持自我效能，通过引导客户自己发现改变理由来激发动机。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">动机性访谈（MI）的核心技术是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">表达共情、发展不一致、避免争辩、顺应阻抗、支持自我效能，通过引导客户自己发现改变理由来激发动机。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="一份明确具体行动计划的书面协议，包含做什么、何时、多少频率、多长时间。作用：提供清晰路线图、明确承诺、便于追踪进度。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q13</span>
+<span class="fc-question">行为契约（Behavioral Contract）是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">一份明确具体行动计划的书面协议，包含做什么、何时、多少频率、多长时间。作用：提供清晰路线图、明确承诺、便于追踪进度。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="在特定情境中反复执行某一行为，当该行为变得自动、几乎不需要意识努力时，习惯就形成了。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q14</span>
+<span class="fc-question">习惯如何形成？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">在特定情境中反复执行某一行为，当该行为变得自动、几乎不需要意识努力时，习惯就形成了。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="帮助客户制定“如果出现X情况，那么我就执行Y锻炼行为”的具体计划，将情境与行动绑定以提高执行率。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q15</span>
+<span class="fc-question">如何运用“如果-那么”计划帮助客户坚持锻炼？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">帮助客户制定“如果出现X情况，那么我就执行Y锻炼行为”的具体计划，将情境与行动绑定以提高执行率。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
+<div class="tab-content" id="tab-sop"><h4>行为改变教练操作清单</h4><ol class="sop-list">
+<li>评估客户处于变化模型的哪个阶段（前/中/行动/维持）</li>
+<li>使用动机性访谈（MI）激发内在动机</li>
+<li>帮助客户设定 SMART 目标</li>
+<li>建立行为契约（书面协议：做什么/何时/频率/时长）</li>
+<li>运用"如果-那么"计划（Implementation Intention）</li>
+<li>使用控制刺激法（移除不良线索，增加健康线索）</li>
+<li>帮助客户建立外部支持系统（团体/伙伴/社区）</li>
+<li>使用决策平衡表帮助客户看清利弊</li>
+<li>通过成功体验提升自我效能</li>
+<li>正确看待复发：视为学习机会而非失败</li>
+</ol></div>
 <div class="chapter-nav">
 <a class="prev" href="ch1.html">← 上一章</a>
 <a class="next" href="ch3.html">下一章 →</a>
@@ -935,6 +1285,29 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+// Flip card logic
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>

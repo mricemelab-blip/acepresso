@@ -328,6 +328,154 @@ tbody tr:hover { background: var(--accent-light); }
   table { break-inside: avoid; }
   .img-figure img { max-width: 80%; }
 }
+
+/* Flip Cards */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -429,6 +577,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -1240,9 +1389,174 @@ tbody tr:hover { background: var(--accent-light); }
 </div>
 </div>
 </div>
-<div class="tab-content" id="tab-sop">
-<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 12 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/12</span>
 </div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="FITT原则：频率（Frequency）、强度（Intensity）、时间（Time）、方式（Type/Mode）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">心肺训练处方的四个关键组成部分是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">FITT原则：频率（Frequency）、强度（Intensity）、时间（Time）、方式（Type/Mode）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="靶心率 = (最大心率 - 静息心率) × 强度% + 静息心率，其中最大心率通常用 220 - 年龄估算。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">最大心率储备百分比法（%HRR）的计算公式是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">靶心率 = (最大心率 - 静息心率) × 强度% + 静息心率，其中最大心率通常用 220 - 年龄估算。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="测量桡动脉或颈动脉搏动，在早晨醒来后平躺状态下测量，计数30秒脉搏×2。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">静息心率（RHR）应如何准确测量？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">测量桡动脉或颈动脉搏动，在早晨醒来后平躺状态下测量，计数30秒脉搏×2。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="RPE（自觉用力程度量表）是主观评估运动强度的工具。6-20量表或0-10 CR10量表，用于验证心率数据与主观感受是否匹配。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">什么是RPE？它如何用于运动强度监控？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">RPE（自觉用力程度量表）是主观评估运动强度的工具。6-20量表或0-10 CR10量表，用于验证心率数据与主观感受是否匹配。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="确定运动时应维持的心率范围，确保训练强度既安全又有效。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">靶心率（THR）的作用是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">确定运动时应维持的心率范围，确保训练强度既安全又有效。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="%HRR、%VO2R、%VO2max、RPE自觉用力程度、谈话测试。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">心肺训练处方的强度可以用哪些方式确定？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">%HRR、%VO2R、%VO2max、RPE自觉用力程度、谈话测试。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="ACSM建议每次至少30分钟中等强度，或20分钟高强度；可连续或分次（每次至少10分钟）累计。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">心肺训练的时间应如何安排？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">ACSM建议每次至少30分钟中等强度，或20分钟高强度；可连续或分次（每次至少10分钟）累计。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="ACSM建议：中等强度≥5天/周，高强度≥3天/周，中等+高强度混合3-5天/周。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">心肺训练的频率建议是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">ACSM建议：中等强度≥5天/周，高强度≥3天/周，中等+高强度混合3-5天/周。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="从低强度开始（40-50% HRR），每次10-15分钟，逐步增加到30分钟，频率3-5天/周，选择低冲击方式（步行、固定自行车）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">如何根据FITT-VP原则为久坐客户设计初始运动处方？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">从低强度开始（40-50% HRR），每次10-15分钟，逐步增加到30分钟，频率3-5天/周，选择低冲击方式（步行、固定自行车）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="传统公式：220 - 年龄；Tanaka公式：208 - 0.7 × 年龄（更准确，尤其对老年人）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">最大心率（HRmax）可以通过哪些公式估算？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">传统公式：220 - 年龄；Tanaka公式：208 - 0.7 × 年龄（更准确，尤其对老年人）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="MET是活动时代谢率与静息代谢率的比值。1 MET = 3.5 ml O₂/kg/min = 1 kcal/kg/h。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">什么是代谢当量（MET）？1 MET等于什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">MET是活动时代谢率与静息代谢率的比值。1 MET = 3.5 ml O₂/kg/min = 1 kcal/kg/h。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="收缩压下降&gt;10mmHg、收缩压&gt;250mmHg、舒张压&gt;115mmHg、出现心绞痛、严重心律失常、头晕、面色苍白。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">心肺适能测试的终止指征有哪些？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">收缩压下降&gt;10mmHg、收缩压&gt;250mmHg、舒张压&gt;115mmHg、出现心绞痛、严重心律失常、头晕、面色苍白。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
+<div class="tab-content" id="tab-sop"><h4>心肺训练处方设计清单</h4><ol class="sop-list">
+<li>确定客户心肺训练目标（减脂/耐力/健康维持）</li>
+<li>选择强度指标：%HRR 或 %VO2R 或 RPE</li>
+<li>计算靶心率范围（Karvonen公式）</li>
+<li>确定频率：中等≥5天/周 或 高强度≥3天/周</li>
+<li>确定时间：≥30分钟中等 或 ≥20分钟高强度</li>
+<li>选择方式：考虑客户偏好、关节状况、设备可用性</li>
+<li>制定渐进计划：每1-2周增加不超过10%训练量</li>
+<li>教授自我监控方法（心率监测、RPE、谈话测试）</li>
+<li>记录每次训练的心率、时长、RPE、主观感受</li>
+<li>定期评估并调整处方（每4-6周）</li>
+</ol></div>
 <div class="chapter-nav">
 <a class="prev" href="ch4.html">← 上一章</a>
 <a class="next" href="ch6.html">下一章 →</a>
@@ -1306,6 +1620,29 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+// Flip card logic
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>

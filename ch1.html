@@ -371,6 +371,154 @@ tbody tr:hover { background: var(--accent-light); }
 [data-theme="dark"] .quiz-warn { background: #3a2a1b; }
 [data-theme="dark"] .quiz-scene { background: #2a1b3a; }
 [data-theme="dark"] .quiz-item { background: var(--surface); }
+
+/* Flip Cards */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -423,6 +571,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -837,11 +986,177 @@ tbody tr:hover { background: var(--accent-light); }
 </div>
 </div>
 </div>
-<div class="tab-content" id="tab-sop">
-<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 12 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/12</span>
 </div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="①评估客户健康危险因素；②提供营养知识普及。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">ACE认证中，健康危险评估包括哪两项基本程序？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①评估客户健康危险因素；②提供营养知识普及。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="评估、指导、激励客户，但不提供心理咨询或治疗，不设计矫形方案，不提供按摩治疗，不开具处方，不配餐。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">私人教练的执业范围有怎样的边界？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">评估、指导、激励客户，但不提供心理咨询或治疗，不设计矫形方案，不提供按摩治疗，不开具处方，不配餐。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="提供营养计划、心理治疗、矫形指导、按摩治疗、开处方、配餐、超声诊断、提供药物。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">哪些行为超出私人教练的执业范围？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">提供营养计划、心理治疗、矫形指导、按摩治疗、开处方、配餐、超声诊断、提供药物。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="普及基础营养知识、推荐健康食品、讨论膳食与疾病的关联，但不能提供个性化营养计划。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">私人教练可以为客户做哪些营养方面的指导？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">普及基础营养知识、推荐健康食品、讨论膳食与疾病的关联，但不能提供个性化营养计划。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="有饮食紊乱/抑郁/焦虑的客户需要转介心理/营养专业人士；有慢性疼痛的客户需要转介物理治疗师。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">哪些客户需要在私人教练的执业范围之外获得专业帮助？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">有饮食紊乱/抑郁/焦虑的客户需要转介心理/营养专业人士；有慢性疼痛的客户需要转介物理治疗师。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="筛选可靠的在线资源，引导客户获取经过科学验证的健身信息，抵制误导性说法。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">私人教练如何帮助客户获得可靠的健康和健身信息？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">筛选可靠的在线资源，引导客户获取经过科学验证的健身信息，抵制误导性说法。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="以循证科学为基础，在认证和执业范围内指导客户运动训练和生活方式改善。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">私人教练执业范围的核心边界是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">以循证科学为基础，在认证和执业范围内指导客户运动训练和生活方式改善。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="记录身体成分变化、运动表现进展、训练完成情况，用于客户沟通和训练计划调整。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">私人教练如何客观记录客户的身体变化和训练情况？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">记录身体成分变化、运动表现进展、训练完成情况，用于客户沟通和训练计划调整。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="评估健康危险因素、提供营养知识普及、记录训练数据、运用运动指导技巧、激励客户。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">哪些情况属于私人教练执业范围内的客户服务？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">评估健康危险因素、提供营养知识普及、记录训练数据、运用运动指导技巧、激励客户。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="通过有效沟通、正确示范动作、给予反馈、激励客户达成目标。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">私人教练在执业中应如何运用运动指导技巧？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">通过有效沟通、正确示范动作、给予反馈、激励客户达成目标。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="进行功能性动作评估发现风险、与客户医生沟通确认安全运动、在安全范围内指导训练、转介至物理治疗师。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">私人教练如何合法地参与运动损伤的预防和康复过程？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">进行功能性动作评估发现风险、与客户医生沟通确认安全运动、在安全范围内指导训练、转介至物理治疗师。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="在理疗师许可范围内执行运动训练，辅助客户完成训练计划，记录训练情况，但不得替代理疗师做评估或治疗。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">私人教练如何辅助客户遵从物理治疗师的建议？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">在理疗师许可范围内执行运动训练，辅助客户完成训练计划，记录训练情况，但不得替代理疗师做评估或治疗。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
+<div class="tab-content" id="tab-sop"><h4>私人教练执业边界清单</h4><ol class="sop-list">
+<li><span class="sop-icon">✅</span>评估客户健康危险因素（PAR-Q+、健康史问卷）</li>
+<li><span class="sop-icon">✅</span>提供基础营养知识普及（非个性化饮食方案）</li>
+<li><span class="sop-icon">✅</span>辅助客户遵从理疗师建议（在许可范围内执行训练）</li>
+<li><span class="sop-icon">✅</span>客观记录客户身体变化和训练数据</li>
+<li><span class="sop-icon">✅</span>运用运动指导技巧（示范、反馈、激励）</li>
+<li><span class="sop-icon">❌</span>不得提供心理咨询或治疗</li>
+<li><span class="sop-icon">❌</span>不得设计矫形/康复方案</li>
+<li><span class="sop-icon">❌</span>不得提供按摩治疗</li>
+<li><span class="sop-icon">❌</span>不得开具处方或诊断</li>
+<li><span class="sop-icon">❌</span>不得制定个性化营养/膳食计划</li>
+<li><span class="sop-icon">⚠️</span>饮食紊乱/抑郁/焦虑客户 → 转介专业人士</li>
+<li><span class="sop-icon">⚠️</span>慢性疼痛客户 → 转介物理治疗师</li>
+</ol></div>
 <div class="chapter-nav">
-
 <a class="next" href="ch2.html">下一章 →</a>
 </div>
 </main>
@@ -903,6 +1218,29 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+// Flip card logic
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>

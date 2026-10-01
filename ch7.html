@@ -385,6 +385,154 @@ tbody tr:hover { background: var(--accent-light); }
 }
 .knowledge-overview[open] summary { margin-bottom: 20px; }
 .knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
+
+/* Flip Cards */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -483,6 +631,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -781,9 +930,181 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>PAD患者的间歇步行训练中，'高强度'指的是疼痛强度而非能量消耗。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文解释PAD间歇步行训练中'高强度'在此语境指疼痛强度，非能量消耗。</p></details></div>
 </div>
 </div>
-<div class="tab-content" id="tab-sop">
-<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 12 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/12</span>
 </div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="有氧运动每周≥150分钟中等强度，加入抗阻训练（非大重量），避免瓦尔萨尔瓦动作和头部低于心脏的动作。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">高血压的运动建议是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">有氧运动每周≥150分钟中等强度，加入抗阻训练（非大重量），避免瓦尔萨尔瓦动作和头部低于心脏的动作。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="监测血糖水平，预防低血糖，避免屏气用力，注意足部护理，运动前后检查足部。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">Ⅱ型糖尿病客户运动时应注意什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">监测血糖水平，预防低血糖，避免屏气用力，注意足部护理，运动前后检查足部。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="随身携带急救吸入器，热身至少10-15分钟，避免在寒冷干燥空气中运动，运动后充分放松。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">哮喘客户运动时应注意什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">随身携带急救吸入器，热身至少10-15分钟，避免在寒冷干燥空气中运动，运动后充分放松。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="通常比最大症状限制性测试中达到的心率低10-20次/分钟，或用RPE 11-13（稍用力到稍难）。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">心血管疾病客户的安全运动心率范围如何确定？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">通常比最大症状限制性测试中达到的心率低10-20次/分钟，或用RPE 11-13（稍用力到稍难）。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免加重关节压力的动作，选择低冲击有氧运动，在无痛范围内训练，急性发作期减少运动量。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">关节炎客户运动时应注意什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免加重关节压力的动作，选择低冲击有氧运动，在无痛范围内训练，急性发作期减少运动量。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免脊柱屈曲动作（弯腰触趾）、高冲击运动、躯干大幅扭转、快速爆发性动作，以防压缩性骨折。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">骨质疏松客户应避免哪些运动？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免脊柱屈曲动作（弯腰触趾）、高冲击运动、躯干大幅扭转、快速爆发性动作，以防压缩性骨折。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="可继续孕前运动习惯并适当降低强度，避免仰卧位（孕中期后）、接触性运动、高温高湿环境运动，注意补水。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">妊娠客户的安全运动建议是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">可继续孕前运动习惯并适当降低强度，避免仰卧位（孕中期后）、接触性运动、高温高湿环境运动，注意补水。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免维管化不足的肌肉做离心收缩，注意淋巴水肿风险，从低强度开始逐步增加，监测疲劳水平。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">癌症幸存者运动的注意事项是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免维管化不足的肌肉做离心收缩，注意淋巴水肿风险，从低强度开始逐步增加，监测疲劳水平。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="运动可作为辅助治疗但不能替代专业治疗，选择客户感兴趣的活动，关注动机和自我效能，监测运动反应。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">抑郁症客户运动时应注意什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">运动可作为辅助治疗但不能替代专业治疗，选择客户感兴趣的活动，关注动机和自我效能，监测运动反应。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="避免过热（体温升高会加重症状），选择凉爽环境运动，注意疲劳管理，监测平衡和协调能力。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">多发性硬化症客户运动时应注意什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">避免过热（体温升高会加重症状），选择凉爽环境运动，注意疲劳管理，监测平衡和协调能力。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="关注平衡和协调训练，可能需要辅助器具，从低强度有氧开始，逐步增加抗阻训练，注意监测血压。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">中风幸存者运动的注意事项是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">关注平衡和协调训练，可能需要辅助器具，从低强度有氧开始，逐步增加抗阻训练，注意监测血压。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="注意自主神经反射异常（T6及以上损伤），监测血压，选择适合的有氧方式（手摇车），注意体温调节障碍。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">脊髓损伤客户运动的注意事项是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">注意自主神经反射异常（T6及以上损伤），监测血压，选择适合的有氧方式（手摇车），注意体温调节障碍。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
+<div class="tab-content" id="tab-sop"><h4>慢性病客户安全运动清单</h4><ol class="sop-list">
+<li>获取客户医生许可和运动限制说明</li>
+<li>了解客户用药情况及其对运动的影响</li>
+<li>根据疾病类型调整运动处方：
+    <ul>
+<li><span class="sop-icon">⚠️</span>高血压：避免瓦尔萨尔瓦动作、头部低于心脏</li>
+<li><span class="sop-icon">⚠️</span>糖尿病：监测血糖，预防低血糖，注意足部</li>
+<li><span class="sop-icon">⚠️</span>哮喘：备急救吸入器，充分热身</li>
+<li><span class="sop-icon">⚠️</span>心血管疾病：心率低于测试心率10-20次</li>
+<li><span class="sop-icon">⚠️</span>关节炎：无痛范围内训练，低冲击</li>
+<li><span class="sop-icon">⚠️</span>骨质疏松：避免脊柱屈曲和高冲击</li>
+</ul>
+</li>
+<li>运动前中后监测相关指标</li>
+<li>教会客户识别危险信号并立即停止运动</li>
+<li>调整训练环境（温度、湿度、海拔）</li>
+<li>与客户医疗团队保持沟通</li>
+<li>记录运动反应和不适症状</li>
+</ol></div>
 <div class="chapter-nav">
 <a class="prev" href="ch6.html">← 上一章</a>
 <a class="next" href="ch8.html">下一章 →</a>
@@ -847,6 +1168,29 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+// Flip card logic
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>
