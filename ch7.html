@@ -388,24 +388,29 @@ tbody tr:hover { background: var(--accent-light); }
 
 /* ============ 学习记录面板 ============ */
 
-.record-toggle {
+.record-toggle { {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  width: 52px;
+  min-width: 52px;
   height: 52px;
-  border-radius: 50%;
+  border-radius: 26px;
   background: var(--text);
   color: var(--bg);
-  border: none;
+  border: 2px solid var(--border);
   cursor: pointer;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-  z-index: 200;
-  transition: transform 0.2s;
+  gap: 8px;
+  padding: 0 18px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 9999;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 }
 .record-toggle:hover { transform: scale(1.08); }
 
@@ -549,6 +554,73 @@ tbody tr:hover { background: var(--accent-light); }
   .record-toggle { bottom: 20px; right: 20px; width: 46px; height: 46px; }
   .record-panel { right: 12px; left: 12px; width: auto; bottom: 76px; }
 }
+
+/* ============ 知识翻卡 ============ */
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 8px 0 32px;
+}
+.flipcard {
+  perspective: 1000px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s;
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.flipcard-front { background: var(--surface); }
+.flipcard-back {
+  background: var(--text);
+  color: var(--bg);
+  transform: rotateY(180deg);
+}
+.flipcard-type {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  display: inline-block;
+  margin-bottom: 12px;
+  border: 1px solid;
+  align-self: flex-start;
+}
+.flipcard-type.know { color: #4CAF50; border-color: #4CAF50; }
+.flipcard-type.avoid { color: #D32F2F; border-color: #D32F2F; }
+.flipcard-type.dothis { color: #1565C0; border-color: #1565C0; }
+.flipcard-type.caution { color: #E65100; border-color: #E65100; }
+.flipcard-type.scene { color: #7B1FA2; border-color: #7B1FA2; }
+.flipcard-front .flipcard-text { font-size: 14px; line-height: 1.7; color: var(--text); flex: 1; }
+.flipcard-back .flipcard-text { font-size: 14px; line-height: 1.7; color: var(--bg); flex: 1; }
+.flipcard-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 8px; font-family: var(--font-mono); }
+.flipcard-back .flipcard-hint { color: rgba(255,255,255,0.5); }
+.flipcard-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; font-family: var(--font-sans); }
+.flipcard-count { font-size: 12px; color: var(--text-muted); font-family: var(--font-mono); }
+.flipcard-nav-btn { background: none; border: 1px solid var(--border); color: var(--text); padding: 6px 16px; font-size: 12px; cursor: pointer; font-family: var(--font-mono); letter-spacing: 0.05em; transition: all 0.15s; }
+.flipcard-nav-btn:hover { border-color: var(--text); }
+
 </head>
 <body>
 
@@ -966,7 +1038,7 @@ tbody tr:hover { background: var(--accent-light); }
 
 <!-- 学习记录浮动按钮 -->
 <button class="record-toggle" id="recordToggle" onclick="toggleRecord()">
-  <span class="record-icon">📊</span>
+  <span>学习记录</span>
   <span class="record-badge" id="recordBadge">0</span>
 </button>
 
