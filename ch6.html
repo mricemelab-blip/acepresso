@@ -372,6 +372,152 @@ tbody tr:hover { background: var(--accent-light); }
   .quiz-item { break-inside: avoid; }
   .img-figure img { max-width: 80%; }
 }
+
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
 </style>
 </head>
 <body>
@@ -691,6 +837,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -2074,6 +2221,162 @@ tbody tr:hover { background: var(--accent-light); }
 </div>
 </div>
 </div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 12 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/12</span>
+</div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="渐进超负荷——逐步增加训练量（重量、组数、次数）以持续刺激肌肉适应。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">抗阻训练的基本原则是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">渐进超负荷——逐步增加训练量（重量、组数、次数）以持续刺激肌肉适应。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="充分热身（8-10次→6-8次→2-3次递增组），每组间隔3-5分钟，不超过5次尝试达到1RM。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">1RM测试的注意事项是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">充分热身（8-10次→6-8次→2-3次递增组），每组间隔3-5分钟，不超过5次尝试达到1RM。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="多关节：涉及两个以上关节（深蹲、硬拉、卧推）；单关节：只涉及一个关节（弯举、腿屈伸）。训练应以多关节为主。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">多关节动作和单关节动作的区别是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">多关节：涉及两个以上关节（深蹲、硬拉、卧推）；单关节：只涉及一个关节（弯举、腿屈伸）。训练应以多关节为主。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="先大肌群后小肌群，先多关节后单关节，先高强度后低强度。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">力量训练的训练顺序原则是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">先大肌群后小肌群，先多关节后单关节，先高强度后低强度。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="最大力量：3-5分钟；肌肉肥大：30-90秒；肌肉耐力：<30秒。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">组间休息时间如何根据训练目标调整？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">最大力量：3-5分钟；肌肉肥大：30-90秒；肌肉耐力：<30秒。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="增加重量、增加次数、增加组数、缩短休息时间、增加训练频率、增加动作难度。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">渐进超负荷的常见方法有哪些？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">增加重量、增加次数、增加组数、缩短休息时间、增加训练频率、增加动作难度。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="在动作中力学劣势最大的位置。处理方法：降低重量、在粘性点附近做部分动作训练、加强弱侧肌群。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">什么是“粘性点”（sticking point）？如何处理？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">在动作中力学劣势最大的位置。处理方法：降低重量、在粘性点附近做部分动作训练、加强弱侧肌群。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="自由重量：需要更多稳定肌参与、功能性更强、但技术要求高；固定器械：稳定性好、安全性高、但运动轨迹固定。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">自由重量和固定器械各有什么优缺点？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">自由重量：需要更多稳定肌参与、功能性更强、但技术要求高；固定器械：稳定性好、安全性高、但运动轨迹固定。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="腹直肌、腹横肌、腹内外斜肌、竖脊肌、多裂肌、腰方肌、骨盆底肌。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">核心训练的主要目标肌群有哪些？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">腹直肌、腹横肌、腹内外斜肌、竖脊肌、多裂肌、腰方肌、骨盆底肌。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="适用于有一定训练基础的客户。需先具备足够的基础力量，从低强度开始，注意落地缓冲技术，避免过度训练。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">超等长训练（Plyometrics）的适用人群和注意事项是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">适用于有一定训练基础的客户。需先具备足够的基础力量，从低强度开始，注意落地缓冲技术，避免过度训练。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="8-10个练习覆盖主要肌群，每个练习2-3组×10-15次，每周2-3次，组间休息60-90秒，从轻负荷开始学习动作。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">如何为初学者设计全身训练计划？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">8-10个练习覆盖主要肌群，每个练习2-3组×10-15次，每周2-3次，组间休息60-90秒，从轻负荷开始学习动作。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="发力（向心）时呼气，还原（离心）时吸气。避免瓦尔萨尔瓦动作（屏气用力），尤其是高血压客户。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">抗阻训练中呼吸的基本原则是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">发力（向心）时呼气，还原（离心）时吸气。避免瓦尔萨尔瓦动作（屏气用力），尤其是高血压客户。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
 <div class="tab-content" id="tab-sop"><h4>肌肉训练处方设计清单</h4><ol class="sop-list">
 <li>评估客户力量训练经验和目标</li>
 <li>选择负荷：初学者 60-70% 1RM / 中级 70-80% / 高级 80-100%</li>
@@ -2148,6 +2451,28 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>

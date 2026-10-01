@@ -328,6 +328,152 @@ tbody tr:hover { background: var(--accent-light); }
   table { break-inside: avoid; }
   .img-figure img { max-width: 80%; }
 }
+
+.flipcard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 8px 0;
+}
+.flipcard {
+  perspective: 800px;
+  height: 200px;
+  cursor: pointer;
+}
+.flipcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flipcard.flipped .flipcard-inner {
+  transform: rotateY(180deg);
+}
+.flipcard-front, .flipcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+.flipcard-front {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+.flipcard-front .fc-num {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+.flipcard-front .fc-question {
+  font-size: 14px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.flipcard-front .fc-hint {
+  font-size: 11px;
+  opacity: 0.5;
+  margin-top: 12px;
+}
+.flipcard-back {
+  background: #f8f9fa;
+  color: var(--text-primary, #1a1a2e);
+  border: 2px solid #667eea;
+  transform: rotateY(180deg);
+}
+.flipcard-back .fc-answer {
+  font-size: 13px;
+  line-height: 1.8;
+}
+[data-theme="dark"] .flipcard-back {
+  background: #1e1e2e;
+  color: #e0e0e0;
+}
+[data-theme="dark"] .flipcard-front {
+  background: linear-gradient(135deg, #4a5568 0%, #553c7b 100%);
+}
+.fc-header {
+  margin-bottom: 24px;
+}
+.fc-header h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a2e);
+  margin: 0 0 8px 0;
+}
+.fc-header p {
+  font-size: 14px;
+  color: var(--text-secondary, #666);
+  margin: 0;
+}
+.fc-counter {
+  display: inline-block;
+  background: #667eea;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+.fc-reset-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 8px 20px;
+  background: none;
+  border: 1px solid var(--border, #ddd);
+  border-radius: 6px;
+  color: var(--text-secondary, #666);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.fc-reset-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+.fc-footer {
+  text-align: center;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border, #eee);
+}
+@media (max-width: 600px) {
+  .flipcard-grid { grid-template-columns: 1fr; }
+  .flipcard { height: 220px; }
+}
+@media print {
+  .flipcard { height: auto; perspective: none; }
+  .flipcard-inner { transform: none !important; transform-style: flat; }
+  .flipcard-back { display: none; }
+  .flipcard-front {
+    position: relative;
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    border: 1px solid #ccc;
+  }
+  .flipcard-front::after {
+    content: attr(data-answer);
+    display: block;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #555;
+    font-weight: normal;
+  }
+}
 </style>
 </head>
 <body>
@@ -432,6 +578,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="tabs">
 <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
 <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('flashcards', this)">知识翻卡</button>
 <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
 </div>
 <div class="tab-content active" id="tab-lecture">
@@ -1266,6 +1413,198 @@ tbody tr:hover { background: var(--accent-light); }
 </div>
 </div>
 </div>
+<div class="tab-content" id="tab-flashcards">
+<div class="fc-header">
+<h2>知识翻卡</h2>
+<p>共 15 张知识卡片，点击翻转查看答案</p>
+<span class="fc-counter">已翻转: 0/15</span>
+</div>
+<div class="flipcard-grid">
+<div class="flipcard" data-answer="真诚、共情、尊重、积极倾听、非评判态度。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q1</span>
+<span class="fc-question">建立良好客户关系的核心要素是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">真诚、共情、尊重、积极倾听、非评判态度。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①注视对方 ②适时的语言回应（嗯、对）③身体前倾 ④复述对方观点确认理解。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q2</span>
+<span class="fc-question">积极倾听的四个技巧是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①注视对方 ②适时的语言回应（嗯、对）③身体前倾 ④复述对方观点确认理解。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="面部表情、眼神接触、身体姿态、手势、空间距离、语调语速。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q3</span>
+<span class="fc-question">非语言沟通包括哪些要素？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">面部表情、眼神接触、身体姿态、手势、空间距离、语调语速。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="视觉型：多用图示、示范、视频；听觉型：口头讲解、讨论；动觉型：实际操作、体验式学习。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q4</span>
+<span class="fc-question">如何根据客户的学习风格调整教学方法？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">视觉型：多用图示、示范、视频；听觉型：口头讲解、讨论；动觉型：实际操作、体验式学习。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="正面示范→侧面示范→背面示范，慢速→正常速度，分解→完整。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q5</span>
+<span class="fc-question">动作示范的最佳顺序是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">正面示范→侧面示范→背面示范，慢速→正常速度，分解→完整。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="先肯定做得好的部分→指出需要改进的地方→鼓励再次尝试。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q6</span>
+<span class="fc-question">给予反馈的“三明治法”是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">先肯定做得好的部分→指出需要改进的地方→鼓励再次尝试。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="将长期目标拆解为可量化、可达成的小步骤，每1-2周设定一个里程碑，完成后及时庆祝。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q7</span>
+<span class="fc-question">如何帮助客户设定有效的短期目标？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">将长期目标拆解为可量化、可达成的小步骤，每1-2周设定一个里程碑，完成后及时庆祝。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①表达共情 ②发展不一致感 ③避免争辩 ④顺应阻抗 ⑤支持自我效能。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q8</span>
+<span class="fc-question">动机性访谈的五个核心原则是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①表达共情 ②发展不一致感 ③避免争辩 ④顺应阻抗 ⑤支持自我效能。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="不直接对抗，而是反映式倾听，引导客户自己发现改变的理由，使用“滚动抵抗”技术。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q9</span>
+<span class="fc-question">如何处理客户的抗拒心理？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">不直接对抗，而是反映式倾听，引导客户自己发现改变的理由，使用“滚动抵抗”技术。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="开放式问题（如何、为什么）用于探索客户想法和感受；封闭式问题（是否、多少）用于确认具体信息。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q10</span>
+<span class="fc-question">有效沟通中，开放式问题和封闭式问题分别适用于什么场景？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">开放式问题（如何、为什么）用于探索客户想法和感受；封闭式问题（是否、多少）用于确认具体信息。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="①准备面谈提纲 ②建立融洽关系 ③积极倾听 ④记录关键信息 ⑤总结确认 ⑥制定下一步计划。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q11</span>
+<span class="fc-question">如何进行有效的客户面谈？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">①准备面谈提纲 ②建立融洽关系 ③积极倾听 ④记录关键信息 ⑤总结确认 ⑥制定下一步计划。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="追踪进展、调整计划、展示进步、增强客户信心、发现潜在问题。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q12</span>
+<span class="fc-question">为什么记录每次训练的客户反馈很重要？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">追踪进展、调整计划、展示进步、增强客户信心、发现潜在问题。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="用自己的话复述客户表达的内容和感受，确认理解正确，让客户感到被理解和尊重。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q13</span>
+<span class="fc-question">如何运用“反映式倾听”？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">用自己的话复述客户表达的内容和感受，确认理解正确，让客户感到被理解和尊重。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="先提供充分的支持和指导，随着客户能力提升逐步减少辅助，最终让客户独立完成动作。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q14</span>
+<span class="fc-question">教学中的“脚手架”策略是什么？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">先提供充分的支持和指导，随着客户能力提升逐步减少辅助，最终让客户独立完成动作。</span>
+</div>
+</div>
+</div>
+<div class="flipcard" data-answer="承认和接纳情绪，不否定不评判，引导客户表达，帮助找到情绪的根源，共同探讨应对策略。" onclick="flipCard(this)">
+<div class="flipcard-inner">
+<div class="flipcard-front">
+<span class="fc-num">Q15</span>
+<span class="fc-question">如何处理客户的负面情绪？</span>
+<span class="fc-hint">点击翻转</span>
+</div>
+<div class="flipcard-back">
+<span class="fc-answer">承认和接纳情绪，不否定不评判，引导客户表达，帮助找到情绪的根源，共同探讨应对策略。</span>
+</div>
+</div>
+</div>
+</div>
+<div class="fc-footer">
+<button class="fc-reset-btn" onclick="resetFlipcards(this)">全部复位</button>
+</div>
+</div>
 <div class="tab-content" id="tab-sop"><h4>沟通与教学操作清单</h4><ol class="sop-list">
 <li>首次面谈：建立融洽关系，使用积极倾听</li>
 <li>非语言沟通：保持眼神接触、开放姿态、适当距离</li>
@@ -1339,6 +1678,28 @@ window.addEventListener('scroll', function() {
   tocLinks.forEach(l => l.classList.remove('active'));
   if (current) current.link.classList.add('active');
 });
+
+function flipCard(card) {
+  card.classList.toggle('flipped');
+  updateFlipCounter(card);
+}
+function updateFlipCounter(card) {
+  var container = card.closest('.tab-content');
+  if (!container) return;
+  var all = container.querySelectorAll('.flipcard');
+  var flipped = container.querySelectorAll('.flipcard.flipped');
+  var counter = container.querySelector('.fc-counter');
+  if (counter) counter.textContent = '已翻转: ' + flipped.length + '/' + all.length;
+}
+function resetFlipcards(btn) {
+  var container = btn.closest('.tab-content');
+  if (!container) return;
+  container.querySelectorAll('.flipcard').forEach(function(c) { c.classList.remove('flipped'); });
+  var counter = container.querySelector('.fc-counter');
+  var all = container.querySelectorAll('.flipcard');
+  if (counter) counter.textContent = '已翻转: 0/' + all.length;
+}
+
 </script>
 </body>
 </html>
