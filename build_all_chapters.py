@@ -135,7 +135,7 @@ def find_chapters(elements):
     """找到各章的起止位置"""
     ch_starts = []
     for i, e in enumerate(elements):
-        if e['type'] == 'p' and e['style'] == '3' and re.match(r'^第\d+章', e['text']):
+        if e['type'] == 'p' and e['style'] == '3' and re.match(r'^(?:第\d+章|ACE\s*教材第\d+章)', e['text']):
             ch_starts.append(i)
     ch_starts.append(len(elements))
     return ch_starts
@@ -187,6 +187,10 @@ def classify_paragraph(text):
         remaining = re.sub(r'^记忆提示[：:]\s*', '', stripped).strip()
         if remaining:
             return ('memory', remaining)
+        return ('skip', '')
+
+    # ===== 第五步b：【记忆技巧】 standalone label → skip =====
+    if re.match(r'^【记忆技巧】\s*$', stripped):
         return ('skip', '')
 
     # ===== 第六步：🎯 教练小Tips =====
@@ -304,9 +308,13 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
     # 章节标题
     ch_title = elements[start]['text']
     # 提取章节编号和标题
-    m = re.match(r'^第(\d+)章\s*(.*)', ch_title)
-    ch_num = m.group(1) if m else str(ch_idx + 1)
-    ch_name = m.group(2) if m else ch_title
+    m = re.match(r'^(?:第(\d+)章|ACE\s*教材第(\d+)章)\s*[·\s]*(.*)', ch_title)
+    if m:
+        ch_num = m.group(1) or m.group(2)
+        ch_name = m.group(3).strip() if m.group(3) else ch_title
+    else:
+        ch_num = str(ch_idx + 1)
+        ch_name = ch_title
 
     blocks = []
     in_skip_region = False
@@ -314,6 +322,13 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
     skip_until_h5 = False
     skip_inline_until_heading = False  # 用于跳过"核心要义凝练""思考与练习"等内嵌脚手架区域
     in_正文 = False
+    in_preview = False  # Track "学员预习专用" section for 知识速览
+    next_is_memory = False  # After standalone 【记忆技巧】 label
+    
+    # ACE章节（第7-9章）没有"正文部分"标记，直接进入正文模式
+    is_ace_chapter = ch_title.startswith('ACE')
+    if is_ace_chapter:
+        in_正文 = True
 
     # 英文副标题（通常在H3后面的第一个H5或H6中）
     en_subtitle = ''
@@ -323,7 +338,9 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         e = elements[i]
 
         if e['type'] == 'table':
-            if not in_skip_region and not skip_inline_until_heading and in_正文:
+            if in_preview:
+                blocks.append({'type': 'preview', 'subtype': 'table', 'rows': e['rows']})
+            elif not in_skip_region and not skip_inline_until_heading and in_正文:
                 blocks.append({'type': 'table', 'rows': e['rows']})
             i += 1
             continue
@@ -335,6 +352,23 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         text = e['text']
         style = e['style']
         images = e.get('images', [])
+
+        # === Preview section content capture (知识速览) ===
+        if in_preview:
+            # H4 ends preview section
+            if style == '4':
+                in_preview = False
+                # Fall through to normal H4 handling
+            else:
+                # Skip H5 headings but capture their content
+                if style == '5':
+                    i += 1
+                    continue
+                # Capture text paragraphs (skip image-only, heading-only, empty)
+                if text and style not in ('4', '5', '6'):
+                    blocks.append({'type': 'preview', 'subtype': 'text', 'text': text})
+                i += 1
+                continue
 
         # 检测内嵌脚手架区域开始（"核心要义凝练"、"思考与练习"等）
         if style not in ('4', '5', '6') and not in_skip_region:
@@ -350,8 +384,16 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         if style == '4':
             # H4 级别 → 结束内嵌跳过
             skip_inline_until_heading = False
+            if '学员预习专用' in text:
+                in_preview = True
+                in_skip_region = False
+                skip_until_h4 = False
+                skip_until_h5 = False
+                i += 1
+                continue
             if should_skip_region(text, '4'):
                 in_skip_region = True
+                in_preview = False
                 skip_until_h4 = True
                 skip_until_h5 = False
                 i += 1
@@ -376,6 +418,10 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
         if style == '5':
             # H5 级别 → 结束内嵌跳过
             skip_inline_until_heading = False
+            if in_preview:
+                # Skip H5 headings but continue capturing preview content
+                i += 1
+                continue
             if not in_skip_region:
                 # 检查是否为需要跳过的H5区域
                 if should_skip_region(text, '5'):
@@ -433,7 +479,18 @@ def extract_chapter_content(elements, ch_idx, ch_starts, total_chapters):
                 continue
 
         # 分类段落内容
+        # Check for standalone 【记忆技巧】 label
+        if re.match(r'^【记忆技巧】\s*$', text.strip()):
+            next_is_memory = True
+            i += 1
+            continue
+
         category, clean_text = classify_paragraph(text)
+        if next_is_memory and category == 'text' and clean_text:
+            category = 'memory'
+            next_is_memory = False
+        elif category != 'skip':
+            next_is_memory = False
         if category == 'skip':
             i += 1
             continue
@@ -488,6 +545,9 @@ def generate_chapter_html(ch_num, ch_name, blocks, total_chapters):
         '4': 'Pre-Activity Health Screening and Appraisal',
         '5': 'Cardiorespiratory Training: Physiology, Assessment, and Programming',
         '6': 'Muscular Training: Foundations, Benefits, and Program Design',
+        '7': 'Considerations for Clients with Chronic Diseases',
+        '8': 'Exercise Considerations Across the Lifespan',
+        '9': 'Musculoskeletal Abnormalities: Considerations and Recommendations',
     }
     en_subtitle = en_subtitles.get(ch_num, f'Chapter {ch_num}')
 
@@ -499,10 +559,48 @@ def generate_chapter_html(ch_num, ch_name, blocks, total_chapters):
         '4': '本章讲解运动前健康筛查的流程、工具和方法，包括风险分层、医学许可获取和健康风险评估，确保训练安全。',
         '5': '本章深入讲解心肺训练的生理学基础、评估方法和训练计划设计，为私人教练提供科学的心肺训练指导框架。',
         '6': '本章系统讲解肌肉训练的生理学基础、训练益处和计划设计原则，帮助教练为客户制定科学有效的力量训练方案。',
+        '7': '本章讲解私人教练在为慢性病客户提供服务时的注意事项，包括各类慢性疾病的运动适应证、禁忌证和运动处方调整要点。',
+        '8': '本章探讨不同生命阶段（儿童青少年、成年人、老年人）的运动注意事项，帮助教练针对不同年龄群体制定安全有效的训练方案。',
+        '9': '本章聚焦肌肉骨骼异常客户的评估与训练注意事项，帮助私人教练在执业范围内为有特殊需求的客户提供安全的运动指导。',
     }
     intro = intros.get(ch_num, f'第{ch_num}章讲义内容。')
 
+    # === 分离讲义内容和自测判断题 ===
+    main_blocks = []
+    quiz_items = []  # (label, text)
+
     for block in blocks:
+        btype = block['type']
+        if btype in ('tip', 'wrong', 'right', 'warn', 'scene'):
+            label_map = {
+                'tip': '要点', 'wrong': '❌ 错误做法', 'right': '✅ 正确做法',
+                'warn': '⚠ 常见误区', 'scene': '场景',
+            }
+            quiz_items.append((label_map[btype], block['text']))
+        elif btype == 'memory':
+            # 转为独立的记忆提示段落，后续渲染为斜体样式
+            main_blocks.append({'type': 'memory_para', 'text': block['text']})
+        else:
+            main_blocks.append(block)
+
+    # === Build 知识速览 from preview blocks ===
+    preview_blocks = [b for b in main_blocks if b.get('type') == 'preview']
+    main_blocks = [b for b in main_blocks if b.get('type') != 'preview']
+
+    if preview_blocks:
+        overview_parts = ['<details class="knowledge-overview" open>',
+                          '<summary>知识速览</summary>']
+        for pb in preview_blocks:
+            if pb.get('subtype') == 'table':
+                overview_parts.append(build_table_html(pb['rows']))
+            elif pb.get('subtype') == 'text':
+                t = html_mod.escape(pb['text']).strip()
+                if t:
+                    overview_parts.append(f'<p>{t}</p>')
+        overview_parts.append('</details>')
+        content_parts.append('\n'.join(overview_parts))
+
+    for block in main_blocks:
         btype = block['type']
 
         if btype == 'h3':
@@ -523,20 +621,51 @@ def generate_chapter_html(ch_num, ch_name, blocks, total_chapters):
             src = block['src']
             caption = block.get('caption', '')
             content_parts.append(f'<figure class="img-figure"><img src="images/{src}" loading="lazy" onclick="openLightbox(this)" alt="{html_mod.escape(caption)}"></figure>')
-        elif btype == 'tip':
-            content_parts.append(f'<div class="card card-tip"><span class="card-label">要点</span><p>{html_mod.escape(block["text"])}</p></div>')
-        elif btype == 'wrong':
-            content_parts.append(f'<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>{html_mod.escape(block["text"])}</p></div>')
-        elif btype == 'right':
-            content_parts.append(f'<div class="card card-right"><span class="card-label">✓ 正确做法</span><p>{html_mod.escape(block["text"])}</p></div>')
-        elif btype == 'warn':
-            content_parts.append(f'<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>{html_mod.escape(block["text"])}</p></div>')
-        elif btype == 'scene':
-            content_parts.append(f'<div class="card card-scene"><span class="card-label">场景</span><p>{html_mod.escape(block["text"])}</p></div>')
-        elif btype == 'memory':
-            content_parts.append(f'<div class="card card-memory"><span class="card-label">记忆提示</span><p>{html_mod.escape(block["text"])}</p></div>')
         elif btype == 'text':
-            content_parts.append(f'<p>{html_mod.escape(block["text"])}</p>')
+            # 处理含换行符的段落（含记忆提示合并）
+            escaped = html_mod.escape(block["text"])
+            paragraphs = escaped.split('\n')
+            for para in paragraphs:
+                if para.strip():
+                    content_parts.append(f'<p>{para}</p>')
+        elif btype == 'memory_para':
+            escaped = html_mod.escape(block["text"])
+            content_parts.append(f'<p style="color:var(--text-secondary);font-size:14px;font-style:italic;margin:8px 0 16px;">💡 {escaped}</p>')
+
+    # 自测判断题HTML
+    if quiz_items:
+        # label → CSS class 映射
+        css_class_map = {
+            '要点': 'quiz-tip', '❌ 错误做法': 'quiz-wrong', '✅ 正确做法': 'quiz-right',
+            '⚠ 常见误区': 'quiz-warn', '场景': 'quiz-scene',
+        }
+        quiz_parts = ['<div class="quiz-section">', '<div class="quiz-header">', '<h2>判断题</h2>',
+                      '<p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p>',
+                      '</div>']
+        for idx, (label, text) in enumerate(quiz_items, 1):
+            escaped_text = html_mod.escape(text)
+            escaped_label = html_mod.escape(label)
+            css_class = css_class_map.get(label, 'quiz-tip')
+            # 判断参考答案
+            if label.startswith('✅'):
+                ans = '正确'
+            elif label.startswith('❌'):
+                ans = '错误'
+            else:
+                ans = '正确（属于要点/场景/误区陈述）'
+            quiz_parts.append(
+                f'<div class="quiz-item">'
+                f'<div class="quiz-q"><span class="quiz-num">{idx}.</span>'
+                f'<span class="quiz-tag {css_class}">{escaped_label}</span>'
+                f'<span>{escaped_text}</span></div>'
+                f'<details class="quiz-answer"><summary>查看答案</summary>'
+                f'<p>该说法<strong>{ans}</strong>。</p>'
+                f'</details></div>'
+            )
+        quiz_parts.append('</div>')
+        quiz_html = '\n'.join(quiz_parts)
+    else:
+        quiz_html = '<div class="placeholder">本章暂无判断题。</div>'
 
     content_html = '\n'.join(content_parts)
     toc_html = '\n'.join(toc_items)
@@ -872,10 +1001,67 @@ tbody tr:hover {{ background: var(--accent-light); }}
   .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox {{ display: none !important; }}
   .main-content {{ margin-left: 0; max-width: 100%; padding: 0; }}
   .hero {{ background: none; margin: 0; padding: 20px 0; }}
-  .card {{ break-inside: avoid; }}
   table {{ break-inside: avoid; }}
   .img-figure img {{ max-width: 80%; }}
+  .quiz-item {{ break-inside: avoid; }}
 }}
+
+/* 自测判断题区 */
+.quiz-section {{ padding: 16px 0; }}
+.quiz-header h2 {{
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}}
+.quiz-header .quiz-instruction {{
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}}
+.quiz-item {{
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}}
+.quiz-q {{ font-size: 15px; line-height: 1.8; margin-bottom: 8px; }}
+.quiz-num {{ font-weight: 700; color: var(--accent); margin-right: 6px; }}
+.quiz-tag {{
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}}
+.quiz-tip {{ background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }}
+.quiz-wrong {{ background: #fce4ec; color: #c62828; border-color: #e53935; }}
+.quiz-right {{ background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }}
+.quiz-warn {{ background: #fff8e1; color: #e65100; border-color: #ff8f00; }}
+.quiz-scene {{ background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }}
+.quiz-answer {{
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}}
+.quiz-answer summary {{
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}}
+.quiz-answer p {{ margin-top: 6px; }}
+[data-theme="dark"] .quiz-tip {{ background: #1b3a1b; }}
+[data-theme="dark"] .quiz-wrong {{ background: #3a1b1b; }}
+[data-theme="dark"] .quiz-right {{ background: #1b2a3a; }}
+[data-theme="dark"] .quiz-warn {{ background: #3a2a1b; }}
+[data-theme="dark"] .quiz-scene {{ background: #2a1b3a; }}
+[data-theme="dark"] .quiz-item {{ background: var(--surface); }}
+
+/* 知识速览折叠区 */
+.knowledge-overview {{
+  margin: 0 0 32px; padding: 20px 24px;
+  border: 1px solid var(--border); border-radius: var(--card-radius);
+  background: var(--surface);
+}}
+.knowledge-overview summary {{
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  cursor: pointer; margin-bottom: 16px; user-select: none;
+}}
+.knowledge-overview[open] summary {{ margin-bottom: 20px; }}
+.knowledge-overview p {{ margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }}
 </style>
 </head>
 <body>
@@ -912,7 +1098,7 @@ tbody tr:hover {{ background: var(--accent-light); }}
     </div>
 
     <div id="tab-quiz" class="tab-content">
-      <div class="placeholder">本章自测题目已移除。</div>
+      {quiz_html}
     </div>
 
     <div id="tab-sop" class="tab-content">
@@ -1047,13 +1233,18 @@ def verify_chapter(html_content, ch_num):
     tables = len(re.findall(r'<table', html_content))
     images = len(re.findall(r'<img', html_content))
     toc = len(re.findall(r'class="toc-link toc-h', html_content))
-    cards = len(re.findall(r'class="card ', html_content))
+    quiz_items = len(re.findall(r'class="quiz-item"', html_content))
 
     # Logo
     if 'ACEpporesso' in html_content:
         issues.append('  ⚠️ Logo拼写错误: ACEpporesso')
 
-    return issues, tables, images, toc, cards
+    # 检查正文中是否还有卡片（不应该有）
+    main_card_count = html_content.count('class="card ')
+    if main_card_count > 0:
+        issues.append(f'  ⚠️ 正文仍有色块卡片: {main_card_count}处')
+
+    return issues, tables, images, toc, quiz_items
 
 
 def main():
@@ -1076,9 +1267,9 @@ def main():
     extracted = extract_images(DOCX_PATH, img_rels, IMAGES_DIR)
     print(f"  提取了 {len(extracted)} 张图片")
 
-    # 生成各章HTML
+    # 生成各章HTML（仅处理ch2）
     print("\n[3/4] 生成各章HTML...")
-    for ch_idx in range(total_chapters):
+    for ch_idx in [6, 7, 8]:  # ch7, ch8, ch9
         print(f"\n  --- 第{ch_idx+1}章 ---")
         ch_num, ch_name, blocks = extract_chapter_content(elements, ch_idx, ch_starts, total_chapters)
 
@@ -1102,13 +1293,16 @@ def main():
         print(f"  内容块: {n_text}段落, {n_h3}H3, {n_h4}H4, {n_h5}H5")
         print(f"  卡片: {n_tip}要点, {n_wrong}错误, {n_right}正确, {n_warn}误区, {n_scene}场景, {n_memory}记忆")
         print(f"  表格: {n_table}, 图片: {n_image}")
+        # 统计自测题数量
+        n_quiz = n_tip + n_wrong + n_right + n_warn + n_scene
+        print(f"  自测题: {n_quiz}道判断题, 记忆提示并入正文: {n_memory}条")
 
         # 生成HTML
         html = generate_chapter_html(ch_num, ch_name, blocks, total_chapters)
 
         # 验证
-        issues, tables, images, toc, cards = verify_chapter(html, ch_num)
-        print(f"  验证: 表格={tables}, 图片={images}, TOC={toc}, 卡片={cards}")
+        issues, tables, images, toc, quiz_items = verify_chapter(html, ch_num)
+        print(f"  验证: 表格={tables}, 图片={images}, TOC={toc}, 自测题={quiz_items}")
         if issues:
             for iss in issues:
                 print(iss)

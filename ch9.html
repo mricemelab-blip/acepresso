@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第9章 肌肉骨骼异常客户的注意事项 · 重点总结 | ACEpresso</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --sidebar-bg: #fafbfc; --header-bg: #ffffff; --shadow: rgba(0,0,0,0.06);
+  --hero-gradient: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  --table-header: #2e7d32; --table-stripe: #f8f8f5;
+  --card-radius: 10px;
+}
+[data-theme="dark"] {
+  --bg: #0f0f1a; --surface: #1a1a2e; --text: #e0e0e0; --text-secondary: #aaa;
+  --accent: #66bb6a; --accent-light: #1b3a1b; --border: #2a2a3a;
+  --sidebar-bg: #12121e; --header-bg: #0f0f1a; --shadow: rgba(0,0,0,0.3);
+  --hero-gradient: linear-gradient(135deg, #1b3a1b 0%, #1a2e1a 50%, #0f0f1a 100%);
+  --table-header: #1b5e20; --table-stripe: #1e1e30;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 进度条 */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #4caf50);
+  z-index: 1000; transition: width 0.15s; width: 0%;
+}
+
+/* 顶部导航 */
+.site-header {
+  position: fixed; top: 3px; left: 0; right: 0; height: 54px;
+  background: var(--header-bg); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.theme-toggle {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  padding: 6px 16px; border-radius: 20px; cursor: pointer;
+  font-size: 13px; transition: all 0.25s;
+}
+.theme-toggle:hover {
+  background: var(--accent-light); border-color: var(--accent); color: var(--accent);
+}
+
+/* 布局 */
+.layout { display: flex; margin-top: 57px; min-height: calc(100vh - 57px); }
+
+/* 侧边栏 */
+.sidebar {
+  position: fixed; top: 57px; left: 0; width: 280px;
+  height: calc(100vh - 57px); background: var(--sidebar-bg);
+  border-right: 1px solid var(--border); overflow-y: auto;
+  padding: 20px 0; z-index: 50;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.toc-title {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; font-weight: 700; color: var(--text-secondary);
+  padding: 0 24px 14px; text-transform: uppercase; letter-spacing: 3px;
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+}
+.toc-link {
+  display: block; padding: 7px 24px; color: var(--text-secondary);
+  text-decoration: none; font-size: 13px; line-height: 1.5;
+  transition: all 0.2s; border-left: 3px solid transparent;
+}
+.toc-link:hover {
+  background: var(--accent-light); color: var(--accent);
+  border-left-color: var(--accent);
+}
+.toc-link.active {
+  color: var(--accent); font-weight: 600;
+  border-left-color: var(--accent); background: var(--accent-light);
+}
+.toc-h2 { padding-left: 24px; font-weight: 700; font-size: 14px; color: var(--text); margin-top: 8px; }
+.toc-h3 { padding-left: 36px; }
+.toc-h4 { padding-left: 48px; font-size: 12px; }
+
+/* 主内容区 */
+.main-content {
+  margin-left: 280px; flex: 1; max-width: 880px;
+  padding: 0 48px 100px;
+}
+
+/* Hero区 */
+.hero {
+  padding: 48px 0 36px; border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  background: var(--hero-gradient);
+  margin-left: -48px; margin-right: -48px;
+  padding-left: 48px; padding-right: 48px;
+}
+.hero .badge {
+  display: inline-block; background: var(--accent); color: white;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; font-weight: 700; padding: 4px 14px;
+  border-radius: 20px; letter-spacing: 1px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 32px; font-weight: 800; line-height: 1.3;
+  color: var(--text); margin-bottom: 8px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.hero .subtitle {
+  font-size: 15px; color: var(--text-secondary);
+  font-style: italic; margin-bottom: 16px;
+}
+.hero .intro {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.8;
+  max-width: 640px; border-left: 3px solid var(--accent);
+  padding-left: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 0; border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 12px 24px; font-size: 14px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.2s; margin-bottom: -2px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active {
+  color: var(--accent); border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.placeholder {
+  padding: 48px 24px; text-align: center;
+  color: var(--text-secondary); font-size: 15px;
+}
+
+/* 标题层级 */
+.section-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 24px; font-weight: 800; color: var(--accent);
+  margin: 48px 0 20px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  line-height: 1.4;
+}
+.subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--text);
+  margin: 36px 0 16px; padding-left: 16px;
+  border-left: 4px solid var(--accent);
+  line-height: 1.4;
+}
+.sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 17px; font-weight: 600; color: var(--text);
+  margin: 28px 0 12px; line-height: 1.4;
+}
+.sub-sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--text-secondary);
+  margin: 20px 0 10px; line-height: 1.4;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* 正文段落 */
+.main-content p {
+  margin-bottom: 16px; text-align: justify;
+  text-indent: 0;
+}
+
+/* 色块卡片 */
+.card {
+  margin: 18px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  position: relative;
+}
+.card .card-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700; font-size: 12px;
+  display: inline-block; margin-bottom: 8px;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px;
+}
+.card p { margin: 0; font-size: 15px; line-height: 1.8; }
+
+.card-tip { background: #e8f5e9; border-color: #4caf50; }
+.card-tip .card-label { color: #2e7d32; background: #c8e6c9; }
+
+.card-wrong { background: #fce4ec; border-color: #e53935; }
+.card-wrong .card-label { color: #c62828; background: #ffcdd2; }
+
+.card-right { background: #e3f2fd; border-color: #1e88e5; }
+.card-right .card-label { color: #1565c0; background: #bbdefb; }
+
+.card-warn { background: #fff8e1; border-color: #ff8f00; }
+.card-warn .card-label { color: #e65100; background: #ffecb3; }
+
+.card-scene { background: #f3e5f5; border-color: #7b1fa2; }
+.card-scene .card-label { color: #6a1b9a; background: #e1bee7; }
+
+.card-memory {
+  background: var(--bg-secondary, #f5f5f5); border-color: #9e9e9e;
+  border-left-style: dashed;
+}
+.card-memory .card-label { color: #616161; background: #e0e0e0; }
+.card-memory p { font-size: 14px; color: var(--text-secondary); font-style: italic; }
+
+/* 深色模式卡片 */
+[data-theme="dark"] .card-tip { background: #1b3a1b; }
+[data-theme="dark"] .card-tip .card-label { background: #2e5a2e; color: #81c784; }
+[data-theme="dark"] .card-wrong { background: #3a1b1b; }
+[data-theme="dark"] .card-wrong .card-label { background: #5a2e2e; color: #ef9a9a; }
+[data-theme="dark"] .card-right { background: #1b2a3a; }
+[data-theme="dark"] .card-right .card-label { background: #2e4a5a; color: #90caf9; }
+[data-theme="dark"] .card-warn { background: #3a2a1b; }
+[data-theme="dark"] .card-warn .card-label { background: #5a4a2e; color: #ffcc80; }
+[data-theme="dark"] .card-scene { background: #2a1b3a; }
+[data-theme="dark"] .card-scene .card-label { background: #4a2e5a; color: #ce93d8; }
+[data-theme="dark"] .card-memory { background: #1a1a2a; }
+[data-theme="dark"] .card-memory .card-label { background: #2a2a3a; color: #bdbdbd; }
+
+/* 表格 */
+.table-wrapper {
+  margin: 20px 0; overflow-x: auto; border-radius: 10px;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  line-height: 1.6;
+}
+th {
+  background: var(--table-header); color: white;
+  padding: 12px 16px; text-align: left;
+  font-family: 'Noto Sans SC', sans-serif; font-weight: 600;
+  font-size: 13px; letter-spacing: 0.5px;
+}
+td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:hover { background: var(--accent-light); }
+
+/* 图片 */
+.img-figure {
+  margin: 24px 0; text-align: center;
+}
+.img-figure img {
+  max-width: 100%; height: auto; border-radius: 8px;
+  border: 1px solid var(--border); box-shadow: 0 2px 8px var(--shadow);
+  cursor: pointer; transition: transform 0.2s;
+}
+.img-figure img:hover { transform: scale(1.01); }
+.img-figure figcaption {
+  font-size: 13px; color: var(--text-secondary);
+  margin-top: 8px; font-style: italic;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+  z-index: 2000; justify-content: center; align-items: center;
+  cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 90%; max-height: 90%; border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* 章间导航 */
+.chapter-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+}
+.chapter-nav a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  text-decoration: none; padding: 10px 20px;
+  border: 1px solid var(--accent); border-radius: 8px;
+  transition: all 0.2s;
+}
+.chapter-nav a:hover {
+  background: var(--accent); color: white;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding: 0 20px 60px; }
+  .hero { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 24px; }
+  .section-heading { font-size: 20px; }
+  .subsection-heading { font-size: 18px; }
+}
+
+/* 打印 */
+@media print {
+  .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox { display: none !important; }
+  .main-content { margin-left: 0; max-width: 100%; padding: 0; }
+  .hero { background: none; margin: 0; padding: 20px 0; }
+  table { break-inside: avoid; }
+  .img-figure img { max-width: 80%; }
+  .quiz-item { break-inside: avoid; }
+}
+
+/* 自测判断题区 */
+.quiz-section { padding: 16px 0; }
+.quiz-header h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.quiz-header .quiz-instruction {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}
+.quiz-item {
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}
+.quiz-q { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+.quiz-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.quiz-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.quiz-tip { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+.quiz-wrong { background: #fce4ec; color: #c62828; border-color: #e53935; }
+.quiz-right { background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }
+.quiz-warn { background: #fff8e1; color: #e65100; border-color: #ff8f00; }
+.quiz-scene { background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }
+.quiz-answer {
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}
+.quiz-answer summary {
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}
+.quiz-answer p { margin-top: 6px; }
+[data-theme="dark"] .quiz-tip { background: #1b3a1b; }
+[data-theme="dark"] .quiz-wrong { background: #3a1b1b; }
+[data-theme="dark"] .quiz-right { background: #1b2a3a; }
+[data-theme="dark"] .quiz-warn { background: #3a2a1b; }
+[data-theme="dark"] .quiz-scene { background: #2a1b3a; }
+[data-theme="dark"] .quiz-item { background: var(--surface); }
+
+/* 知识速览折叠区 */
+.knowledge-overview {
+  margin: 0 0 32px; padding: 20px 24px;
+  border: 1px solid var(--border); border-radius: var(--card-radius);
+  background: var(--surface);
+}
+.knowledge-overview summary {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  cursor: pointer; margin-bottom: 16px; user-select: none;
+}
+.knowledge-overview[open] summary { margin-bottom: 20px; }
+.knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">本章目录</div>
+    <a href="#s1" class="toc-link toc-h2">跨病症通用原则</a>
+<a href="#s2" class="toc-link toc-h4">执业范围</a>
+<a href="#s6" class="toc-link toc-h4">愈合三阶段</a>
+<a href="#s13" class="toc-link toc-h4">伤后训练进度</a>
+<a href="#s18" class="toc-link toc-h4">疼痛管理</a>
+<a href="#s29" class="toc-link toc-h4">预防肌肉骨骼损伤</a>
+<a href="#s33" class="toc-link toc-h4">课程设计通用框架</a>
+<a href="#s41" class="toc-link toc-h4">康复期肌肉和心肺训练注意事项</a>
+<a href="#s44" class="toc-link toc-h2">一、急性损伤</a>
+<a href="#s45" class="toc-link toc-h3">1.1 肌肉拉伤（Strain）</a>
+<a href="#s46" class="toc-link toc-h4">核心机制</a>
+<a href="#s48" class="toc-link toc-h4">分级</a>
+<a href="#s54" class="toc-link toc-h3">1.2 韧带扭伤（Sprain）</a>
+<a href="#s57" class="toc-link toc-h4">核心机制</a>
+<a href="#s63" class="toc-link toc-h4">分级</a>
+<a href="#s68" class="toc-link toc-h3">1.3 软骨损伤</a>
+<a href="#s71" class="toc-link toc-h4">核心机制</a>
+<a href="#s78" class="toc-link toc-h3">1.4 骨折</a>
+<a href="#s81" class="toc-link toc-h4">核心机制</a>
+<a href="#s85" class="toc-link toc-h4">紧急处理</a>
+<a href="#s90" class="toc-link toc-h4">应力性骨折</a>
+<a href="#s97" class="toc-link toc-h3">1.5 脑震荡</a>
+<a href="#s100" class="toc-link toc-h4">核心机制</a>
+<a href="#s103" class="toc-link toc-h4">体征</a>
+<a href="#s107" class="toc-link toc-h4">关键风险</a>
+<a href="#s112" class="toc-link toc-h3">1.6 椎间盘损伤</a>
+<a href="#s115" class="toc-link toc-h4">核心机制</a>
+<a href="#s121" class="toc-link toc-h4">症状</a>
+<a href="#s125" class="toc-link toc-h2">二、过度使用症</a>
+<a href="#s126" class="toc-link toc-h3">2.1 肌腱炎/滑囊炎/筋膜炎</a>
+<a href="#s131" class="toc-link toc-h3">2.2 应力性骨折</a>
+<a href="#s141" class="toc-link toc-h2">三、上肢病症</a>
+<a href="#s142" class="toc-link toc-h3">3.1 肩部——肩峰撞击综合征/肩袖损伤</a>
+<a href="#s145" class="toc-link toc-h4">核心机制</a>
+<a href="#s153" class="toc-link toc-h4">课程设计四步法</a>
+<a href="#s158" class="toc-link toc-h4">关键动作</a>
+<a href="#s163" class="toc-link toc-h4">注意事项</a>
+<a href="#s167" class="toc-link toc-h3">3.2 肘、腕和手</a>
+<a href="#s168" class="toc-link toc-h4">背景</a>
+<a href="#s171" class="toc-link toc-h4">3.2.1外上髁炎（网球肘）</a>
+<a href="#s176" class="toc-link toc-h4">3.2.2内上髁炎（高尔夫球肘）</a>
+<a href="#s181" class="toc-link toc-h4">3.2.3腕管综合征</a>
+<a href="#s186" class="toc-link toc-h4">课程设计注意事项</a>
+<a href="#s192" class="toc-link toc-h4">课程设计四步法</a>
+<a href="#s197" class="toc-link toc-h3">3.3 肘/腕/手病症关键记忆点</a>
+<a href="#s202" class="toc-link toc-h2">四、脊柱病症</a>
+<a href="#s203" class="toc-link toc-h3">4.1 颈部</a>
+<a href="#s206" class="toc-link toc-h4">核心机制</a>
+<a href="#s212" class="toc-link toc-h4">课程设计步骤</a>
+<a href="#s216" class="toc-link toc-h3">4.2 下背部</a>
+<a href="#s219" class="toc-link toc-h4">核心机制</a>
+<a href="#s227" class="toc-link toc-h4">关键肌肉对躯干/骨盆稳定性的作用</a>
+<a href="#s230" class="toc-link toc-h4">课程设计四步法</a>
+<a href="#s242" class="toc-link toc-h4">下蹲动作要点</a>
+<a href="#s249" class="toc-link toc-h2">五、下肢病症</a>
+<a href="#s250" class="toc-link toc-h3">5.1 髋关节</a>
+<a href="#s251" class="toc-link toc-h4">背景</a>
+<a href="#s256" class="toc-link toc-h4">梨状肌综合征</a>
+<a href="#s266" class="toc-link toc-h4">髋关节炎/髋关节置换术</a>
+<a href="#s274" class="toc-link toc-h4">髋关节课程设计四步法</a>
+<a href="#s280" class="toc-link toc-h3">5.2 膝部</a>
+<a href="#s281" class="toc-link toc-h4">背景</a>
+<a href="#s285" class="toc-link toc-h4">5.2.1髂胫束（IT束）摩擦综合征</a>
+<a href="#s295" class="toc-link toc-h4">5.2.2膝部肌腱炎</a>
+<a href="#s305" class="toc-link toc-h4">5.2.3髌股疼痛综合征（PFPS）</a>
+<a href="#s324" class="toc-link toc-h4">膝关节炎/膝关节置换术</a>
+<a href="#s330" class="toc-link toc-h4">膝关节课程设计四步法</a>
+<a href="#s336" class="toc-link toc-h3">5.3 脚踝和小腿</a>
+<a href="#s337" class="toc-link toc-h4">5.3.1外胫夹（胫骨内侧压力症候群 MTSS / 前外胫夹）</a>
+<a href="#s353" class="toc-link toc-h4">5.3.2脚踝扭伤</a>
+<a href="#s361" class="toc-link toc-h4">恢复训练</a>
+<a href="#s371" class="toc-link toc-h4">5.3.3跟腱炎</a>
+<a href="#s385" class="toc-link toc-h4">5.3.4足底筋膜炎</a>
+<a href="#s396" class="toc-link toc-h4">足/踝/小腿课程设计四步法</a>
+<a href="#s401" class="toc-link toc-h4">日常训练建议</a>
+  </nav>
+
+  <main class="main-content">
+    <div class="hero">
+      <div class="badge">第9章</div>
+      <h1>肌肉骨骼异常客户的注意事项 · 重点总结</h1>
+      <div class="subtitle">Musculoskeletal Abnormalities: Considerations and Recommendations</div>
+      <div class="intro">本章聚焦肌肉骨骼异常客户的评估与训练注意事项，帮助私人教练在执业范围内为有特殊需求的客户提供安全的运动指导。</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
+      <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+      <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
+    </div>
+
+    <div id="tab-lecture" class="tab-content active">
+<p>本章节按&quot;核心机制→症状要点→课程设计/安全注意&quot;结构组织</p>
+<h2 class="section-heading" id="s1">跨病症通用原则</h2>
+<h4 class="sub-subsection-heading" id="s2">执业范围</h4>
+<p>● 私人教练的职责是运动评估，不是损伤评估/诊断</p>
+<p>● 客户出现疼痛或受伤，必须转介给医疗保健专业人员</p>
+<p>● 与医生/理疗师保持沟通，获取运动限制和恢复方案</p>
+<h4 class="sub-subsection-heading" id="s6">愈合三阶段</h4>
+<p>表9-1</p>
+<div class="table-wrapper"><table><thead><tr><th>阶段</th><th>时间</th><th>特征</th><th>运动</th><th>禁忌</th></tr></thead><tbody><tr><td>I 炎症期</td><td>前3-4天</td><td>发红、肿胀、疼痛、局部发烫</td><td>零负重，主动ROM</td><td>患处疼痛/肿胀时禁止训练</td></tr><tr><td>II 修复期</td><td>3天-6周</td><td>瘢痕初步形成</td><td>耐受范围内负重，缓慢无痛运动</td><td>—</td></tr><tr><td>III 重塑期</td><td>4周-2年</td><td>瘢痕组织力量增加</td><td>循序渐进无痛运动</td><td>—</td></tr></tbody></table></div>
+<p>● 急性期标准处理：RICE（休息Rest、冰敷Ice、压迫Compression、抬高Elevation）</p>
+<p>● 冰敷：间接接触皮肤，每次≤20分钟，前24-48小时冰敷（非热敷）</p>
+<p>● 压迫：弹性绷带包扎受伤部位，控制肿胀；绷带应扎牢但不可太紧（以免阻碍静脉血回流）</p>
+<p>● 抬高：至心脏水平以上，有助于静脉血回流</p>
+<h4 class="sub-subsection-heading" id="s13">伤后训练进度</h4>
+<p>● 训练进度须始终维持保守态度</p>
+<p>● 与医生/理疗师保持联系，获取禁忌动作建议和推荐运动恢复方案</p>
+<p>● 严格执行无痛训练课程后，组织重塑可功能完全恢复且无症状</p>
+<p>● 受伤部位疼痛 = 应立即停止运动</p>
+<h4 class="sub-subsection-heading" id="s18">疼痛管理</h4>
+<p>● 使用知觉疼痛等级量表（0-10级）</p>
+<p>● 疼痛超过3级即停止运动（3级尚未引起不适/痛苦）</p>
+<p>● 训练前及训练中持续评估疼痛等级</p>
+<p>● 慢性疼痛会造成生物、心理和情绪影响（愤怒、绝望、抑郁、焦虑）</p>
+<p>● 与客户沟通疼痛管理要点：</p>
+<p>1. 锻炼前说明可能触及患处</p>
+<p>2. 解释疼痛等级量表</p>
+<p>3. 说明超过3级将中止锻炼</p>
+<p>4. 鼓励客户交流任意程度的疼痛</p>
+<p>5. 让客户在训练前及全程评估疼痛级别</p>
+<h4 class="sub-subsection-heading" id="s29">预防肌肉骨骼损伤</h4>
+<p>● 柔韧性和弹性：损伤后瘢痕组织降低弹性；长期不运动、放疗、年龄增长均导致弹性下降；弹性差既是损伤成因也是后果</p>
+<p>● 热身活动：覆盖所有运动平面，激活本体感受器，增加血流和结缔组织弹性；全方位预备操优先于单平面活动（如步行/骑行）</p>
+<p>● 恢复：两节训练课之间留出充分修复时间；拉伸和自我肌筋膜放松舒缓僵硬肌肉</p>
+<h4 class="sub-subsection-heading" id="s33">课程设计通用框架</h4>
+<p>● 热身更为重要（胶原↓、弹性↓），需覆盖所有运动平面</p>
+<p>● 先解决ROM受限和姿势不良，再进阶</p>
+<p>● 动力链思维：相邻关节功能障碍会影响远端</p>
+<p>● 恢复期计划必不可少：组织修复+关节ROM</p>
+<p>● 静态拉伸放在锻炼结束时（长时间拉伸后神经抑制、力量↓）；</p>
+<p>● 若需抑制过度活跃肌肉/调整姿势，可在简单热身后先做静态拉伸</p>
+<p>● 积极恢复计划是成功计划的重要部分</p>
+<h4 class="sub-subsection-heading" id="s41">康复期肌肉和心肺训练注意事项</h4>
+<p>表9-2</p>
+<div class="table-wrapper"><table><thead><tr><th>损伤类型</th><th>可做的肌肉训练</th><th>可做的心肺训练</th><th>应避免</th></tr></thead><tbody><tr><td>下肢损伤</td><td>上半身：坐位或卧位训练；下半身：按理疗师/医生指示；脊柱和髓核：不涉及患肢的训练</td><td>水中运动；上肢测力计；卧式/固定式自行车</td><td>任何引起疼痛的动作；负重训练（除非获医生/理疗师允许）</td></tr><tr><td>上肢损伤</td><td>下半身：不涉及患肢的训练；上半身：按理疗师/医生指示；脊柱和髓核：不涉及患肢的训练</td><td>步行；卧式/固定式自行车；椭圆机</td><td>任何引起疼痛的动作；跑步（动力链影响可能致患肢疼痛）；需双手保持稳定性的训练</td></tr><tr><td>背部/脊柱损伤</td><td>理疗师/医生指示的练习和拉伸；可承受范围内的负重训练</td><td>水中运动；步行；卧式/固定式自行车</td><td>任何引起疼痛的动作；高频重复动作组（重复8-10次，避免疲乏）；负重脊柱旋转；需接触地面的运动（条件允许可垫高或用按摩椅）</td></tr></tbody></table></div>
+<h2 class="section-heading" id="s44">一、急性损伤</h2>
+<h3 class="subsection-heading" id="s45">1.1 肌肉拉伤（Strain）</h3>
+<h4 class="sub-subsection-heading" id="s46">核心机制</h4>
+<p>● 肌肉超限工作→肌纤维撕裂；任何类型的用力都可能发生</p>
+<h4 class="sub-subsection-heading" id="s48">分级</h4>
+<p>表9-3</p>
+<div class="table-wrapper"><table><thead><tr><th>级别</th><th>严重程度</th><th>体征</th><th>功能</th></tr></thead><tbody><tr><td>I级</td><td>轻度</td><td>轻度疼痛/酸痛，微量肿胀</td><td>肌力正常</td></tr><tr><td>II级</td><td>中度</td><td>疼痛肿胀更严重，ROM↓</td><td>肌力↓，可能跛行</td></tr><tr><td>III级</td><td>重度</td><td>肌肉完全撕裂，&quot;撕裂/断裂&quot;感，明显变形</td><td>功能丧失</td></tr></tbody></table></div>
+<p>● III级拉伤在老年人中更常见（胶原组织失去弹性）</p>
+<p>● 愈合时间取决于严重程度；轻度损伤愈合各阶段可持续数日至数周；III级可能需要外科干涉</p>
+<p>● 随年龄增长，即使轻度拉伤也需更长时间愈合</p>
+<h3 class="subsection-heading" id="s54">1.2 韧带扭伤（Sprain）</h3>
+<figure class="img-figure"><img src="images/ch9_fig1.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-1</p>
+<h4 class="sub-subsection-heading" id="s57">核心机制</h4>
+<p>● 外力将韧带拉伸至损伤点（接触性或非接触性）</p>
+<p>● ACL撕裂机制：膝关节过伸和/或扭伤</p>
+<p>● 接触性：如橄榄球中膝前侧和外侧的撞击产生剪切力</p>
+<p>● 非接触性：如篮球中踩硬地面同时突然切球和扭动</p>
+<p>● 包含全方位力量和稳定性训练可降低非接触性损伤风险</p>
+<h4 class="sub-subsection-heading" id="s63">分级</h4>
+<p>表9-4</p>
+<div class="table-wrapper"><table><thead><tr><th>级别</th><th>身体检查</th><th>功能损伤</th><th>病理</th><th>急性护理</th></tr></thead><tbody><tr><td>I级</td><td>轻微触痛/肿胀</td><td>轻微</td><td>胶原纤维微观撕裂</td><td>RICE</td></tr><tr><td>II级</td><td>中度触痛/肿胀，ROM↓，可能不稳定</td><td>中度</td><td>部分胶原纤维完全撕裂</td><td>RICE+医生评估</td></tr><tr><td>III级</td><td>明显肿胀/触痛/不稳定</td><td>重度</td><td>韧带完全撕裂/破裂</td><td>空气夹板+RICE+立即就医</td></tr></tbody></table></div>
+<p>● 客户可能报告听到&quot;砰砰&quot;声后随即出现疼痛和肿胀</p>
+<p>● II级扭伤出现不稳定、ROM下降和功能丧失</p>
+<h3 class="subsection-heading" id="s68">1.3 软骨损伤</h3>
+<figure class="img-figure"><img src="images/ch9_fig2.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-2</p>
+<h4 class="sub-subsection-heading" id="s71">核心机制</h4>
+<p>● 关节受压迫+剪切力→软骨撕裂</p>
+<p>● 膝关节最易发生（负重+活动自由度大）</p>
+<p>● 年长者关节软骨已退化，较小的力即可撕裂</p>
+<p>● 大部分软骨无血管→无法自行愈合，常需手术取出撕裂碎片</p>
+<p>● 例外：半月板外侧1/3血管丰富，可手术修复（需较长术后零负重状态）</p>
+<p>症状：关节僵硬、咔嗒/砰砰声、腿软、伸直受限、关节闭锁、疼痛肿胀、肌肉无力</p>
+<h3 class="subsection-heading" id="s78">1.4 骨折</h3>
+<figure class="img-figure"><img src="images/ch9_fig3.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-3</p>
+<h4 class="sub-subsection-heading" id="s81">核心机制</h4>
+<p>● 压迫力（如伸直腿踩硬表面）、扭力或直接撞击导致</p>
+<p>● 骨质疏松/骨癌/感染/放疗/骨量差者风险更高</p>
+<p>体征：喀嚓声、变形、肿胀、淤青、疼痛触痛</p>
+<h4 class="sub-subsection-heading" id="s85">紧急处理</h4>
+<p>● 防止骨骼和软组织进一步受伤，必要时急救应对休克</p>
+<p>● 怀疑骨折应立即启动EMS，控制环境让客户静卧休息</p>
+<p>● 冰敷可能加剧疼痛</p>
+<p>● 仅在偏远地区EMS无法到场时，才用急救技能夹住/固定骨折肢</p>
+<h4 class="sub-subsection-heading" id="s90">应力性骨折</h4>
+<p>● 骨形成/吸收失衡→反复应力→骨头不足以承受压迫力</p>
+<p>● 所有骨头均可发生，股骨颈时有发生，胫骨最常见（常被误认为外胫夹）</p>
+<p>● 长跑运动员高风险（骨量未及调整即增加里程）</p>
+<p>● 特征：骨头某点触痛，疼痛局部且渐进，负重时加重；某些情况下静息/睡觉时也会酸痛，甚至局部肿胀</p>
+<p>● 继续活动→加重→完全骨折风险</p>
+<p>● 骨癌症状可能与应力性骨折相似，尽早诊断很重要</p>
+<h3 class="subsection-heading" id="s97">1.5 脑震荡</h3>
+<figure class="img-figure"><img src="images/ch9_fig4.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-4</p>
+<h4 class="sub-subsection-heading" id="s100">核心机制</h4>
+<p>● 脑损伤导致精神状态改变（接触性运动、交通事故、跌倒或撞击均可引起）</p>
+<p>● 可能伴随或没有短暂性意识丧失</p>
+<h4 class="sub-subsection-heading" id="s103">体征</h4>
+<p>● 精神错乱、定向障碍、记忆丧失（重复提问、无法认人/识别地点）</p>
+<p>● 言语迟钝/不清、动作不协调、头疼、恶心呕吐</p>
+<p>● 警觉性降低、平衡感下降、眩晕、惊厥、四肢麻木/失去知觉</p>
+<h4 class="sub-subsection-heading" id="s107">关键风险</h4>
+<p>● 脑震荡后脑部极脆弱→二次损伤可导致二次撞击综合征（危及生命）</p>
+<p>● 必须立即停止活动</p>
+<p>● 获有头部损伤治疗经验的合格医疗保健专业人员书面许可前，禁止任何活动</p>
+<p>● 许可同时应提供书面活动恢复方案；恢复要循序渐进，私人教练需格外小心防症状复发</p>
+<h3 class="subsection-heading" id="s112">1.6 椎间盘损伤</h3>
+<figure class="img-figure"><img src="images/ch9_fig5.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-5</p>
+<h4 class="sub-subsection-heading" id="s115">核心机制</h4>
+<p>● 椎间盘位于两椎骨之间，起减震、支撑和稳定作用，由胶原组成</p>
+<p>● 压迫+剪切力→纤维环层撕裂→髓核胶状液渗漏→外层形成肿块</p>
+<p>● 膨胀的外层压迫神经或卡在椎骨间→沿神经走向牵涉痛/剧烈疼痛</p>
+<p>● Valsalva动作增加受伤风险（打喷嚏/咳嗽同理）</p>
+<p>● 常见于腰椎</p>
+<h4 class="sub-subsection-heading" id="s121">症状</h4>
+<p>● 可能出现坐骨神经痛或其他神经根病体征</p>
+<p>● 沿受累神经走向剧烈刺痛、麻木和/或痛感，可能延伸至足部</p>
+<p>处理：冰敷缓解疼痛，但需立即就医；客户可能疼到不能走路，需联系EMS转运至急诊室</p>
+<h2 class="section-heading" id="s125">二、过度使用症</h2>
+<h3 class="subsection-heading" id="s126">2.1 肌腱炎/滑囊炎/筋膜炎</h3>
+<p>表9-5</p>
+<div class="table-wrapper"><table><thead><tr><th>病症</th><th>定义</th><th>成因</th></tr></thead><tbody><tr><td>肌腱炎</td><td>肌腱炎症（-itis = 炎症）</td><td>过度使用；急性→可转为慢性</td></tr><tr><td>滑囊炎</td><td>滑囊发炎</td><td>急性外伤有时引起；更多是反复应力/肌肉失衡/肌紧张</td></tr><tr><td>筋膜炎</td><td>结缔组织（筋膜）发炎</td><td>常见：足底筋膜炎、IT束摩擦综合征</td></tr></tbody></table></div>
+<p>● 急性肌腱炎 = 处于损伤愈合炎症阶段的肌腱炎</p>
+<p>● 处理不当均可转为慢性</p>
+<h3 class="subsection-heading" id="s131">2.2 应力性骨折</h3>
+<figure class="img-figure"><img src="images/ch9_fig6.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-6</p>
+<p>● 骨形成/吸收失衡处发生</p>
+<p>● 长跑运动员高风险（骨量未及调整即增加里程）</p>
+<p>● 胫骨最常见，常被误认为外胫夹</p>
+<p>● 关键鉴别：应力性骨折为骨头某点触痛，疼痛局部、渐进、负重加重</p>
+<p>● 某些情况下静息/睡觉时酸痛，甚至局部肿胀</p>
+<p>● 继续活动→症状加重→完全骨折风险</p>
+<p>● 需转介给医生诊断和治疗（骨癌症状可能类似，需排除）</p>
+<h2 class="section-heading" id="s141">三、上肢病症</h2>
+<h3 class="subsection-heading" id="s142">3.1 肩部——肩峰撞击综合征/肩袖损伤</h3>
+<figure class="img-figure"><img src="images/ch9_fig7.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-7</p>
+<h4 class="sub-subsection-heading" id="s145">核心机制</h4>
+<p>● 肩关节窝浅→骨稳定性差，靠盂唇+韧带+肩袖加固</p>
+<p>● 肌肉力量/稳定性不足 + 不良姿势（圆肩/胸椎后凸）→肩胛骨偏离（偏向上侧和前侧）→肩峰下间隙变窄</p>
+<p>● 冈上肌腱鞘+肩峰下滑囊被压迫→肩峰撞击综合征</p>
+<p>● 可伴肱二头肌长头肌腱炎</p>
+<p>● 肩袖弹性↓→肩袖撕裂（发生率随年龄↑）</p>
+<p>● 肩袖肌肉作用：在过头运动中降低肱骨向前速度并稳定肱骨在关节窝中</p>
+<p>● 多数人其他软组织可代偿→即使全层肩袖撕裂也可选择保守治疗和物理疗法而非手术</p>
+<h4 class="sub-subsection-heading" id="s153">课程设计四步法</h4>
+<p>1. 解决不良姿势（圆肩/脊柱后凸）→伸展肩部前侧和前胸（抑制过度活跃肌肉，可在热身时完成）</p>
+<p>2. 强化肩胛骨稳定肌（下斜方肌、中斜方肌、前锯肌）+肩袖</p>
+<p>3. 通过受控前推动作改善肩前肌肉和胸大肌</p>
+<p>4. 最后引入过头运动（在肩胛面——额状面前30°完成，防撞击/挤压）</p>
+<h4 class="sub-subsection-heading" id="s158">关键动作</h4>
+<p>● 坐姿划船（强化肩胛稳定肌）</p>
+<p>● 前锯肌推举</p>
+<p>● 鸟狗式（闭链负重训练，激活肩袖而不使组织恶化）</p>
+<p>● 农夫行走（开链训练，激活肩袖）</p>
+<h4 class="sub-subsection-heading" id="s163">注意事项</h4>
+<p>● 应避免需要举过头的训练（稳定性和力量需求超出受损肩关节能力）</p>
+<p>● 过头动作使肱骨头与肩峰接触更紧密，增加撞击风险</p>
+<p>● 上半身整体力量、稳定性和ROM训练应纳入常规项目，预防疼痛和功能丧失</p>
+<h3 class="subsection-heading" id="s167">3.2 肘、腕和手</h3>
+<h4 class="sub-subsection-heading" id="s168">背景</h4>
+<p>● 工作及休闲中长期使用鼠标和键盘→过度使用损伤日渐增多</p>
+<p>● 归咎于长时间静负荷及不恰当的办公设置</p>
+<h4 class="sub-subsection-heading" id="s171">3.2.1外上髁炎（网球肘）</h4>
+<figure class="img-figure"><img src="images/ch9_fig8.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-8</p>
+<p>● 肱骨外上髁起点附近→腕伸肌肌腱过度使用或反复外伤性损伤</p>
+<p>● 30-55岁成年人常见</p>
+<h4 class="sub-subsection-heading" id="s176">3.2.2内上髁炎（高尔夫球肘）</h4>
+<figure class="img-figure"><img src="images/ch9_fig9.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-9</p>
+<p>● 肱骨内上髁→腕屈肌肌腱在起始处附近的过度使用或反复外伤性损伤</p>
+<p>● 30-55岁成年人常见</p>
+<h4 class="sub-subsection-heading" id="s181">3.2.3腕管综合征</h4>
+<figure class="img-figure"><img src="images/ch9_fig10.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-10</p>
+<p>● 屈肌支持带下肌腱发炎→腕骨和屈肌支持带之间狭小间隙内炎症刺痛腕管→压迫正中神经→疼痛和麻木</p>
+<p>● 建议客户向人力资源部申请工作环境的人体工程学评估</p>
+<h4 class="sub-subsection-heading" id="s186">课程设计注意事项</h4>
+<p>● 肌腱发炎时应避免增加压力，消除所有可导致疼痛或不适的因素</p>
+<p>● 需要腕部屈曲、伸展或握紧的训练需进行调整</p>
+<p>● 腕管综合征适用与肘腱炎相同的注意事项</p>
+<p>● 训练时使用夹板或矫形器可能有益（尤其持续疼痛的客户），但需由医生定夺</p>
+<p>● 运动时应穿戴医生推荐和指定的手腕托，并遵从指导</p>
+<h4 class="sub-subsection-heading" id="s192">课程设计四步法</h4>
+<p>1. 预防过度使用：牵引训练时引入多种手柄增加舒适感，和/或戴手套增加手与手柄/器械之间的摩擦力（减轻受损组织负荷）</p>
+<p>2. 在各运动平面上缓慢拉伸，增加ROM</p>
+<p>3. 通过训练改善腕部和手部力量（如俯卧撑、腕部屈伸）</p>
+<p>4. 取下手柄或手套，在耐受范围内逐步增加牵引训练重量</p>
+<h3 class="subsection-heading" id="s197">3.3 肘/腕/手病症关键记忆点</h3>
+<p>● 网球肘 = 外上髁 + 伸肌肌腱；高尔夫球肘 = 内上髁 + 屈肌肌腱</p>
+<p>● 腕管综合征 = 正中神经受压→疼痛麻木；需人体工程学评估</p>
+<p>● 训练调整：多种手柄/手套/腕带减少握力需求</p>
+<p>● 调整使腕部处于中间位置的训练项目（如正手窄握支撑架做俯卧撑）</p>
+<h2 class="section-heading" id="s202">四、脊柱病症</h2>
+<h3 class="subsection-heading" id="s203">4.1 颈部</h3>
+<figure class="img-figure"><img src="images/ch9_fig11.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-11</p>
+<h4 class="sub-subsection-heading" id="s206">核心机制</h4>
+<p>● 胸椎后凸加重→头部前倾姿势→颈部肌肉异常压力</p>
+<p>● 脊柱通过骨性凸起物和软组织连接→任一位置错位引起连锁反应</p>
+<p>● 示例：右侧腰骶段的竖脊肌（ace课本为这个骶竖肌，但不符合解剖学规范用语，特此标注。）紧张→右外侧屈曲→右肩抬高→左侧颈痛</p>
+<p>● 解决动力链全段缩短的组织，不只是患处</p>
+<p>● 单独强化颈部肌肉不应作为训练课程目标</p>
+<h4 class="sub-subsection-heading" id="s212">课程设计步骤</h4>
+<p>1. 观察颈部相对胸椎和肩部位置→先矫正脊柱和肩部（圆肩和脊柱后凸尤其常见）</p>
+<p>2. 教授柔和动作和拉伸（侧向拉伸、旋转拉伸）→客户感到不适时可随时进行</p>
+<p>3. 疼痛严重或持续→转介给医生</p>
+<h3 class="subsection-heading" id="s216">4.2 下背部</h3>
+<figure class="img-figure"><img src="images/ch9_fig12.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-12</p>
+<h4 class="sub-subsection-heading" id="s219">核心机制</h4>
+<p>● 80%成人会出现下背部疼痛，30%转为慢性</p>
+<p>● 最常见于30-50岁人群；主要致残原因之一</p>
+<p>● 常见原因：肌肉拉伤、长期静态姿势不良引起的软组织应激、身体素质差、椎间盘疾病、骨关节炎、类风湿性关节炎、强直性脊柱炎、癌症</p>
+<p>● 明显脊柱前凸→腰骶段的竖脊肌（ace课本为这个骶竖肌，但不符合解剖学规范用语，特此标注。）+髋屈肌紧张+后侧链无力→下背部僵硬/疼痛</p>
+<p>● 髋部灵活性不足→腰椎ROM代偿性增加（腰椎应保持不动）</p>
+<p>● 竖脊肌是稳定肌，不是强大伸肌；臀肌和腘绳肌才是真正的髋伸肌</p>
+<p>● 椎间盘损伤常发生在腰椎→可能出现坐骨神经痛/神经根病</p>
+<h4 class="sub-subsection-heading" id="s227">关键肌肉对躯干/骨盆稳定性的作用</h4>
+<p>表9-6</p>
+<div class="table-wrapper"><table><thead><tr><th>肌群</th><th>功能</th></tr></thead><tbody><tr><td>臀大肌</td><td>髋伸肌；支撑骨盆和躯干稳定；保持正确骨盆位置</td></tr><tr><td>腘绳肌</td><td>髋伸肌；支撑骨盆和躯干稳定；紧张时抑制髋铰链→骨盆后倾</td></tr><tr><td>腹直肌</td><td>稳定躯干；保持正确骨盆位置</td></tr><tr><td>腹内/外斜肌</td><td>稳定躯干；保持正确骨盆位置</td></tr><tr><td>背阔肌</td><td>附着胸腰筋膜→为腰椎提供稳定性</td></tr><tr><td>髋屈肌</td><td>紧张时抑制髋铰链→骨盆前倾</td></tr><tr><td>髋内旋肌</td><td>紧张时抑制髋铰链→骨盆前倾</td></tr><tr><td>髋外旋肌</td><td>紧张时抑制髋铰链→骨盆后倾</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s230">课程设计四步法</h4>
+<p>1. 纠正左右侧不平衡</p>
+<p>2. 纠正前倾/后倾不良姿势（骨盆前倾或后倾）</p>
+<p>3. 增加髋关节功能性内/外旋程度（如伐木训练向下=内旋，向上=外旋）</p>
+<p>4. 强化后侧链肌群（尤其腘绳肌和臀肌）</p>
+<p>日常脊柱稳定训练（每天都进行最有效）</p>
+<p>● 猫牛式：有节律动作改善柔韧性并给组织热身；是动作训练非拉伸，重点在动作而非推到极限；猫式呼气，牛式吸气，中立位换气</p>
+<p>● 改良式卷腹：保持腰椎中立位（手/毛巾垫于腰下）；一只膝弯一只腿伸直，锁定骨盆-腰椎位置；中间点交替弯曲腿</p>
+<p>● 鸟狗式：双手对肩、双膝对髋→找到脊柱中立位→腹 muscles 保持稳定→对侧手臂和腿同时抬起→每侧保持5-8秒改善肌肉耐力</p>
+<p>● 侧桥：腰方肌和腹部斜肌实现最佳稳定性；初级=肘+膝支撑→进阶=肘+脚支撑；维持颈部和脊柱中立位；每侧保持5-8秒</p>
+<p>● 下背部训练：耐力优先于力量（慢缩姿势肌有保护作用）</p>
+<p>● 重复低难度动作增强姿势耐力和力量</p>
+<h4 class="sub-subsection-heading" id="s242">下蹲动作要点</h4>
+<p>● 下蹲是ADL中必要的动作模式（坐椅子、进出车辆、使用马桶）</p>
+<p>● 常见缺陷：髋关节铰链协调性缺乏+后侧链肌群力量缺乏→膝盖向前超过脚趾→膝关节疼痛+下背部承受不必要压力</p>
+<p>● 调整方案：</p>
+<p>● 椅式（适合稳定性/力量/ROM不佳者）：握住固定物站在箱子/长凳前，向后向下坐；先屈髋再屈膝，双脚紧踩地面；可垫高座位降低难度；增大难度时减少手臂借力/降低箱子高度</p>
+<p>● 自重深蹲（适合稳定性/力量/ROM尚可者）：侧重正确髋铰链和膝关节对齐；出现膝外翻时提醒向地面用力激活稳定肌</p>
+<p>● 弹力带深蹲（适合准备增加后侧链力量但未准备杠铃/哑铃深蹲者）：弹力带抵消部分体重提供支撑；全程需后侧链和脊柱稳定肌对抗向前拉力</p>
+<h2 class="section-heading" id="s249">五、下肢病症</h2>
+<h3 class="subsection-heading" id="s250">5.1 髋关节</h3>
+<h4 class="sub-subsection-heading" id="s251">背景</h4>
+<p>● 球窝关节，可进行多方向运动；髋臼是较深的骨性关节窝</p>
+<p>● ROM有限，与关节囊和肌肉结构一起产生显著稳定性</p>
+<p>● 久坐使髋部前侧肌肉缩短、后侧拉长→影响关节铰链能力</p>
+<p>● 功能障碍可能上移至下背部或下移至膝部</p>
+<h4 class="sub-subsection-heading" id="s256">梨状肌综合征</h4>
+<figure class="img-figure"><img src="images/ch9_fig13.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-13</p>
+<p>● 梨状肌发紧/紧绷/发炎→压迫穿过梨状肌的坐骨神经和孖肌→类似腰椎间盘损伤的神经根病症状</p>
+<p>● 22%人群坐骨神经隔断（穿过）梨状肌→更易患病</p>
+<p>● 至少6%&quot;下背痛&quot;患者实际为梨状肌综合征</p>
+<p>● 梨状肌作用：步行中充当髋外旋肌，稳定股骨头</p>
+<p>● 评估要点：关注髂脊高度→评估骨盆位置及与股骨相对位置</p>
+<p>● 示例：左侧骨盆高→左侧股骨相对骨盆内收+内旋→左侧肌肉被拉紧（IT束、外旋肌群、臀大肌）→坐骨神经受压</p>
+<p>● 课程设计：平衡左右骨盆位置（紧张侧静态拉伸+紧绷侧强化）+髋关节闭链内外旋训练（改善灵活性和稳定性）</p>
+<h4 class="sub-subsection-heading" id="s266">髋关节炎/髋关节置换术</h4>
+<p>● 关节炎：慢性疾病，关节疼痛和发炎</p>
+<p>● 稳定性和强化训练可改善动作，提高ADL效率</p>
+<p>● 保守治疗失败可建议髋关节置换术/全髋关节成形术</p>
+<p>● 术后前几个月接受常规理疗；理疗结束后ROM可能与非手术侧不等</p>
+<p>● 卧式自行车：改善心肺+ROM+股四头肌力量（优于固定式自行车，屈曲程度更大，更好挑战ROM）</p>
+<p>● 固定式自行车：屈曲程度较小，适合努力恢复ROM的客户</p>
+<p>● 柔和拉伸和动态ROM练习可鼓励进行，但期望须符合实际</p>
+<h4 class="sub-subsection-heading" id="s274">髋关节课程设计四步法</h4>
+<p>1. 纠正左右侧不平衡</p>
+<p>2. 改善髋关节内/外旋ROM+单脚站立稳定性</p>
+<p>3. 改善髋关节铰链灵活性和稳定性</p>
+<p>4. 改善后侧链肌群力量</p>
+<p>注意：每一侧训练和伸展不同——一侧紧张肌肉做伸展，对侧较弱肌肉做强化；尽早在锻炼中加入静态拉伸（简单热身后），抑制紧张肌肉、增加ROM</p>
+<h3 class="subsection-heading" id="s280">5.2 膝部</h3>
+<h4 class="sub-subsection-heading" id="s281">背景</h4>
+<p>● 典型铰链式关节，但有2-3度旋转；由强健韧带和筋膜支撑，灵活性高（可弯曲至130°）</p>
+<p>● 唯一穿过膝关节的肌腹是腘肌；其他移动/固定膝关节的肌肉以肌腱形式穿过</p>
+<p>● 软骨损害和韧带扭伤常见</p>
+<h4 class="sub-subsection-heading" id="s285">5.2.1髂胫束（IT束）摩擦综合征</h4>
+<figure class="img-figure"><img src="images/ch9_fig14.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-14</p>
+<p>● IT束远端与股骨外侧上髁反复摩擦→膝外侧烧灼/刺痛（剧痛或刺痛）</p>
+<p>● 15-50岁活跃人群常见（跑步者、骑行者、排球/举重运动员）</p>
+<p>● 风险因素：过度使用、装备不当/鞋子不合脚、跑步平面改变、肌力失衡（无力或紧张）、结构异常（扁平足、膝外翻、下肢不等长）</p>
+<p>● 骨盆失衡→IT束紧绷→增加与股骨外侧上髁接触</p>
+<p>● 左侧骨盆高→左侧IT束紧绷</p>
+<p>● 右侧阔筋膜张肌紧张→也可增加IT束与股骨外侧上髁接触</p>
+<p>● 课程设计：紧张侧自我肌筋膜放松+静态伸展→纠正骨盆失衡→增加ROM和纠正左/右侧失衡</p>
+<h4 class="sub-subsection-heading" id="s295">5.2.2膝部肌腱炎</h4>
+<figure class="img-figure"><img src="images/ch9_fig15.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-15</p>
+<p>● 常见部位：髌腱、鹅足腱、股四头肌腱</p>
+<p>● 跑步/上下楼梯/下蹲时疼痛</p>
+<p>● 存在膝关节功能障碍时，关注髋关节、踝关节和足部（膝关节依赖临近关节保持稳定和缓冲地面反作用力）</p>
+<p>● 足部旋前/旋后静态姿势评估→发现失衡→立即选择适当训练强化ROM或增强训练</p>
+<p>● 髌骨肌腱炎时：四头肌很可能紧张→增加髌骨与股骨髁间压力→自我肌筋膜放松+伸展解决</p>
+<p>● 肌肉训练侧重后侧链力量恢复（腓肠肌、腘绳肌、臀肌）</p>
+<p>● 与客户保持沟通疼痛等级，疼痛限制时停止训练</p>
+<h4 class="sub-subsection-heading" id="s305">5.2.3髌股疼痛综合征（PFPS）</h4>
+<figure class="img-figure"><img src="images/ch9_fig16.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-16</p>
+<p>● 过度使用+生物力学改变+肌肉功能障碍→髌骨轨迹异常→软骨磨损→髌骨软骨软化</p>
+<p>● 关键机制：膝关节屈曲时股骨内旋失控（膝外翻/X形腿）或IT束紧张将髌骨拉出滑车沟</p>
+<p>● 下楼/下坡时疼痛加剧</p>
+<p>● 生物力学异常因素：</p>
+<p>● 扁平足→改变膝关节排列→胫骨/股骨代偿性内旋→改变髌股关节动力学</p>
+<p>● IT束紧张→通过筋膜对髌骨产生过度横向力</p>
+<p>● 腓肠肌/比目鱼肌紧张→代偿性内转+过度后向力→髌股关节压力↑</p>
+<p>● 相关肌无力：</p>
+<p>● 髋外展肌和外旋肌无力→活动时股骨内旋+膝外翻→髌股轨迹异常</p>
+<p>● 需要四头肌减缓膝关节屈曲的活动（下楼梯、步行跑下坡）时，髌骨和股骨间隙变窄→疼痛加剧</p>
+<p>● 课程设计四步法：</p>
+<p>1. 纠正左右侧不平衡</p>
+<p>2. 解决髋部/踝部/足部肌紧张和不稳定（防止股骨内旋）</p>
+<p>3. 改善髋关节铰链灵活性和稳定性</p>
+<p>4. 改善后侧链肌群力量</p>
+<p>● 注意：开链膝关节伸展（坐位膝关节伸展）对单膝疼痛者应避开→选择负重闭链训练</p>
+<h4 class="sub-subsection-heading" id="s324">膝关节炎/膝关节置换术</h4>
+<p>● 稳定性和强化训练可改善动作，提高ADL效率</p>
+<p>● 保守治疗失败可建议膝关节置换术/全膝关节成形术</p>
+<p>● 术后四头肌强化很重要，自行车训练课程有帮助</p>
+<p>● 全膝关节ROM可能无法完全恢复</p>
+<p>● 下蹲是重要运动模式，但膝关节ROM可能限制下蹲深度；掌握正确髋铰链节奏后，直腿硬拉可增加后侧链力量</p>
+<h4 class="sub-subsection-heading" id="s330">膝关节课程设计四步法</h4>
+<p>1. 纠正左右侧不平衡</p>
+<p>2. 解决髋部/踝部/足部可能造成股骨内旋的肌紧张和不稳定</p>
+<p>3. 改善髋关节铰链灵活性和稳定性</p>
+<p>4. 改善后侧链肌群力量</p>
+<p>共同注意：每一侧训练和伸展不同；尽早加入静态拉伸增加ROM</p>
+<h3 class="subsection-heading" id="s336">5.3 脚踝和小腿</h3>
+<h4 class="sub-subsection-heading" id="s337">5.3.1外胫夹（胫骨内侧压力症候群 MTSS / 前外胫夹）</h4>
+<figure class="img-figure"><img src="images/ch9_fig17.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-17</p>
+<p>● &quot;外胫夹&quot;是描述劳力性小腿疼痛的一般术语</p>
+<p>● MTSS（后外胫夹）= 骨膜炎（骨膜炎症），影响腿部后关节腔肌肉（胫骨后肌、趾长屈肌、拇长屈肌和腘肌）</p>
+<p>● 活跃人群的过劳性损伤，运动诱发性疾病，往往由活动突然变化引起</p>
+<p>● 跑步者、舞蹈员和军人的常见损伤</p>
+<p>● 前外胫夹 = 前关节腔肌肉受累（胫骨前肌、趾长伸肌、拇长伸肌及筋膜和骨膜内层）</p>
+<p>● 与劳力性活动有关，病因尚未完全掌握</p>
+<p>● 与应力性骨折鉴别：外胫夹不需要彻底静休，调整训练课程即可</p>
+<p>● 课程设计调整：</p>
+<p>● 提供低冲击力/低里程数项目+交叉训练备选（如停止跑步→改为骑行和游泳）</p>
+<p>● 各部位有时间休息和愈合</p>
+<p>● 逐步引入完整动作而不引起症状复发</p>
+<p>● 小腿肌群（尤其比目鱼肌）无痛拉伸可有效缓解MTSS症状</p>
+<p>● 静态姿势和动态评估→发现足部/踝关节错位或不稳定→恢复运动需改善足部和踝关节柔韧性和稳定性</p>
+<h4 class="sub-subsection-heading" id="s353">5.3.2脚踝扭伤</h4>
+<figure class="img-figure"><img src="images/ch9_fig18.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-18</p>
+<p>● 每年影响200万美国人（运动和高度活跃人群仅占一半）</p>
+<p>● 外侧/内翻性扭伤最常见（约75%）→距腓前韧带、跟腓韧带、距腓后韧带</p>
+<p>● 机制：过度跖屈+内翻</p>
+<p>● 70%外侧扭伤导致反复性扭伤和慢性症状</p>
+<p>● 内侧/外翻性少见（外侧腓骨头加固）；内侧三角肌韧带最常受累，损伤常需排除骨折</p>
+<h4 class="sub-subsection-heading" id="s361">恢复训练</h4>
+<p>● 遵循与其他扭伤一样的运动恢复指导</p>
+<p>● 负重关节，可能需更长时间恢复</p>
+<p>● 愈合早期可能需使用拐杖；医生可能要求使用支架</p>
+<p>● 可继续锻炼非损伤区域（如上半身）；损伤区域始终在运动中受保护</p>
+<p>● 物理疗法结束后关键第一步：修复本体感受、柔韧性和力量</p>
+<p>● 韧带是本体感受反馈的主要来源</p>
+<p>● 渐进式单腿训练促进本体感受</p>
+<p>● 避免在不平稳表面训练（半泡沫滚筒/微型蹦床）→超负荷本体感受系统（尤其初始阶段）</p>
+<p>● 侧向运动打开外侧踝关节→可能产生不必要张力→确保客户准备好后再进行冠状面运动</p>
+<h4 class="sub-subsection-heading" id="s371">5.3.3跟腱炎</h4>
+<figure class="img-figure"><img src="images/ch9_fig19.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-19</p>
+<p>● 跟腱炎症→可能发展为II级或III级拉伤（尤其&gt;45岁）</p>
+<p>● III级拉伤=跟腱断裂，多由慢性跟腱炎引起</p>
+<p>● 常见损伤机制：突然从站立位启动运动（如垒球比赛离开一垒）</p>
+<p>● 结构性因素：高弓足、扁平足、腿长不等、外侧踝不稳</p>
+<p>● 健身相关因素：训练机制不当、鞋子不合脚、肌肉无力、柔韧性差</p>
+<p>● 课程设计可纳入具体训练项目逐步改善弹性；任何要求多平面反应度和脚趾离地推动的训练均可达成目标</p>
+<p>● 进阶路径：简单提踵→绳梯操练</p>
+<p>● 重获小腿柔韧性是关键，但避免过度拉伸跟腱（会刺激肌腱）</p>
+<p>● 柔和动态拉伸作为热身一部分</p>
+<p>● 站立位拉伸小腿时脚保持中立位（避免过度旋前/旋后），脚直指前方</p>
+<p>● 逐步恢复背屈ROM和力量+步行抬脚阶段控制力</p>
+<h4 class="sub-subsection-heading" id="s385">5.3.4足底筋膜炎</h4>
+<figure class="img-figure"><img src="images/ch9_fig20.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图9-20</p>
+<p>● 足底/跖表面结缔组织发炎</p>
+<p>● 可运动，但医疗专业人员可能叮嘱限制</p>
+<p>● 目标：让客户感到具有挑战性但不使足部负荷过度的健身计划</p>
+<p>● 将特定足部运动整合到一般健身计划中效果最好</p>
+<p>● 拉伸腓肠肌/比目鱼肌/足底筋膜→缓解症状</p>
+<p>● 自我肌筋膜放松（足底滚网球/自我肌筋膜放松球/高尔夫球）→提高背屈ROM+缓解疼痛</p>
+<p>● 对整个后侧链肌群运用自我肌筋膜放松术也可提高背屈ROM</p>
+<p>● 强化足内在肌→改善足弓稳定性→减少足底筋膜压力</p>
+<h4 class="sub-subsection-heading" id="s396">足/踝/小腿课程设计四步法</h4>
+<p>1. 解决足部和脚踝灵活性和稳定性</p>
+<p>2. 改善控制矢状面运动的肌肉力量</p>
+<p>3. 改善控制横状面和冠状面运动的肌肉力量</p>
+<p>4. 改善后侧链肌群力量</p>
+<h4 class="sub-subsection-heading" id="s401">日常训练建议</h4>
+<p>● 拉伸：每日一次或每两天一次最有效；可推荐客户自行完成</p>
+<p>● 即使存在小腿/足部功能障碍，用网球对足底筋膜自我肌筋膜放松也有益</p>
+<p>● 平衡练习：每天做无过度使用风险；如刷牙时用患肢单脚站立练习平衡（每天两次1-2分钟本体感受训练）</p>
+<p>表9-7</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>各病症关键记忆点总结</th></tr></thead><tbody></tbody></table></div>
+<p>表9-8</p>
+<div class="table-wrapper"><table><thead><tr><th>病症</th><th>关键记忆点</th></tr></thead><tbody><tr><td>愈合三阶段</td><td>炎症期（3-4天）→修复期（~6周）→重塑期（4周-2年）；急性期RICE处理</td></tr><tr><td>疼痛阈值</td><td>疼痛&gt;3级即停止运动</td></tr><tr><td>肌肉拉伤</td><td>I级轻/II级中/III级重（完全撕裂）；老年人更易III级</td></tr><tr><td>韧带扭伤</td><td>I级微裂/II级部分撕裂/III级完全断裂；ACL机制=过伸+扭伤</td></tr><tr><td>软骨损伤</td><td>大部分无血管→无法自愈；半月板外侧1/3例外</td></tr><tr><td>脑震荡</td><td>二次撞击综合征可致命；必须完全停止直到获医疗许可</td></tr><tr><td>椎间盘损伤</td><td>压迫+剪切力→纤维环撕裂→髓核渗漏→压迫神经→牵涉痛；Valsalva也增加风险</td></tr><tr><td>肩峰撞击</td><td>肩胛面过头推举（额状面前30°）；先矫正姿势→强化肩胛稳定肌→再过头</td></tr><tr><td>网球肘</td><td>外上髁=伸肌肌腱；30-55岁常见；避免增加压力/腕部屈曲伸展握紧</td></tr><tr><td>高尔夫球肘</td><td>内上髁=屈肌肌腱；30-55岁常见；同网球肘注意事项</td></tr><tr><td>腕管综合征</td><td>屈肌支持带下→压迫正中神经→疼痛麻木；需人体工程学评估</td></tr><tr><td>肘/腕/手课程四步</td><td>预防过度使用（多手柄/手套）→各平面拉伸增ROM→腕手力量训练→逐步增牵引重量</td></tr><tr><td>颈部</td><td>脊柱错位引起连锁反应→解决动力链全段，不只是患处；单独强化颈部不应作为目标</td></tr><tr><td>下背部</td><td>80%成人会发生；30%转慢性；耐力优先于力量；每天训练最有效</td></tr><tr><td>下背部四步</td><td>纠正左右不平衡→纠正骨盆前/后倾→增加髋旋转ROM→强化后侧链</td></tr><tr><td>日常脊柱训练</td><td>猫牛式（动作训练非拉伸）+改良卷腹+鸟狗式（5-8秒/侧）+侧桥（5-8秒/侧）</td></tr><tr><td>梨状肌综合征</td><td>22%坐骨神经穿过梨状肌；≥6%&quot;下背痛&quot;实为梨状肌综合征</td></tr><tr><td>IT束摩擦</td><td>膝外侧疼痛；骨盆失衡→IT束紧绷→摩擦股骨外侧上髁</td></tr><tr><td>膝部肌腱炎</td><td>髌腱/鹅足腱/股四头肌腱；四头肌紧张→增加髌骨压力→自我肌筋膜放松+伸展</td></tr><tr><td>PFPS</td><td>股骨内旋失控+IT束紧张→髌骨轨迹异常；下楼/下坡痛加剧；扁平足/腓肠肌紧张/髋外展外旋无力均相关</td></tr><tr><td>膝关节注意</td><td>避开开链膝伸展→选闭链负重训练；全膝ROM可能无法完全恢复</td></tr><tr><td>外胫夹 vs 应力性骨折</td><td>外胫夹不需完全休息；应力性骨折为某点触痛、局部渐进痛</td></tr><tr><td>踝扭伤</td><td>75%在外侧；70%导致反复扭伤；机制=过度跖屈+内翻</td></tr><tr><td>踝扭伤恢复</td><td>修复本体感受→渐进单腿训练；避免不平稳表面；侧向运动确保准备好后再进行</td></tr><tr><td>跟腱炎</td><td>柔韧性是关键但避免过度拉伸；可进展为跟腱断裂（&gt;45岁高危）；脚保持中立位直指前方</td></tr><tr><td>足底筋膜炎</td><td>拉伸小腿+足底筋膜；滚球自我肌筋膜放松提高背屈ROM+缓解疼痛；强化足内在肌改善足弓</td></tr><tr><td>下肢课程通用</td><td>灵活性/稳定性→矢状面→冠状面/横状面→后侧链力量</td></tr></tbody></table></div>
+    </div>
+
+    <div id="tab-quiz" class="tab-content">
+      <div class="quiz-section">
+<div class="quiz-header"><h2>判断题</h2>
+<p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-warn">要点</span><span>私人教练的职责包括损伤评估和诊断。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出私人教练的职责是运动评估，不是损伤评估/诊断。客户出现疼痛或受伤，必须转介给医疗保健专业人员。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">2.</span><span class="quiz-tag quiz-tip">要点</span><span>RICE处理中的I代表冰敷（Ice），应在受伤后前24-48小时内使用。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出急性期标准处理为RICE（休息Rest、冰敷Ice、压迫Compression、抬高Elevation），前24-48小时冰敷。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">3.</span><span class="quiz-tag quiz-warn">要点</span><span>冰敷时应直接接触皮肤以获得最佳效果。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出冰敷应间接接触皮肤，每次≤20分钟。直接冰敷可能造成冻伤。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">4.</span><span class="quiz-tag quiz-tip">要点</span><span>疼痛超过3级即应停止运动。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确疼痛超过3级即停止运动（3级尚未引起不适/痛苦），训练前及训练中需持续评估疼痛等级。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">5.</span><span class="quiz-tag quiz-warn">要点</span><span>静态拉伸应放在锻炼开始时进行热身。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出静态拉伸放在锻炼结束时，因为长时间拉伸后会导致神经抑制和力量下降。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">6.</span><span class="quiz-tag quiz-tip">要点</span><span>III级肌肉拉伤在老年人中更常见，因为胶原组织失去弹性。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出III级拉伤在老年人中更常见（胶原组织失去弹性），愈合时间取决于严重程度。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">7.</span><span class="quiz-tag quiz-warn">要点</span><span>ACL撕裂只能通过接触性外力产生。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出ACL撕裂机制包括接触性（如橄榄球撞击）和非接触性（如篮球踩硬地面同时突然切球和扭动）两种。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">8.</span><span class="quiz-tag quiz-tip">要点</span><span>大部分软骨无血管，因此无法自行愈合。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出大部分软骨无血管→无法自行愈合，常需手术取出撕裂碎片；例外是半月板外侧1/3血管丰富，可手术修复。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">9.</span><span class="quiz-tag quiz-tip">要点</span><span>脑震荡后二次损伤可导致危及生命的二次撞击综合征。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出脑震荡后脑部极脆弱，二次损伤可导致二次撞击综合征（危及生命），必须立即停止活动。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">10.</span><span class="quiz-tag quiz-tip">要点</span><span>椎间盘损伤中Valsalva动作（憋气）会增加受伤风险。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出Valsalva动作增加椎间盘受伤风险，打喷嚏/咳嗽同理。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">11.</span><span class="quiz-tag quiz-warn">要点</span><span>应力性骨折仅发生在胫骨。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出所有骨头均可发生应力性骨折，股骨颈时有发生，胫骨最常见（常被误认为外胫夹）。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>包含全方位力量和稳定性训练可降低非接触性韧带损伤风险。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确包含全方位力量和稳定性训练可降低非接触性损伤风险。</p></details></div>
+</div>
+    </div>
+
+    <div id="tab-sop" class="tab-content">
+      <div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+    </div>
+
+    <div class="chapter-nav">
+      <a href="ch8.html" class="prev">← 上一章</a>
+      <span></span>
+    </div>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+// 深色模式
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  localStorage.setItem('theme', html.getAttribute('data-theme'));
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+// Tab切换
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// 阅读进度条
+window.addEventListener('scroll', function() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Lightbox
+function openLightbox(img) {
+  document.getElementById('lightboxImg').src = img.src;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+// TOC高亮
+const tocLinks = document.querySelectorAll('.toc-link');
+const headings = [];
+tocLinks.forEach(link => {
+  const id = link.getAttribute('href').substring(1);
+  const el = document.getElementById(id);
+  if (el) headings.push({el, link});
+});
+window.addEventListener('scroll', function() {
+  let current = null;
+  for (const h of headings) {
+    if (h.el.getBoundingClientRect().top <= 100) current = h;
+  }
+  tocLinks.forEach(l => l.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+});
+</script>
+
+</body>
+</html>

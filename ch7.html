@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第7章 慢性病客户注意事项 | ACEpresso</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --sidebar-bg: #fafbfc; --header-bg: #ffffff; --shadow: rgba(0,0,0,0.06);
+  --hero-gradient: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  --table-header: #2e7d32; --table-stripe: #f8f8f5;
+  --card-radius: 10px;
+}
+[data-theme="dark"] {
+  --bg: #0f0f1a; --surface: #1a1a2e; --text: #e0e0e0; --text-secondary: #aaa;
+  --accent: #66bb6a; --accent-light: #1b3a1b; --border: #2a2a3a;
+  --sidebar-bg: #12121e; --header-bg: #0f0f1a; --shadow: rgba(0,0,0,0.3);
+  --hero-gradient: linear-gradient(135deg, #1b3a1b 0%, #1a2e1a 50%, #0f0f1a 100%);
+  --table-header: #1b5e20; --table-stripe: #1e1e30;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 进度条 */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #4caf50);
+  z-index: 1000; transition: width 0.15s; width: 0%;
+}
+
+/* 顶部导航 */
+.site-header {
+  position: fixed; top: 3px; left: 0; right: 0; height: 54px;
+  background: var(--header-bg); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.theme-toggle {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  padding: 6px 16px; border-radius: 20px; cursor: pointer;
+  font-size: 13px; transition: all 0.25s;
+}
+.theme-toggle:hover {
+  background: var(--accent-light); border-color: var(--accent); color: var(--accent);
+}
+
+/* 布局 */
+.layout { display: flex; margin-top: 57px; min-height: calc(100vh - 57px); }
+
+/* 侧边栏 */
+.sidebar {
+  position: fixed; top: 57px; left: 0; width: 280px;
+  height: calc(100vh - 57px); background: var(--sidebar-bg);
+  border-right: 1px solid var(--border); overflow-y: auto;
+  padding: 20px 0; z-index: 50;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.toc-title {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; font-weight: 700; color: var(--text-secondary);
+  padding: 0 24px 14px; text-transform: uppercase; letter-spacing: 3px;
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+}
+.toc-link {
+  display: block; padding: 7px 24px; color: var(--text-secondary);
+  text-decoration: none; font-size: 13px; line-height: 1.5;
+  transition: all 0.2s; border-left: 3px solid transparent;
+}
+.toc-link:hover {
+  background: var(--accent-light); color: var(--accent);
+  border-left-color: var(--accent);
+}
+.toc-link.active {
+  color: var(--accent); font-weight: 600;
+  border-left-color: var(--accent); background: var(--accent-light);
+}
+.toc-h2 { padding-left: 24px; font-weight: 700; font-size: 14px; color: var(--text); margin-top: 8px; }
+.toc-h3 { padding-left: 36px; }
+.toc-h4 { padding-left: 48px; font-size: 12px; }
+
+/* 主内容区 */
+.main-content {
+  margin-left: 280px; flex: 1; max-width: 880px;
+  padding: 0 48px 100px;
+}
+
+/* Hero区 */
+.hero {
+  padding: 48px 0 36px; border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  background: var(--hero-gradient);
+  margin-left: -48px; margin-right: -48px;
+  padding-left: 48px; padding-right: 48px;
+}
+.hero .badge {
+  display: inline-block; background: var(--accent); color: white;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; font-weight: 700; padding: 4px 14px;
+  border-radius: 20px; letter-spacing: 1px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 32px; font-weight: 800; line-height: 1.3;
+  color: var(--text); margin-bottom: 8px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.hero .subtitle {
+  font-size: 15px; color: var(--text-secondary);
+  font-style: italic; margin-bottom: 16px;
+}
+.hero .intro {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.8;
+  max-width: 640px; border-left: 3px solid var(--accent);
+  padding-left: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 0; border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 12px 24px; font-size: 14px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.2s; margin-bottom: -2px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active {
+  color: var(--accent); border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.placeholder {
+  padding: 48px 24px; text-align: center;
+  color: var(--text-secondary); font-size: 15px;
+}
+
+/* 标题层级 */
+.section-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 24px; font-weight: 800; color: var(--accent);
+  margin: 48px 0 20px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  line-height: 1.4;
+}
+.subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--text);
+  margin: 36px 0 16px; padding-left: 16px;
+  border-left: 4px solid var(--accent);
+  line-height: 1.4;
+}
+.sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 17px; font-weight: 600; color: var(--text);
+  margin: 28px 0 12px; line-height: 1.4;
+}
+.sub-sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--text-secondary);
+  margin: 20px 0 10px; line-height: 1.4;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* 正文段落 */
+.main-content p {
+  margin-bottom: 16px; text-align: justify;
+  text-indent: 0;
+}
+
+/* 色块卡片 */
+.card {
+  margin: 18px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  position: relative;
+}
+.card .card-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700; font-size: 12px;
+  display: inline-block; margin-bottom: 8px;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px;
+}
+.card p { margin: 0; font-size: 15px; line-height: 1.8; }
+
+.card-tip { background: #e8f5e9; border-color: #4caf50; }
+.card-tip .card-label { color: #2e7d32; background: #c8e6c9; }
+
+.card-wrong { background: #fce4ec; border-color: #e53935; }
+.card-wrong .card-label { color: #c62828; background: #ffcdd2; }
+
+.card-right { background: #e3f2fd; border-color: #1e88e5; }
+.card-right .card-label { color: #1565c0; background: #bbdefb; }
+
+.card-warn { background: #fff8e1; border-color: #ff8f00; }
+.card-warn .card-label { color: #e65100; background: #ffecb3; }
+
+.card-scene { background: #f3e5f5; border-color: #7b1fa2; }
+.card-scene .card-label { color: #6a1b9a; background: #e1bee7; }
+
+.card-memory {
+  background: var(--bg-secondary, #f5f5f5); border-color: #9e9e9e;
+  border-left-style: dashed;
+}
+.card-memory .card-label { color: #616161; background: #e0e0e0; }
+.card-memory p { font-size: 14px; color: var(--text-secondary); font-style: italic; }
+
+/* 深色模式卡片 */
+[data-theme="dark"] .card-tip { background: #1b3a1b; }
+[data-theme="dark"] .card-tip .card-label { background: #2e5a2e; color: #81c784; }
+[data-theme="dark"] .card-wrong { background: #3a1b1b; }
+[data-theme="dark"] .card-wrong .card-label { background: #5a2e2e; color: #ef9a9a; }
+[data-theme="dark"] .card-right { background: #1b2a3a; }
+[data-theme="dark"] .card-right .card-label { background: #2e4a5a; color: #90caf9; }
+[data-theme="dark"] .card-warn { background: #3a2a1b; }
+[data-theme="dark"] .card-warn .card-label { background: #5a4a2e; color: #ffcc80; }
+[data-theme="dark"] .card-scene { background: #2a1b3a; }
+[data-theme="dark"] .card-scene .card-label { background: #4a2e5a; color: #ce93d8; }
+[data-theme="dark"] .card-memory { background: #1a1a2a; }
+[data-theme="dark"] .card-memory .card-label { background: #2a2a3a; color: #bdbdbd; }
+
+/* 表格 */
+.table-wrapper {
+  margin: 20px 0; overflow-x: auto; border-radius: 10px;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  line-height: 1.6;
+}
+th {
+  background: var(--table-header); color: white;
+  padding: 12px 16px; text-align: left;
+  font-family: 'Noto Sans SC', sans-serif; font-weight: 600;
+  font-size: 13px; letter-spacing: 0.5px;
+}
+td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:hover { background: var(--accent-light); }
+
+/* 图片 */
+.img-figure {
+  margin: 24px 0; text-align: center;
+}
+.img-figure img {
+  max-width: 100%; height: auto; border-radius: 8px;
+  border: 1px solid var(--border); box-shadow: 0 2px 8px var(--shadow);
+  cursor: pointer; transition: transform 0.2s;
+}
+.img-figure img:hover { transform: scale(1.01); }
+.img-figure figcaption {
+  font-size: 13px; color: var(--text-secondary);
+  margin-top: 8px; font-style: italic;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+  z-index: 2000; justify-content: center; align-items: center;
+  cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 90%; max-height: 90%; border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* 章间导航 */
+.chapter-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+}
+.chapter-nav a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  text-decoration: none; padding: 10px 20px;
+  border: 1px solid var(--accent); border-radius: 8px;
+  transition: all 0.2s;
+}
+.chapter-nav a:hover {
+  background: var(--accent); color: white;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding: 0 20px 60px; }
+  .hero { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 24px; }
+  .section-heading { font-size: 20px; }
+  .subsection-heading { font-size: 18px; }
+}
+
+/* 打印 */
+@media print {
+  .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox { display: none !important; }
+  .main-content { margin-left: 0; max-width: 100%; padding: 0; }
+  .hero { background: none; margin: 0; padding: 20px 0; }
+  table { break-inside: avoid; }
+  .img-figure img { max-width: 80%; }
+  .quiz-item { break-inside: avoid; }
+}
+
+/* 自测判断题区 */
+.quiz-section { padding: 16px 0; }
+.quiz-header h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.quiz-header .quiz-instruction {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}
+.quiz-item {
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}
+.quiz-q { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+.quiz-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.quiz-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.quiz-tip { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+.quiz-wrong { background: #fce4ec; color: #c62828; border-color: #e53935; }
+.quiz-right { background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }
+.quiz-warn { background: #fff8e1; color: #e65100; border-color: #ff8f00; }
+.quiz-scene { background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }
+.quiz-answer {
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}
+.quiz-answer summary {
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}
+.quiz-answer p { margin-top: 6px; }
+[data-theme="dark"] .quiz-tip { background: #1b3a1b; }
+[data-theme="dark"] .quiz-wrong { background: #3a1b1b; }
+[data-theme="dark"] .quiz-right { background: #1b2a3a; }
+[data-theme="dark"] .quiz-warn { background: #3a2a1b; }
+[data-theme="dark"] .quiz-scene { background: #2a1b3a; }
+[data-theme="dark"] .quiz-item { background: var(--surface); }
+
+/* 知识速览折叠区 */
+.knowledge-overview {
+  margin: 0 0 32px; padding: 20px 24px;
+  border: 1px solid var(--border); border-radius: var(--card-radius);
+  background: var(--surface);
+}
+.knowledge-overview summary {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  cursor: pointer; margin-bottom: 16px; user-select: none;
+}
+.knowledge-overview[open] summary { margin-bottom: 20px; }
+.knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">本章目录</div>
+    <a href="#s1" class="toc-link toc-h2">跨疾病通用原则（所有疾病都适用的原则）</a>
+<a href="#s2" class="toc-link toc-h4">医学许可与筛查</a>
+<a href="#s6" class="toc-link toc-h4">运动处方通用框架</a>
+<a href="#s10" class="toc-link toc-h4">多学科协作</a>
+<a href="#s13" class="toc-link toc-h4">生活方式干预核心</a>
+<a href="#s16" class="toc-link toc-h2">一、心脑血管疾病</a>
+<a href="#s17" class="toc-link toc-h3">1.1 冠状动脉疾病（CAD）</a>
+<a href="#s18" class="toc-link toc-h4">核心机制</a>
+<a href="#s21" class="toc-link toc-h4">症状要点</a>
+<a href="#s26" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s29" class="toc-link toc-h4">安全红线</a>
+<a href="#s34" class="toc-link toc-h3">1.2 高血压</a>
+<a href="#s37" class="toc-link toc-h4">核心机制</a>
+<a href="#s41" class="toc-link toc-h4">诊断标准（2017 ACC/AHA）</a>
+<a href="#s44" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s47" class="toc-link toc-h4">关键数据</a>
+<a href="#s51" class="toc-link toc-h4">安全注意</a>
+<a href="#s55" class="toc-link toc-h3">1.3 中风</a>
+<a href="#s58" class="toc-link toc-h4">核心机制</a>
+<a href="#s61" class="toc-link toc-h4">警示信号（FAST原则）</a>
+<a href="#s66" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s69" class="toc-link toc-h4">关键要点</a>
+<a href="#s74" class="toc-link toc-h3">1.4 外周动脉疾病（PAD）</a>
+<a href="#s77" class="toc-link toc-h4">核心机制</a>
+<a href="#s80" class="toc-link toc-h4">症状要点</a>
+<a href="#s84" class="toc-link toc-h4">运动改善模式（核心：间歇步行训练）</a>
+<a href="#s87" class="toc-link toc-h4">关键机制</a>
+<a href="#s90" class="toc-link toc-h4">安全注意</a>
+<a href="#s94" class="toc-link toc-h2">二、代谢紊乱</a>
+<a href="#s95" class="toc-link toc-h3">2.1 血脂异常</a>
+<a href="#s96" class="toc-link toc-h4">核心机制</a>
+<a href="#s105" class="toc-link toc-h4">诊断标准</a>
+<a href="#s108" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s111" class="toc-link toc-h4">关键要点</a>
+<a href="#s117" class="toc-link toc-h3">2.2 糖尿病</a>
+<a href="#s120" class="toc-link toc-h4">1型糖尿病</a>
+<a href="#s121" class="toc-link toc-h4">核心机制</a>
+<a href="#s125" class="toc-link toc-h4">运动注意</a>
+<a href="#s131" class="toc-link toc-h4">2型糖尿病（&gt;90%患者）</a>
+<a href="#s132" class="toc-link toc-h4">核心机制</a>
+<a href="#s136" class="toc-link toc-h4">症状要点</a>
+<a href="#s139" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s142" class="toc-link toc-h4">关键要点</a>
+<a href="#s148" class="toc-link toc-h4">安全注意</a>
+<a href="#s151" class="toc-link toc-h3">2.3 代谢综合征（MetS）</a>
+<a href="#s154" class="toc-link toc-h4">核心机制</a>
+<a href="#s160" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s163" class="toc-link toc-h4">关键要点</a>
+<a href="#s168" class="toc-link toc-h2">三、肺部疾病</a>
+<a href="#s169" class="toc-link toc-h3">3.1 哮喘（运动诱发性支气管收缩 EIB）</a>
+<a href="#s172" class="toc-link toc-h4">核心机制</a>
+<a href="#s176" class="toc-link toc-h4">症状要点</a>
+<a href="#s181" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s184" class="toc-link toc-h4">关键要点</a>
+<a href="#s189" class="toc-link toc-h4">安全注意</a>
+<a href="#s197" class="toc-link toc-h2">四、其他慢性病</a>
+<a href="#s198" class="toc-link toc-h3">4.1 癌症</a>
+<a href="#s199" class="toc-link toc-h4">核心机制</a>
+<a href="#s203" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s206" class="toc-link toc-h4">关键要点</a>
+<a href="#s212" class="toc-link toc-h4">安全注意</a>
+<a href="#s215" class="toc-link toc-h3">4.2 骨质疏松症</a>
+<a href="#s220" class="toc-link toc-h4">核心机制</a>
+<a href="#s226" class="toc-link toc-h4">风险因素</a>
+<a href="#s229" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s232" class="toc-link toc-h4">关键要点</a>
+<a href="#s235" class="toc-link toc-h4">安全红线</a>
+<a href="#s241" class="toc-link toc-h3">4.3 关节炎</a>
+<a href="#s243" class="toc-link toc-h4">骨关节炎（OA）</a>
+<a href="#s244" class="toc-link toc-h4">核心机制</a>
+<a href="#s248" class="toc-link toc-h4">症状要点</a>
+<a href="#s253" class="toc-link toc-h4">类风湿关节炎（RA）</a>
+<a href="#s254" class="toc-link toc-h4">核心机制</a>
+<a href="#s258" class="toc-link toc-h4">运动改善模式</a>
+<a href="#s261" class="toc-link toc-h4">关键要点</a>
+<a href="#s266" class="toc-link toc-h4">安全注意</a>
+  </nav>
+
+  <main class="main-content">
+    <div class="hero">
+      <div class="badge">第7章</div>
+      <h1>慢性病客户注意事项</h1>
+      <div class="subtitle">Considerations for Clients with Chronic Diseases</div>
+      <div class="intro">本章讲解私人教练在为慢性病客户提供服务时的注意事项，包括各类慢性疾病的运动适应证、禁忌证和运动处方调整要点。</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
+      <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+      <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
+    </div>
+
+    <div id="tab-lecture" class="tab-content active">
+<p>本章节内容按&quot;核心机制→症状要点→运动改善模式→安全注意&quot;四段结构组织</p>
+<h2 class="section-heading" id="s1">跨疾病通用原则（所有疾病都适用的原则）</h2>
+<h4 class="sub-subsection-heading" id="s2">医学许可与筛查</h4>
+<p>● 所有慢性病客户开始运动前需获得医学许可</p>
+<p>● 遵循ACE整合式Fitness训练模型的一般原则，根据疾病特点个性化调整</p>
+<p>● 使用SOAP笔记记录客户进展（主观→客观→评估→计划）</p>
+<h4 class="sub-subsection-heading" id="s6">运动处方通用框架</h4>
+<p>● 心肺：FITT-VP（频率、强度、时间、类型、进阶、变化）</p>
+<p>● 肌力：频率、强度、时间、类型、进阶</p>
+<p>● 强度监控：HRR%、VO₂R%、RPE、VT1/VT2</p>
+<h4 class="sub-subsection-heading" id="s10">多学科协作</h4>
+<p>● 私人教练需与治疗医生、理疗师、注册营养师、心理健康专业人员保持沟通</p>
+<p>● 多学科方法优于单一药物或单一干预</p>
+<h4 class="sub-subsection-heading" id="s13">生活方式干预核心</h4>
+<p>● 所有慢性病共同建议：适度（适量营养+热量+运动频率/强度/时间）</p>
+<p>● 减重、增加身体活动、健康饮食、戒烟是共性初始策略</p>
+<h2 class="section-heading" id="s16">一、心脑血管疾病</h2>
+<h3 class="subsection-heading" id="s17">1.1 冠状动脉疾病（CAD）</h3>
+<h4 class="sub-subsection-heading" id="s18">核心机制</h4>
+<p>● 动脉粥样硬化：血管壁炎症→脂质斑块沉积→管腔狭窄→心肌供血不足</p>
+<p>● 心梗（MI）触发：脆弱斑块破裂→血栓形成→动脉完全堵塞</p>
+<h4 class="sub-subsection-heading" id="s21">症状要点</h4>
+<p>● 心绞痛（胸痛/胸闷，运动时加重）</p>
+<p>● 呼吸困难</p>
+<p>● 运动耐量下降</p>
+<p>● 风险因素：家族史、高血压、血脂异常、糖尿病、吸烟、久坐、不良饮食</p>
+<h4 class="sub-subsection-heading" id="s26">运动改善模式</h4>
+<p>表7-1</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>低风险稳定客户处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：≥3天/周（最好5天+）；肌力：2-3天/周</td></tr><tr><td>强度</td><td>心肺：40-80% HRR，RPE 12-13，≤VT1；肌力：RPE 11-13</td></tr><tr><td>时间</td><td>心肺：20-60分钟（含5-10分钟热身放松）；肌力：1-3组×10-15次，8-10个动作</td></tr><tr><td>类型</td><td>心肺：踏车、椭圆机、划船机、步行；肌力：小重量起始→逐渐过渡到器械</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s29">安全红线</h4>
+<p>● 必须获得医学许可后方可开始训练</p>
+<p>● 终止运动的信号：心绞痛、呼吸困难、头晕、面色苍白、心率超目标</p>
+<p>● 避免Valsalva动作（憋气）</p>
+<p>● 低风险标准：住院过程无并发症、无缺血证据、功能能力&gt;7METs、射血分数&gt;50%</p>
+<h3 class="subsection-heading" id="s34">1.2 高血压</h3>
+<figure class="img-figure"><img src="images/ch7_fig1.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-1</p>
+<h4 class="sub-subsection-heading" id="s37">核心机制</h4>
+<p>● 原发性（90-95%）：病因不明，遗传+环境交互</p>
+<p>● 继发性（5-10%）：肾脏疾病等可识别原因</p>
+<p>● 关键可变风险因素：压力、体脂过多、钠摄入、酒精、久坐、睡眠不足（OSA）</p>
+<h4 class="sub-subsection-heading" id="s41">诊断标准（2017 ACC/AHA）</h4>
+<p>表7-2</p>
+<div class="table-wrapper"><table><thead><tr><th>分类</th><th>收缩压</th><th>舒张压</th></tr></thead><tbody><tr><td>正常</td><td>&lt;120</td><td>&lt;80</td></tr><tr><td>偏高</td><td>120-129</td><td>&lt;80</td></tr><tr><td>1期</td><td>130-139</td><td>80-89</td></tr><tr><td>2期</td><td>≥140</td><td>≥90</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s44">运动改善模式</h4>
+<p>表7-3</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>大多数/所有天数</td></tr><tr><td>强度</td><td>40-59% HRR，RPE 12-13，&lt;VT1（可舒适交谈）</td></tr><tr><td>时间</td><td>≥30分钟连续或累积（可分10分钟间歇）</td></tr><tr><td>类型</td><td>有节奏大肌群：步行、慢跑、骑车、游泳</td></tr><tr><td>肌力</td><td>60-80% 1-RM，2-4组×8-12次，避免Valsalva</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s47">关键数据</h4>
+<p>● 单次运动后血压可降低5-7 mmHg，持续24小时</p>
+<p>● 每周≥150分钟运动量降压效果最大</p>
+<p>● 生活方式改变（DASH饮食+运动+减重）效果可媲美药物</p>
+<h4 class="sub-subsection-heading" id="s51">安全注意</h4>
+<p>● 服用β受体阻滞剂/钙通道阻滞剂者：用RPE监控强度，缓慢变换体位</p>
+<p>● 服用利尿剂者：注意补液，防止脱水和运动后低血压</p>
+<p>● 体位性低血压者：转介医疗专业人员评估用药</p>
+<h3 class="subsection-heading" id="s55">1.3 中风</h3>
+<figure class="img-figure"><img src="images/ch7_fig2.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-2</p>
+<h4 class="sub-subsection-heading" id="s58">核心机制</h4>
+<p>● 缺血性（~80%）：脑血管被血栓/斑块堵塞</p>
+<p>● 出血性（~20%）：脑血管破裂</p>
+<h4 class="sub-subsection-heading" id="s61">警示信号（FAST原则）</h4>
+<p>● Face：面部突然下垂</p>
+<p>● Arms：手臂突然无力</p>
+<p>● Speech：说话困难/理解障碍</p>
+<p>● Time：立即呼叫急救</p>
+<h4 class="sub-subsection-heading" id="s66">运动改善模式</h4>
+<p>表7-4</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：3-5天/周；肌力：2个非连续日</td></tr><tr><td>强度</td><td>心肺：轻-中-剧烈均可，40-70% HRR或RPE 11-14；肌力：50-70% 1-RM</td></tr><tr><td>时间</td><td>心肺：20-60分钟，可分多轮；肌力：1-3组×8-15次</td></tr><tr><td>类型</td><td>心肺：踏车、卧式踏步机、跑步机步行；肌力：器械优先（安全性高）</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s69">关键要点</h4>
+<p>● 运动可改善CVD风险因素（血压、血脂、胰岛素敏感性）</p>
+<p>● 运动可改善平衡/协调/步态</p>
+<p>● 即使中风后数年，运动仍能改善运动功能</p>
+<p>● 运动指南应来自理疗师/职业治疗师</p>
+<h3 class="subsection-heading" id="s74">1.4 外周动脉疾病（PAD）</h3>
+<figure class="img-figure"><img src="images/ch7_fig3.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-3</p>
+<h4 class="sub-subsection-heading" id="s77">核心机制</h4>
+<p>● 下肢动脉粥样硬化→病变远端血流减少→缺血性跛行（运动性下肢疼痛）</p>
+<p>● 最常见病变部位：腹主动脉/髂骨、股骨、腘动脉、胫骨动脉</p>
+<h4 class="sub-subsection-heading" id="s80">症状要点</h4>
+<p>● 跛行：行走一定距离后出现下肢钝痛/酸痛/痉挛</p>
+<p>● 休息后缓解，再走再痛</p>
+<p>● 重症者静息时也疼痛</p>
+<h4 class="sub-subsection-heading" id="s84">运动改善模式（核心：间歇步行训练）</h4>
+<p>表7-5</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>3-5天/周</td></tr><tr><td>强度</td><td>中等强度，以疼痛强度为准（非心率）；跛行疼痛量表3-4级（轻-中度）</td></tr><tr><td>时间</td><td>30-45分钟（不含休息），逐步至60分钟；12周为一周期</td></tr><tr><td>类型</td><td>承重步行（间歇性）：走至中度疼痛→坐下休息→疼痛消失→继续</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s87">关键机制</h4>
+<p>● 步行产生缺血→刺激侧支循环形成+毛细血管/线粒体密度增加→氧气利用改善</p>
+<p>● &quot;高强度&quot;在此语境指疼痛强度，非能量消耗</p>
+<h4 class="sub-subsection-heading" id="s90">安全注意</h4>
+<p>● 出现CAD症状（胸痛等）→立即停止，需医学评估</p>
+<p>● 足部护理至关重要（尤其合并糖尿病者）</p>
+<p>● 穿合适的鞋袜</p>
+<h2 class="section-heading" id="s94">二、代谢紊乱</h2>
+<h3 class="subsection-heading" id="s95">2.1 血脂异常</h3>
+<h4 class="sub-subsection-heading" id="s96">核心机制</h4>
+<figure class="img-figure"><img src="images/ch7_fig4.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-4</p>
+<p>● 脂质代谢紊乱：总胆固醇↑、LDL↑、TG↑、HDL↓ → 动脉粥样硬化</p>
+<p>● 关键脂蛋白：</p>
+<p>● LDL（&quot;坏&quot;胆固醇）：促进动脉粥样硬化</p>
+<p>● HDL（&quot;好&quot;胆固醇）：运输脂质至肝脏排泄，与CAD负相关</p>
+<p>● 非HDL胆固醇：HDL之外的总胆固醇，识别致动脉粥样硬化颗粒，优于LDL</p>
+<p>● TG：独立风险因素，慢性升高→内皮功能障碍</p>
+<h4 class="sub-subsection-heading" id="s105">诊断标准</h4>
+<p>表7-6</p>
+<div class="table-wrapper"><table><thead><tr><th>指标</th><th>理想</th><th>边缘偏高</th><th>高</th><th>非常高</th></tr></thead><tbody><tr><td>LDL</td><td>&lt;100</td><td>130-159</td><td>160-189</td><td>≥190</td></tr><tr><td>总胆固醇</td><td>&lt;200</td><td>200-239</td><td>≥240</td><td>—</td></tr><tr><td>HDL</td><td>≥60（高=保护性）</td><td>—</td><td>&lt;40（低=风险）</td><td>—</td></tr><tr><td>TG</td><td>&lt;150</td><td>150-199</td><td>200-499</td><td>≥500</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s108">运动改善模式</h4>
+<p>表7-7</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：≥5天（最大化热量消耗）；肌力：2-3天</td></tr><tr><td>强度</td><td>心肺：40-75% HRR，低于/等于/高于VT1但&lt;VT2；肌力：50-85% 1-RM（力量）或&lt;50%（耐力）</td></tr><tr><td>时间</td><td>心肺：30-60分钟（减重建议50-60分钟）；肌力：2-4组×8-12次（力量）或12-20次（耐力）</td></tr><tr><td>类型</td><td>心肺：有节奏大肌群；肌力：器械/自由重量/体重</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s111">关键要点</h4>
+<p>● LDL：单纯运动对LDL改善不一致，需结合减重</p>
+<p>● HDL：心肺适能提高→HDL普遍增高；减脂可使HDL增高更多</p>
+<p>● TG：心肺训练最有效（TG可作燃料）；肌力训练无效</p>
+<p>● 运动量阈值：每周250-300分钟，消耗~2000千卡→多数成年人可降低体重/体脂</p>
+<p>● 餐后脂血症（PPL）：单次中等强度运动30-60分钟→TG降低持续12-36小时→建议至少隔天运动一次</p>
+<h3 class="subsection-heading" id="s117">2.2 糖尿病</h3>
+<figure class="img-figure"><img src="images/ch7_fig5.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-5</p>
+<h4 class="sub-subsection-heading" id="s120">1型糖尿病</h4>
+<h4 class="sub-subsection-heading" id="s121">核心机制</h4>
+<p>● 自身免疫攻击胰岛β细胞→胰岛素绝对缺乏</p>
+<p>● 需注射/泵入胰岛素调节血糖</p>
+<p>● 血糖控制=饮食+运动+胰岛素三者的时间/量协调</p>
+<h4 class="sub-subsection-heading" id="s125">运动注意</h4>
+<p>● 运动前减少胰岛素剂量</p>
+<p>● 运动前/中摄取易吸收碳水化合物</p>
+<p>● 运动中/后调整胰岛素泵输注量</p>
+<p>● 胰岛素水平高→运动时/后低血糖风险</p>
+<p>● 胰岛素水平低→高血糖+酮症风险</p>
+<h4 class="sub-subsection-heading" id="s131">2型糖尿病（&gt;90%患者）</h4>
+<h4 class="sub-subsection-heading" id="s132">核心机制</h4>
+<p>● 胰岛素抵抗（细胞对胰岛素不敏感）+ β细胞相对不足→高血糖</p>
+<p>● 与久坐、热量过剩、肥胖（尤其内脏脂肪）高度相关</p>
+<p>● 内脏脂肪→轻度炎症→胰岛素抵抗→糖尿病/代谢综合征</p>
+<h4 class="sub-subsection-heading" id="s136">症状要点</h4>
+<p>● 多饮、多尿、多食、体重下降（典型但未必要全部出现）</p>
+<p>● 长期并发症：心脏、血管、肾脏、眼睛、足部、神经、肌肉骨骼</p>
+<h4 class="sub-subsection-heading" id="s139">运动改善模式</h4>
+<p>表7-8</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：3-7天（避免连续2天不运动！）；肌力：≥2个非连续日（最好3天）</td></tr><tr><td>强度</td><td>中等：40-59% HRR，&lt;VT1；剧烈：60-89% HRR，VT1至&lt;VT2</td></tr><tr><td>时间</td><td>1型：150分钟中等/75分钟剧烈；2型：150分钟中等</td></tr><tr><td>肌力</td><td>50-85% 1-RM，1-3组×8-10次（所有大肌群，8-10个动作，接近疲劳）</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s142">关键要点</h4>
+<p>● 不可连续2天不运动：运动对胰岛素敏感性的影响24-48小时后消失</p>
+<p>● 心肺+肌力结合→肌肉保持更高胰岛素敏感性→更好血糖控制</p>
+<p>● 减重5-7%即可逆转胰岛素抵抗（与全身性炎症减少有关）</p>
+<p>● 碳水对血糖影响最大→饭后1小时血糖最高，2小时后开始下降</p>
+<p>● 碳水化合物类型重要：单糖→血糖快速峰值；复合碳水→释放更慢</p>
+<h4 class="sub-subsection-heading" id="s148">安全注意</h4>
+<p>● 1型：运动前后监测血糖，调整胰岛素和碳水摄入</p>
+<p>● 2型：注意低血糖症状（出汗、颤抖、头晕、意识模糊）</p>
+<h3 class="subsection-heading" id="s151">2.3 代谢综合征（MetS）</h3>
+<figure class="img-figure"><img src="images/ch7_fig6.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-6</p>
+<h4 class="sub-subsection-heading" id="s154">核心机制</h4>
+<p>● 不是单一疾病，是一组增加心脏病/糖尿病/中风风险的代谢异常簇集</p>
+<p>● 诊断标准（出现≥3项）：</p>
+<p>1. 腰围↑：男≥102cm，女≥88cm</p>
+<p>4. 血压≥130/85 mmHg（或药物治疗）</p>
+<p>5. 空腹血糖≥100 mg/dL（或药物治疗）</p>
+<h4 class="sub-subsection-heading" id="s160">运动改善模式</h4>
+<p>表7-9</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：≥5天（最大化热量消耗）；肌力：≥2天（最好3天）</td></tr><tr><td>强度</td><td>心肺：40-59% HRR，RPE 12-13，&lt;VT1；肌力：50-85% 1-RM</td></tr><tr><td>时间</td><td>心肺：30-60分钟（减重建议50-60分钟）；肌力：1-3组×8-10次</td></tr><tr><td>类型</td><td>心肺：有节奏大肌群；肌力：所有大肌群</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s163">关键要点</h4>
+<p>● 主要目标是减重（尤其减少内脏脂肪）</p>
+<p>● 运动计划参照肥胖症指南设计</p>
+<p>● 需同时评估CAD、高血压、血脂异常等共存风险因素</p>
+<p>● 持续性运动和间歇性运动均可</p>
+<h2 class="section-heading" id="s168">三、肺部疾病</h2>
+<h3 class="subsection-heading" id="s169">3.1 哮喘（运动诱发性支气管收缩 EIB）</h3>
+<figure class="img-figure"><img src="images/ch7_fig7.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-7</p>
+<h4 class="sub-subsection-heading" id="s172">核心机制</h4>
+<p>● 呼吸道慢性炎症→对各种刺激因素过度反应→支气管平滑肌收缩+黏膜肿胀+黏液分泌↑→气道狭窄</p>
+<p>● 运动诱发机制：大量干冷空气进入呼吸道→呼吸道水分丢失→支气管收缩物质释放</p>
+<p>● 80%哮喘患者运动时/后发作（EIB）</p>
+<h4 class="sub-subsection-heading" id="s176">症状要点</h4>
+<p>● 喘息、呼吸困难、胸闷、咳嗽（尤其夜间/清晨）</p>
+<p>● EIB特征：中-剧烈强度运动后呼吸道暂时变窄</p>
+<p>● 症状在运动后5-10分钟达峰，持续20-30分钟</p>
+<p>● 部分人运动后2-12小时出现延迟反应</p>
+<h4 class="sub-subsection-heading" id="s181">运动改善模式</h4>
+<p>表7-10</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：3-5天/周；肌力：≥2天（最好3天）</td></tr><tr><td>强度</td><td>心肺：起始&lt;VT1（40-59% HRR），1个月后进阶至60-70%；RPE 12-13</td></tr><tr><td>时间</td><td>逐步至30-40分钟/次</td></tr><tr><td>类型</td><td>心肺：步行、跑步、骑车、无氯泳池游泳；肌力：50-85% 1-RM</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s184">关键要点</h4>
+<p>● 10-15分钟热身（含剧烈/间歇运动）→诱导不应期→减弱EIB反应</p>
+<p>● 约50% EIB者有2小时不应期（期间再次运动不发作或发作减弱）</p>
+<p>● 运动调节→减少相同任务所需通气量→呼吸道干燥减少</p>
+<p>● 哮喘最佳反应时间：上午中间至晚些时候</p>
+<h4 class="sub-subsection-heading" id="s189">安全注意</h4>
+<p>● 随身携带急救药物（支气管扩张剂）</p>
+<p>● 运动前预防性使用药物（遵医嘱）</p>
+<p>● 运动前/中/后充分饮水</p>
+<p>● 避免触发因素：极热/极冷、花粉高峰、空气污染</p>
+<p>● 低温环境可佩戴口罩保持吸入空气温暖湿润</p>
+<p>● 密切观察哮喘发作早期体征→症状加重→降低强度→终止课程</p>
+<p>● 药物无效→启动急救系统</p>
+<h2 class="section-heading" id="s197">四、其他慢性病</h2>
+<h3 class="subsection-heading" id="s198">4.1 癌症</h3>
+<h4 class="sub-subsection-heading" id="s199">核心机制</h4>
+<p>● 正常细胞DNA受损→突变→细胞不受控增殖</p>
+<p>● 约30%癌症死亡与5大行为/饮食风险相关：BMI高、蔬果不足、久坐、吸烟、饮酒</p>
+<p>● 癌症幸存者三阶段：治疗期→康复后生活→晚期/临终</p>
+<h4 class="sub-subsection-heading" id="s203">运动改善模式</h4>
+<p>表7-11</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：3-5天/周；肌力：2-3天/周</td></tr><tr><td>强度</td><td>心肺：中等（40-59% HRR，RPE 12-13），可进阶至剧烈；肌力：从&lt;30% 1-RM起始，~5%递增</td></tr><tr><td>时间</td><td>心肺：75分钟剧烈或150分钟中等/周；肌力：≥1组×8-12次</td></tr><tr><td>类型</td><td>心肺：步行、骑车等大肌群长时间有节奏活动；肌力：自由重量+器械+承重功能任务</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s206">关键要点</h4>
+<p>● 运动可改善：焦虑/抑郁、疲劳、恶心、身体功能、生活质量</p>
+<p>● 运动可维持肌肉量、肌肉力量/耐力、心肺适能、柔韧性</p>
+<p>● 运动可降低心脏病、骨质疏松症、糖尿病风险</p>
+<p>● 化疗/放疗患者可能出现贫血→降低运动强度</p>
+<p>● 骨骼完整性受损→减少负重和高强度举重</p>
+<h4 class="sub-subsection-heading" id="s212">安全注意</h4>
+<p>● 运动计划个体化：癌症类型、治疗方案、当前健康状态</p>
+<p>● 建议转介肿瘤专科注册营养师</p>
+<h3 class="subsection-heading" id="s215">4.2 骨质疏松症</h3>
+<figure class="img-figure"><img src="images/ch7_fig8.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-8</p>
+<figure class="img-figure"><img src="images/ch7_fig9.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图7-9</p>
+<h4 class="sub-subsection-heading" id="s220">核心机制</h4>
+<p>● 骨量低+骨微结构破坏→骨骼脆弱→骨折风险↑</p>
+<p>● 定义：BMD低于年轻成人平均值2.5个标准差以上</p>
+<p>● 骨量减少：BMD低于平均值1.0-2.5个标准差</p>
+<p>● 最常见骨折部位：髋关节、脊椎、前臂远端</p>
+<p>● 90%+髋骨折由跌倒引起</p>
+<h4 class="sub-subsection-heading" id="s226">风险因素</h4>
+<p>● 不可控：遗传、女性、白种人/亚洲人、绝经后</p>
+<p>● 可控：生殖激素、钙/维生素D摄入、身体活动、吸烟、酒精</p>
+<h4 class="sub-subsection-heading" id="s229">运动改善模式</h4>
+<p>表7-12</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：4-5天/周；肌力：1-2天→进阶至2-3天</td></tr><tr><td>强度</td><td>心肺：中等（40-59% HRR）；肌力：调整至最后2次重复有挑战性，高强度者可受益</td></tr><tr><td>时间</td><td>心肺：20分钟→进阶至30-60分钟；肌力：1组×8-12次→2周后增至2组</td></tr><tr><td>类型</td><td>心肺：负重大肌群（步行、爬楼梯）；肌力：骨骼负荷力运动+平衡/步态/功能性站姿运动</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s232">关键要点</h4>
+<p>● 物理应力→骨骼微变形→刺激骨沉积→骨量/强度↑</p>
+<p>● 经常运动→BMD↑、跌倒/骨折风险↓</p>
+<h4 class="sub-subsection-heading" id="s235">安全红线</h4>
+<p>● 避免：脊柱过度前屈、扭转、压迫动作→增加脊椎骨折风险</p>
+<p>● 推荐：躯干伸展+腹部稳定运动</p>
+<p>● 避免：光滑表面、绊倒危险环境、快速震动动作</p>
+<p>● 肌力训练+负重+冲击运动（跳跃）对刺激骨量最有效</p>
+<p>● 强调平衡训练：躯干、髋部、下肢肌肉力量</p>
+<h3 class="subsection-heading" id="s241">4.3 关节炎</h3>
+<p>图7-10</p>
+<h4 class="sub-subsection-heading" id="s243">骨关节炎（OA）</h4>
+<h4 class="sub-subsection-heading" id="s244">核心机制</h4>
+<p>● 关节软骨退化（过度使用/创伤/肥胖/年龄）→软骨磨损→骨端直接摩擦→疼痛+炎症</p>
+<p>● 最常受累关节：颈椎/腰椎、髋、膝、手指末端关节</p>
+<p>● 美国致残主要原因</p>
+<h4 class="sub-subsection-heading" id="s248">症状要点</h4>
+<p>● 运动时疼痛（随时间/强度加重）</p>
+<p>● 局部僵硬（尤其晨起/久坐后）</p>
+<p>● 关节肿胀、灵活性下降</p>
+<p>● 骨刺/软骨碎片脱落→炎症→进一步软骨损伤</p>
+<h4 class="sub-subsection-heading" id="s253">类风湿关节炎（RA）</h4>
+<h4 class="sub-subsection-heading" id="s254">核心机制</h4>
+<p>● 自身免疫性疾病：滑膜组织炎症→关节软骨/骨骼磨损→关节变形</p>
+<p>● 全身性疾病：除关节外，还影响皮肤、眼睛、肺、心脏、血管</p>
+<p>● 分解代谢特性→肌肉减少（必须增强受累关节周围肌肉）</p>
+<h4 class="sub-subsection-heading" id="s258">运动改善模式</h4>
+<p>表7-13</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>心肺：3-5天/周；肌力：2-3天/周</td></tr><tr><td>强度</td><td>心肺：中等（40-59% HRR）至剧烈（≥60% HRR）；身体状况差者30-39% HRR</td></tr><tr><td>时间</td><td>≥150分钟/周低-中强度，或75分钟剧烈，或组合</td></tr><tr><td>类型</td><td>心肺：低冲击有节奏大肌群（步行、骑车、游泳）；肌力：50-80% 1-RM，2-4组×8-12次，无痛ROM内运动</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s261">关键要点</h4>
+<p>● 运动+减重是控制OA最佳方法（尤其超重/肥胖者）</p>
+<p>● 运动可改善：心肺适能、肌力/耐力、关节灵活性、疲劳、日常生活功能</p>
+<p>● RA：等长运动优先，避免关节负荷过大</p>
+<p>● RA：低冲击、有限ROM、温水运动、发作期避免运动可能有益</p>
+<h4 class="sub-subsection-heading" id="s266">安全注意</h4>
+<p>● OA：下肢关节炎不建议跑步等高冲击运动</p>
+<p>● RA：根据功能限制和基础心肺适能调整计划</p>
+<p>● 所有动作在无痛范围内进行</p>
+<p>表7-14</p>
+<div class="table-wrapper"><table><thead><tr><th></th><th>各疾病关键记忆点总结</th></tr></thead><tbody></tbody></table></div>
+<p>表7-15</p>
+<div class="table-wrapper"><table><thead><tr><th>疾病/状况</th><th>关键记忆点</th></tr></thead><tbody><tr><td>冠状动脉疾病（CAD）</td><td>避免Valsalva动作（憋气用力）</td></tr><tr><td>高血压</td><td>记住三个阈值：120（正常上限）、130（1期起点）、140（2期起点）；生活方式改变可避免药物</td></tr><tr><td>中风</td><td>无特殊上下肢区分限制，重点在功能恢复（平衡/协调/步态）</td></tr><tr><td>外周动脉疾病（PAD）</td><td>以疼痛强度为准（非运动强度）——走至中等疼痛（跛行量表3-4级）→休息→继续</td></tr><tr><td>糖尿病</td><td>运动前减少胰岛素剂量；不可连续2天不运动（胰岛素敏感性24-48h后消失）；运动中注意低血糖症状</td></tr><tr><td>代谢综合征</td><td>诊断标准：出现≥3项（腰围↑、TG≥150、HDL↓、血压≥130/85、空腹血糖≥100）</td></tr><tr><td>哮喘</td><td>最佳运动时间：上午中间至晚些时候；保持吸入空气温暖湿润；随身携带急救药物</td></tr><tr><td>骨质疏松症</td><td>肌力训练+负重+冲击运动（跳跃）；高强度会受益</td></tr><tr><td>骨关节炎</td><td>避免疼痛范围外运动；避免高冲击和扭转动作</td></tr></tbody></table></div>
+<p>各个生命阶段的运动注意事项</p>
+<p>第     8章</p>
+    </div>
+
+    <div id="tab-quiz" class="tab-content">
+      <div class="quiz-section">
+<div class="quiz-header"><h2>判断题</h2>
+<p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-tip">要点</span><span>所有慢性病客户开始运动前必须获得医学许可。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确指出所有慢性病客户开始运动前需获得医学许可，这是跨疾病通用原则的首要要求。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">2.</span><span class="quiz-tag quiz-tip">要点</span><span>高血压中约90-95%为继发性高血压，由肾脏疾病等可识别原因引起。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出原发性高血压占90-95%，病因不明，为遗传+环境交互所致；继发性仅占5-10%。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">3.</span><span class="quiz-tag quiz-tip">要点</span><span>单次运动后血压可降低5-7 mmHg，且该效应持续24小时。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确报告单次运动后血压可降低5-7 mmHg，持续24小时；每周≥150分钟运动量降压效果最大。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">4.</span><span class="quiz-tag quiz-warn">要点</span><span>服用β受体阻滞剂的客户应使用心率监控运动强度。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出服用β受体阻滞剂/钙通道阻滞剂者应使用RPE监控强度，而非心率，并需缓慢变换体位。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">5.</span><span class="quiz-tag quiz-tip">要点</span><span>中风中约80%为缺血性中风，由脑血管被血栓/斑块堵塞引起。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出缺血性中风约占80%，出血性约占20%。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">6.</span><span class="quiz-tag quiz-warn">要点</span><span>FAST原则中的A代表Arrival（到达医院）。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。FAST中A代表Arms（手臂突然无力），F代表Face（面部下垂），S代表Speech（说话困难），T代表Time（立即呼叫急救）。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">7.</span><span class="quiz-tag quiz-tip">要点</span><span>外周动脉疾病（PAD）的核心运动改善模式是间歇步行训练。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确PAD的核心运动改善模式为间歇步行训练，通过步行产生缺血刺激侧支循环形成。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">8.</span><span class="quiz-tag quiz-warn">要点</span><span>单纯运动对LDL（低密度脂蛋白）的改善效果一致且显著。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出单纯运动对LDL改善不一致，需结合减重才能有效降低LDL。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">9.</span><span class="quiz-tag quiz-tip">要点</span><span>心肺训练是降低甘油三酯（TG）最有效的运动方式，肌力训练对此无效。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出心肺训练最有效（TG可作燃料），肌力训练对降低TG无效。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">10.</span><span class="quiz-tag quiz-tip">要点</span><span>单次中等强度运动30-60分钟可使TG降低持续12-36小时。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文报告餐后脂血症（PPL）单次中等强度运动30-60分钟后TG降低持续12-36小时，建议至少隔天运动一次。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">11.</span><span class="quiz-tag quiz-warn">要点</span><span>1型糖尿病患者运动时应增加胰岛素剂量以防止高血糖。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出1型糖尿病患者运动前应减少胰岛素剂量，运动前/中摄取易吸收碳水化合物，以防低血糖。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>PAD患者的间歇步行训练中，&#x27;高强度&#x27;指的是疼痛强度而非能量消耗。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文解释PAD间歇步行训练中&#x27;高强度&#x27;在此语境指疼痛强度，非能量消耗。</p></details></div>
+</div>
+    </div>
+
+    <div id="tab-sop" class="tab-content">
+      <div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+    </div>
+
+    <div class="chapter-nav">
+      <a href="ch6.html" class="prev">← 上一章</a>
+      <a href="ch8.html" class="next">下一章 →</a>
+    </div>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+// 深色模式
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  localStorage.setItem('theme', html.getAttribute('data-theme'));
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+// Tab切换
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// 阅读进度条
+window.addEventListener('scroll', function() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Lightbox
+function openLightbox(img) {
+  document.getElementById('lightboxImg').src = img.src;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+// TOC高亮
+const tocLinks = document.querySelectorAll('.toc-link');
+const headings = [];
+tocLinks.forEach(link => {
+  const id = link.getAttribute('href').substring(1);
+  const el = document.getElementById(id);
+  if (el) headings.push({el, link});
+});
+window.addEventListener('scroll', function() {
+  let current = null;
+  for (const h of headings) {
+    if (h.el.getBoundingClientRect().top <= 100) current = h;
+  }
+  tocLinks.forEach(l => l.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+});
+</script>
+
+</body>
+</html>

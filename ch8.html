@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第8章 各个生命阶段的运动注意事项 | ACEpresso</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --sidebar-bg: #fafbfc; --header-bg: #ffffff; --shadow: rgba(0,0,0,0.06);
+  --hero-gradient: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  --table-header: #2e7d32; --table-stripe: #f8f8f5;
+  --card-radius: 10px;
+}
+[data-theme="dark"] {
+  --bg: #0f0f1a; --surface: #1a1a2e; --text: #e0e0e0; --text-secondary: #aaa;
+  --accent: #66bb6a; --accent-light: #1b3a1b; --border: #2a2a3a;
+  --sidebar-bg: #12121e; --header-bg: #0f0f1a; --shadow: rgba(0,0,0,0.3);
+  --hero-gradient: linear-gradient(135deg, #1b3a1b 0%, #1a2e1a 50%, #0f0f1a 100%);
+  --table-header: #1b5e20; --table-stripe: #1e1e30;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 进度条 */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), #4caf50);
+  z-index: 1000; transition: width 0.15s; width: 0%;
+}
+
+/* 顶部导航 */
+.site-header {
+  position: fixed; top: 3px; left: 0; right: 0; height: 54px;
+  background: var(--header-bg); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+  backdrop-filter: blur(8px);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.theme-toggle {
+  background: none; border: 1px solid var(--border); color: var(--text);
+  padding: 6px 16px; border-radius: 20px; cursor: pointer;
+  font-size: 13px; transition: all 0.25s;
+}
+.theme-toggle:hover {
+  background: var(--accent-light); border-color: var(--accent); color: var(--accent);
+}
+
+/* 布局 */
+.layout { display: flex; margin-top: 57px; min-height: calc(100vh - 57px); }
+
+/* 侧边栏 */
+.sidebar {
+  position: fixed; top: 57px; left: 0; width: 280px;
+  height: calc(100vh - 57px); background: var(--sidebar-bg);
+  border-right: 1px solid var(--border); overflow-y: auto;
+  padding: 20px 0; z-index: 50;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.toc-title {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; font-weight: 700; color: var(--text-secondary);
+  padding: 0 24px 14px; text-transform: uppercase; letter-spacing: 3px;
+  border-bottom: 1px solid var(--border); margin-bottom: 8px;
+}
+.toc-link {
+  display: block; padding: 7px 24px; color: var(--text-secondary);
+  text-decoration: none; font-size: 13px; line-height: 1.5;
+  transition: all 0.2s; border-left: 3px solid transparent;
+}
+.toc-link:hover {
+  background: var(--accent-light); color: var(--accent);
+  border-left-color: var(--accent);
+}
+.toc-link.active {
+  color: var(--accent); font-weight: 600;
+  border-left-color: var(--accent); background: var(--accent-light);
+}
+.toc-h2 { padding-left: 24px; font-weight: 700; font-size: 14px; color: var(--text); margin-top: 8px; }
+.toc-h3 { padding-left: 36px; }
+.toc-h4 { padding-left: 48px; font-size: 12px; }
+
+/* 主内容区 */
+.main-content {
+  margin-left: 280px; flex: 1; max-width: 880px;
+  padding: 0 48px 100px;
+}
+
+/* Hero区 */
+.hero {
+  padding: 48px 0 36px; border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+  background: var(--hero-gradient);
+  margin-left: -48px; margin-right: -48px;
+  padding-left: 48px; padding-right: 48px;
+}
+.hero .badge {
+  display: inline-block; background: var(--accent); color: white;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; font-weight: 700; padding: 4px 14px;
+  border-radius: 20px; letter-spacing: 1px; margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 32px; font-weight: 800; line-height: 1.3;
+  color: var(--text); margin-bottom: 8px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.hero .subtitle {
+  font-size: 15px; color: var(--text-secondary);
+  font-style: italic; margin-bottom: 16px;
+}
+.hero .intro {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.8;
+  max-width: 640px; border-left: 3px solid var(--accent);
+  padding-left: 16px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex; gap: 0; border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 12px 24px; font-size: 14px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  transition: all 0.2s; margin-bottom: -2px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.tab-btn:hover { color: var(--accent); }
+.tab-btn.active {
+  color: var(--accent); border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.placeholder {
+  padding: 48px 24px; text-align: center;
+  color: var(--text-secondary); font-size: 15px;
+}
+
+/* 标题层级 */
+.section-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 24px; font-weight: 800; color: var(--accent);
+  margin: 48px 0 20px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+  line-height: 1.4;
+}
+.subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--text);
+  margin: 36px 0 16px; padding-left: 16px;
+  border-left: 4px solid var(--accent);
+  line-height: 1.4;
+}
+.sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 17px; font-weight: 600; color: var(--text);
+  margin: 28px 0 12px; line-height: 1.4;
+}
+.sub-sub-subsection-heading {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--text-secondary);
+  margin: 20px 0 10px; line-height: 1.4;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* 正文段落 */
+.main-content p {
+  margin-bottom: 16px; text-align: justify;
+  text-indent: 0;
+}
+
+/* 色块卡片 */
+.card {
+  margin: 18px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  position: relative;
+}
+.card .card-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 700; font-size: 12px;
+  display: inline-block; margin-bottom: 8px;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 4px;
+}
+.card p { margin: 0; font-size: 15px; line-height: 1.8; }
+
+.card-tip { background: #e8f5e9; border-color: #4caf50; }
+.card-tip .card-label { color: #2e7d32; background: #c8e6c9; }
+
+.card-wrong { background: #fce4ec; border-color: #e53935; }
+.card-wrong .card-label { color: #c62828; background: #ffcdd2; }
+
+.card-right { background: #e3f2fd; border-color: #1e88e5; }
+.card-right .card-label { color: #1565c0; background: #bbdefb; }
+
+.card-warn { background: #fff8e1; border-color: #ff8f00; }
+.card-warn .card-label { color: #e65100; background: #ffecb3; }
+
+.card-scene { background: #f3e5f5; border-color: #7b1fa2; }
+.card-scene .card-label { color: #6a1b9a; background: #e1bee7; }
+
+.card-memory {
+  background: var(--bg-secondary, #f5f5f5); border-color: #9e9e9e;
+  border-left-style: dashed;
+}
+.card-memory .card-label { color: #616161; background: #e0e0e0; }
+.card-memory p { font-size: 14px; color: var(--text-secondary); font-style: italic; }
+
+/* 深色模式卡片 */
+[data-theme="dark"] .card-tip { background: #1b3a1b; }
+[data-theme="dark"] .card-tip .card-label { background: #2e5a2e; color: #81c784; }
+[data-theme="dark"] .card-wrong { background: #3a1b1b; }
+[data-theme="dark"] .card-wrong .card-label { background: #5a2e2e; color: #ef9a9a; }
+[data-theme="dark"] .card-right { background: #1b2a3a; }
+[data-theme="dark"] .card-right .card-label { background: #2e4a5a; color: #90caf9; }
+[data-theme="dark"] .card-warn { background: #3a2a1b; }
+[data-theme="dark"] .card-warn .card-label { background: #5a4a2e; color: #ffcc80; }
+[data-theme="dark"] .card-scene { background: #2a1b3a; }
+[data-theme="dark"] .card-scene .card-label { background: #4a2e5a; color: #ce93d8; }
+[data-theme="dark"] .card-memory { background: #1a1a2a; }
+[data-theme="dark"] .card-memory .card-label { background: #2a2a3a; color: #bdbdbd; }
+
+/* 表格 */
+.table-wrapper {
+  margin: 20px 0; overflow-x: auto; border-radius: 10px;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  line-height: 1.6;
+}
+th {
+  background: var(--table-header); color: white;
+  padding: 12px 16px; text-align: left;
+  font-family: 'Noto Sans SC', sans-serif; font-weight: 600;
+  font-size: 13px; letter-spacing: 0.5px;
+}
+td {
+  padding: 10px 16px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:nth-child(even) { background: var(--table-stripe); }
+tbody tr:hover { background: var(--accent-light); }
+
+/* 图片 */
+.img-figure {
+  margin: 24px 0; text-align: center;
+}
+.img-figure img {
+  max-width: 100%; height: auto; border-radius: 8px;
+  border: 1px solid var(--border); box-shadow: 0 2px 8px var(--shadow);
+  cursor: pointer; transition: transform 0.2s;
+}
+.img-figure img:hover { transform: scale(1.01); }
+.img-figure figcaption {
+  font-size: 13px; color: var(--text-secondary);
+  margin-top: 8px; font-style: italic;
+}
+
+/* Lightbox */
+.lightbox {
+  display: none; position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; background: rgba(0,0,0,0.9);
+  z-index: 2000; justify-content: center; align-items: center;
+  cursor: pointer;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 90%; max-height: 90%; border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+/* 章间导航 */
+.chapter-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+}
+.chapter-nav a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--accent);
+  text-decoration: none; padding: 10px 20px;
+  border: 1px solid var(--accent); border-radius: 8px;
+  transition: all 0.2s;
+}
+.chapter-nav a:hover {
+  background: var(--accent); color: white;
+}
+
+/* 响应式 */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding: 0 20px 60px; }
+  .hero { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+  .hero h1 { font-size: 24px; }
+  .section-heading { font-size: 20px; }
+  .subsection-heading { font-size: 18px; }
+}
+
+/* 打印 */
+@media print {
+  .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox { display: none !important; }
+  .main-content { margin-left: 0; max-width: 100%; padding: 0; }
+  .hero { background: none; margin: 0; padding: 20px 0; }
+  table { break-inside: avoid; }
+  .img-figure img { max-width: 80%; }
+  .quiz-item { break-inside: avoid; }
+}
+
+/* 自测判断题区 */
+.quiz-section { padding: 16px 0; }
+.quiz-header h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.quiz-header .quiz-instruction {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}
+.quiz-item {
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}
+.quiz-q { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+.quiz-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.quiz-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.quiz-tip { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+.quiz-wrong { background: #fce4ec; color: #c62828; border-color: #e53935; }
+.quiz-right { background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }
+.quiz-warn { background: #fff8e1; color: #e65100; border-color: #ff8f00; }
+.quiz-scene { background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }
+.quiz-answer {
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}
+.quiz-answer summary {
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}
+.quiz-answer p { margin-top: 6px; }
+[data-theme="dark"] .quiz-tip { background: #1b3a1b; }
+[data-theme="dark"] .quiz-wrong { background: #3a1b1b; }
+[data-theme="dark"] .quiz-right { background: #1b2a3a; }
+[data-theme="dark"] .quiz-warn { background: #3a2a1b; }
+[data-theme="dark"] .quiz-scene { background: #2a1b3a; }
+[data-theme="dark"] .quiz-item { background: var(--surface); }
+
+/* 知识速览折叠区 */
+.knowledge-overview {
+  margin: 0 0 32px; padding: 20px 24px;
+  border: 1px solid var(--border); border-radius: var(--card-radius);
+  background: var(--surface);
+}
+.knowledge-overview summary {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  cursor: pointer; margin-bottom: 16px; user-select: none;
+}
+.knowledge-overview[open] summary { margin-bottom: 20px; }
+.knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
+</header>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="toc-title">本章目录</div>
+    <a href="#s1" class="toc-link toc-h2">跨人群通用原则</a>
+<a href="#s2" class="toc-link toc-h4">医学许可与筛查</a>
+<a href="#s6" class="toc-link toc-h4">运动处方通用框架</a>
+<a href="#s10" class="toc-link toc-h4">ACE IFT模型适用性</a>
+<a href="#s14" class="toc-link toc-h4">行为改变与社会支持</a>
+<a href="#s18" class="toc-link toc-h2">一、青少年</a>
+<a href="#s21" class="toc-link toc-h3">1.1 背景与现状</a>
+<a href="#s22" class="toc-link toc-h4">核心问题</a>
+<a href="#s28" class="toc-link toc-h4">缺乏活动的后果</a>
+<a href="#s31" class="toc-link toc-h4">身体素养（Physical Literacy）</a>
+<a href="#s35" class="toc-link toc-h3">1.2 青少年运动指南</a>
+<a href="#s36" class="toc-link toc-h4">核心原则</a>
+<a href="#s41" class="toc-link toc-h4">肌肉训练的安全性与有效性</a>
+<a href="#s46" class="toc-link toc-h4">FITT建议</a>
+<a href="#s49" class="toc-link toc-h3">1.3 安全注意</a>
+<a href="#s50" class="toc-link toc-h4">肌肉训练安全指南</a>
+<a href="#s57" class="toc-link toc-h4">极端环境防护</a>
+<a href="#s63" class="toc-link toc-h4">过劳性损伤与体育专业化</a>
+<a href="#s68" class="toc-link toc-h3">🔑 青少年关键记忆点</a>
+<a href="#s73" class="toc-link toc-h2">二、孕期与产后女性</a>
+<a href="#s74" class="toc-link toc-h3">2.1 孕期</a>
+<a href="#s77" class="toc-link toc-h4">生理变化</a>
+<a href="#s78" class="toc-link toc-h4">身体结构与重心</a>
+<a href="#s83" class="toc-link toc-h4">激素变化</a>
+<a href="#s87" class="toc-link toc-h4">心血管变化</a>
+<a href="#s92" class="toc-link toc-h4">体温调节</a>
+<a href="#s97" class="toc-link toc-h4">运动指南</a>
+<a href="#s98" class="toc-link toc-h4">核心建议</a>
+<a href="#s104" class="toc-link toc-h4">强度监控</a>
+<a href="#s109" class="toc-link toc-h4">FITT建议</a>
+<a href="#s112" class="toc-link toc-h4">安全注意</a>
+<a href="#s113" class="toc-link toc-h4">绝对禁忌——终止运动的警示性体征</a>
+<a href="#s123" class="toc-link toc-h4">运动禁忌与避免事项</a>
+<a href="#s128" class="toc-link toc-h4">营养与补水</a>
+<a href="#s132" class="toc-link toc-h4">腹直肌分离（Diastasis Recti）</a>
+<a href="#s138" class="toc-link toc-h3">2.2 产后</a>
+<a href="#s141" class="toc-link toc-h4">核心要点</a>
+<a href="#s142" class="toc-link toc-h4">恢复原则</a>
+<a href="#s148" class="toc-link toc-h4">运动恢复指南</a>
+<a href="#s155" class="toc-link toc-h4">哺乳期注意</a>
+<a href="#s160" class="toc-link toc-h4">计划设计重点</a>
+<a href="#s165" class="toc-link toc-h3">🔑 孕期与产后关键记忆点</a>
+<a href="#s173" class="toc-link toc-h2">三、老年人</a>
+<a href="#s176" class="toc-link toc-h3">3.1 衰老的结构性变化</a>
+<a href="#s177" class="toc-link toc-h4">肌肉骨骼系统</a>
+<a href="#s183" class="toc-link toc-h4">平衡与稳定性</a>
+<a href="#s189" class="toc-link toc-h4">认知与心理健康</a>
+<a href="#s195" class="toc-link toc-h3">3.2 老年人运动指南</a>
+<a href="#s196" class="toc-link toc-h4">核心建议</a>
+<a href="#s203" class="toc-link toc-h4">FITT建议</a>
+<a href="#s206" class="toc-link toc-h3">3.3 安全注意与计划设计</a>
+<a href="#s207" class="toc-link toc-h4">评估调整</a>
+<a href="#s213" class="toc-link toc-h4">计划设计重点</a>
+<a href="#s223" class="toc-link toc-h3">🔑 老年人关键记忆点</a>
+<a href="#s230" class="toc-link toc-h2">各人群关键记忆点总结</a>
+  </nav>
+
+  <main class="main-content">
+    <div class="hero">
+      <div class="badge">第8章</div>
+      <h1>各个生命阶段的运动注意事项</h1>
+      <div class="subtitle">Exercise Considerations Across the Lifespan</div>
+      <div class="intro">本章探讨不同生命阶段（儿童青少年、成年人、老年人）的运动注意事项，帮助教练针对不同年龄群体制定安全有效的训练方案。</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
+      <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+      <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
+    </div>
+
+    <div id="tab-lecture" class="tab-content active">
+<p>本章节按&quot;核心机制/背景→运动指南（FITT）→安全注意&quot;结构组织</p>
+<h2 class="section-heading" id="s1">跨人群通用原则</h2>
+<h4 class="sub-subsection-heading" id="s2">医学许可与筛查</h4>
+<p>● 所有特殊人群开始运动前需获得医学许可（尤其合并慢性病者）</p>
+<p>● 使用PARmed-X等筛查工具进行运动前健康评估</p>
+<p>● 慢性病患者需与医师沟通，了解运动禁忌症和限制</p>
+<h4 class="sub-subsection-heading" id="s6">运动处方通用框架</h4>
+<p>● 心肺：FITT-VP（频率、强度、时间、类型、进阶、变化）</p>
+<p>● 肌力：频率、强度、时间、类型</p>
+<p>● 强度监控：谈话测试、RPE、VT1/VT2——不同人群适用不同监控方式</p>
+<h4 class="sub-subsection-heading" id="s10">ACE IFT模型适用性</h4>
+<p>● 三大人群均可使用ACE整合式健身训练模型</p>
+<p>● 需根据人群特点调整评估方式和计划设计</p>
+<p>● 评估本身不必与成年人完全区分，但需注意趣味性和安全性</p>
+<h4 class="sub-subsection-heading" id="s14">行为改变与社会支持</h4>
+<p>● ACE Mover Method + ABC Approach适用于所有人群</p>
+<p>● 社会支持是坚持运动的关键因素（家庭参与、同伴鼓励）</p>
+<p>● 运动计划设计应考虑个人目标、能量波动和日常限制</p>
+<h2 class="section-heading" id="s18">一、青少年</h2>
+<figure class="img-figure"><img src="images/ch8_fig1.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图8-1</p>
+<h3 class="subsection-heading" id="s21">1.1 背景与现状</h3>
+<h4 class="sub-subsection-heading" id="s22">核心问题</h4>
+<p>● 仅20-26%的美国青少年达到身体活动推荐水平（2018年报告卡评分D-）</p>
+<p>● 全球青少年身体活动和久坐行为平均得分均为D</p>
+<p>● 活动水平随年龄增长而下降：16-19岁仅5%达标</p>
+<p>● 女孩活动参与度显著低于男孩</p>
+<p>● 原因：学校体育要求降低、屏幕时间增加（45%高中年龄青少年每日&gt;3小时）、社区安全性不足</p>
+<h4 class="sub-subsection-heading" id="s28">缺乏活动的后果</h4>
+<p>● 儿童期肥胖、高血压、2型糖尿病、骨质疏松症、动脉粥样硬化</p>
+<p>● 久坐习惯延续至成年→形成代际恶性循环（父母不运动→子女不运动可能性高6倍）</p>
+<h4 class="sub-subsection-heading" id="s31">身体素养（Physical Literacy）</h4>
+<p>● 定义：进行身体活动的能力、信心和意愿</p>
+<p>● 核心目标：帮助孩子掌握跑、跳、平衡等基本运动能力</p>
+<p>● 策略：将提高身体素养作为家庭运动计划基础，强调努力而非成绩</p>
+<h3 class="subsection-heading" id="s35">1.2 青少年运动指南</h3>
+<h4 class="sub-subsection-heading" id="s36">核心原则</h4>
+<p>● 每天总计≥60分钟中等至高强度身体活动</p>
+<p>● 包含心肺活动 + 适合年龄的肌肉强化 + 骨骼强化运动</p>
+<p>● 每周累积总量比单一组成部分（频率/强度/持续时间）更重要</p>
+<p>● 骨骼强化对青少年尤为重要——骨量最大增长发生在青春期前和青春期</p>
+<h4 class="sub-subsection-heading" id="s41">肌肉训练的安全性与有效性</h4>
+<p>● 误区澄清：青春期前儿童可安全进行肌肉训练（在适当监督下）</p>
+<p>● 无证据显示适当监督的渐进式肌肉训练会导致生长迟缓或骨骼损伤</p>
+<p>● 研究数据：10个月简单肌肉训练使9岁女孩骨密度增幅达对照组4倍（6.2% vs 1.4%）</p>
+<p>● 肌肉训练损伤风险记录优于其他体育活动</p>
+<h4 class="sub-subsection-heading" id="s46">FITT建议</h4>
+<p>表8-1</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>有氧</th><th>抗阻</th><th>骨骼强化</th></tr></thead><tbody><tr><td>频率</td><td>每天</td><td>≥3天/周</td><td>≥3天/周</td></tr><tr><td>强度</td><td>大多数为中等强度（HR和呼吸明显增加）至高强度（HR和呼吸大幅增加），高强度每周≥3天</td><td>次极量重复8-15次，达到中度疲劳</td><td>N/A</td></tr><tr><td>时间</td><td>作为每天≥60分钟运动的一部分</td><td>作为每天≥60分钟运动的一部分</td><td>作为每天≥60分钟运动的一部分</td></tr><tr><td>类型</td><td>适合年龄的愉悦活动：跑步、游泳、骑车、跳舞、足球、篮球、网球</td><td>非结构化（爬树、拔河、 在运动场设备上攀爬）或结构化（自重/阻力带/器械）</td><td>跑步、跳绳、篮球、网球、抗阻训练、跳格子</td></tr></tbody></table></div>
+<h3 class="subsection-heading" id="s49">1.3 安全注意</h3>
+<h4 class="sub-subsection-heading" id="s50">肌肉训练安全指南</h4>
+<p>● 始终对儿童进行适当监督，采用正确技术</p>
+<p>● 传统健身器材可能不适合孩子的杠杆臂——优先选择自由调节重量器材或自重运动</p>
+<p>● 切勿鼓励单纯的大重量托举或爆发性动作</p>
+<p>● 教导正确呼吸方式（避免Valsalva）</p>
+<p>● 鼓励运动前/中/后充分饮水</p>
+<p>● 告诉孩子感到疲劳/乏力/不适/痛苦时立即沟通</p>
+<h4 class="sub-subsection-heading" id="s57">极端环境防护</h4>
+<p>● 高温风险因素：体表面积/质量比高、出汗能力弱、运动经济性低</p>
+<p>● 极冷风险：脱水、低温症、冻伤——保持补水和分层穿衣</p>
+<p>● 冷空气湿度低→加重哮喘/运动诱发性支气管痉挛</p>
+<p>● 关注气象部门高温/寒冷警告，必要时移至室内</p>
+<p>● 佩戴护具的运动更需注意热相关疾病</p>
+<h4 class="sub-subsection-heading" id="s63">过劳性损伤与体育专业化</h4>
+<p>● 全年单一运动→重复性发力→过劳性损伤风险↑</p>
+<p>● 多样化体育活动增强本体感受、多维力量、敏捷性、速度</p>
+<p>● 遵循周期化原则——职业运动员不会全年不断比赛，青少年也应如此</p>
+<p>● 运动必须适合年龄、强度适当</p>
+<h3 class="subsection-heading" id="s68">🔑 青少年关键记忆点</h3>
+<p>● 每天≥60分钟；骨骼强化特别重要（骨量增长窗口期）</p>
+<p>● 肌肉训练安全（有监督）；避免大重量和爆发力</p>
+<p>● 避免体育专业化和过劳性损伤；遵循周期化</p>
+<p>● 高温/极冷环境需特殊防护</p>
+<h2 class="section-heading" id="s73">二、孕期与产后女性</h2>
+<h3 class="subsection-heading" id="s74">2.1 孕期</h3>
+<figure class="img-figure"><img src="images/ch8_fig2.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图8-2</p>
+<h4 class="sub-subsection-heading" id="s77">生理变化</h4>
+<h4 class="sub-subsection-heading" id="s78">身体结构与重心</h4>
+<p>● 建议增重：25-35磅（11.4-15.9kg），孕前体重不同则建议不同</p>
+<p>● 腹围增长→背部、骨盆、髋部、腿部承受额外压力</p>
+<p>● 重心向上向前移→影响平衡和协调性</p>
+<p>● 孕前通过深蹲、弓步、硬举增强腿后侧和躯干力量，为增重做准备</p>
+<h4 class="sub-subsection-heading" id="s83">激素变化</h4>
+<p>● 松弛素↑→骨盆增大（利于分娩）但所有关节松弛度增加→旧伤复发风险/关节不稳</p>
+<p>● 需要力量和稳定训练增加身体稳定性</p>
+<p>● 恶心和疲劳（妊娠早期最常见，但任何阶段都可能发生）</p>
+<h4 class="sub-subsection-heading" id="s87">心血管变化</h4>
+<p>● 心力储备（静息与最大心脏功能之差）减小</p>
+<p>● 心率、血容量、心搏量、心输出量↑（孕早期即开始）</p>
+<p>● 短暂中等强度运动后可能感觉喘不过气→增加休息时间</p>
+<p>● 避免静止姿势（如仰卧），因可导致静脉回流减少和低血压</p>
+<h4 class="sub-subsection-heading" id="s92">体温调节</h4>
+<p>● 散热能力略有提高（皮肤血流↑+潮气量↑）</p>
+<p>● 运动前必须知晓环境温度</p>
+<p>● 环境温度/湿度升高→显著影响散热→可能导致高热症</p>
+<p>● 尚无运动相关高热症引起胚胎/胎儿畸形的报告</p>
+<h4 class="sub-subsection-heading" id="s97">运动指南</h4>
+<h4 class="sub-subsection-heading" id="s98">核心建议</h4>
+<p>● 每周≥150分钟中等强度有氧运动，至少3天</p>
+<p>● 不论产前运动经历如何，孕期在医师指导下运动都有益且安全（ACOG 2015）</p>
+<p>● 运动可降低：先兆子痫、妊娠期糖尿病、剖腹产、下背痛、焦虑、恶心、胃灼热、失眠、腿痛性痉挛发生率</p>
+<p>● 孕前喜爱运动者：可继续原有计划（安全运动强度上限尚未确定）</p>
+<p>● 孕前不爱运动者：缓慢开始，进阶至中等强度（可能需从&lt;10分钟间歇性运动起步）</p>
+<h4 class="sub-subsection-heading" id="s104">强度监控</h4>
+<p>● 谈话测试优于心率监控</p>
+<p>● 结果&lt;VT1 = 中等强度</p>
+<p>● 中等强度：MET 3-5.9，RPE 12-13（6-20量表）</p>
+<p>● 高强度（MET≥6，RPE 14-17）仅适合孕前已运动或想要提高健康水平的女性</p>
+<h4 class="sub-subsection-heading" id="s109">FITT建议</h4>
+<p>表8-2</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>有氧</th><th>抗阻</th><th>柔韧性</th></tr></thead><tbody><tr><td>频率</td><td>&gt;3-5天/周</td><td>不连续的2-3天/周</td><td>&gt;2-3天/周（每天最有效）</td></tr><tr><td>强度</td><td>中等（MET 3-5.9，RPE 12-13）；高强度适合孕前已运动者</td><td>次极量重复8-10次或12-15次，中度疲劳</td><td>拉伸至紧缩感或轻微不适</td></tr><tr><td>时间</td><td>每天≥30分钟，每周≥150分钟中等或≥75分钟高强度</td><td>初学者1组；中高级2-3组</td><td>静态拉伸保持10-30秒</td></tr><tr><td>类型</td><td>负重和非负重均可：徒步、团体运动、游泳（水中运动减轻腰腿压力）</td><td>器械、自由重量、自重：坐姿推胸、哑铃、弓步</td><td>静态和动态柔韧性运动，每个肌群</td></tr></tbody></table></div>
+<h4 class="sub-subsection-heading" id="s112">安全注意</h4>
+<h4 class="sub-subsection-heading" id="s113">绝对禁忌——终止运动的警示性体征</h4>
+<p>● 阴道出血</p>
+<p>● 宫缩阵痛</p>
+<p>● 羊水泄露</p>
+<p>● 用力前呼吸困难</p>
+<p>● 眩晕或感到昏晕</p>
+<p>● 头疼</p>
+<p>● 胸痛</p>
+<p>● 影响平衡的肌无力</p>
+<p>● 小腿疼痛或肿胀</p>
+<h4 class="sub-subsection-heading" id="s123">运动禁忌与避免事项</h4>
+<p>● 避免高风险/可能腹部创伤的运动（接触性项目、滑雪、冲浪）</p>
+<p>● 避免极端高温环境（如热瑜伽）</p>
+<p>● 避免长时间仰卧姿势</p>
+<p>● 某些运动可能需要调整或与产科护理者讨论（慢跑、球拍运动等）</p>
+<h4 class="sub-subsection-heading" id="s128">营养与补水</h4>
+<p>● 运动前后充分补水</p>
+<p>● 运动前吃小零食避免低血糖（尤其中等强度&gt;45分钟时）</p>
+<p>● 平衡热量摄入</p>
+<h4 class="sub-subsection-heading" id="s132">腹直肌分离（Diastasis Recti）</h4>
+<p>● 腹直肌两肌腹分离，可达1-2英寸（2.5-5.1cm）</p>
+<p>● 孕期发病率高达45%，产后12个月仍达33%</p>
+<p>● 孕前和孕期运动可减少35%发病率</p>
+<p>● 推荐运动：腹横肌等长收缩、姿势肌和腹部力量训练</p>
+<p>● 注意评估腹直肌分离情况后再设计核心训练</p>
+<h3 class="subsection-heading" id="s138">2.2 产后</h3>
+<figure class="img-figure"><img src="images/ch8_fig3.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图8-3</p>
+<h4 class="sub-subsection-heading" id="s141">核心要点</h4>
+<h4 class="sub-subsection-heading" id="s142">恢复原则</h4>
+<p>● 分娩体验因人而异，产后激素水平继续变化</p>
+<p>● 疲劳常见（激素变化+身体需求+睡眠中断）</p>
+<p>● 产后贫血常见→与生活质量下降、认知能力减弱、情绪不稳/抑郁相关</p>
+<p>● 剖腹产需额外恢复时间（开刀手术）</p>
+<p>● 流产和死产的悲痛支持：25%妊娠以流产告终，1%死产</p>
+<h4 class="sub-subsection-heading" id="s148">运动恢复指南</h4>
+<p>● 产后几天/几周内，根据医生建议逐渐增加运动量</p>
+<p>● 慢慢开始：先增加持续时间和频率，再增加强度</p>
+<p>● ACOG建议每日20-30分钟（步行+简单主要肌群强化）</p>
+<p>● 异常疼痛（尤其外阴切开术/剖腹产后）→停止运动并咨询医师</p>
+<p>● 比正常月经更重的鲜红阴道流血→停止运动并就医</p>
+<p>● 目标：9-12个月回到孕前运动强度水平</p>
+<h4 class="sub-subsection-heading" id="s155">哺乳期注意</h4>
+<p>● 热量和营养需求增加→需同时满足运动和母乳需求</p>
+<p>● 充分饮水</p>
+<p>● 长时间抱孩子→头部前倾和圆肩风险↑</p>
+<p>● 计划设计应包括：后背与后肩运动（坐姿划船）+ 前肩和胸肌拉伸</p>
+<h4 class="sub-subsection-heading" id="s160">计划设计重点</h4>
+<p>● 考虑剖腹产伤口愈合或腹直肌分离情况</p>
+<p>● 增加躯干力量和稳定性运动</p>
+<p>● 制定简单的10分钟可完成运动计划（照顾孩子时间有限）</p>
+<p>● 鼓励多散步（可带孩子一起）</p>
+<h3 class="subsection-heading" id="s165">🔑 孕期与产后关键记忆点</h3>
+<p>● 孕期：每周≥150分钟中等强度，谈话测试监控（&lt;VT1）</p>
+<p>● 孕期：避免仰卧、高温环境、接触性运动</p>
+<p>● 孕期：警示性体征9项（见上方清单）</p>
+<p>● 松弛素影响所有关节→关节不稳风险↑</p>
+<p>● 腹直肌分离：孕期发病率45%，运动可减少35%</p>
+<p>● 产后：慢慢开始，9-12个月回到孕前水平</p>
+<p>● 产后：关注哺乳期营养补水+圆肩/头部前倾</p>
+<h2 class="section-heading" id="s173">三、老年人</h2>
+<figure class="img-figure"><img src="images/ch8_fig4.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<p>图8-4</p>
+<h3 class="subsection-heading" id="s176">3.1 衰老的结构性变化</h3>
+<h4 class="sub-subsection-heading" id="s177">肌肉骨骼系统</h4>
+<p>● 肌肉质量↓→力量和耐力↓（生活方式变化+神经肌肉功能减弱）</p>
+<p>● 骨骼更脆弱多孔→骨折风险↑</p>
+<p>● 钙损失→骨量下降（负重和肌肉训练可维持）</p>
+<p>● 约20%髋骨折老年人死于相关并发症</p>
+<p>● 瘦体组织↓ + 体脂↑ + 基础代谢率↓</p>
+<h4 class="sub-subsection-heading" id="s183">平衡与稳定性</h4>
+<p>● 三大平衡系统均受衰老负面影响：</p>
+<p>● 视觉系统（最主要的本体感受输入通道）→衰退</p>
+<p>● 前庭系统（头部空间位置信息）→功能下降</p>
+<p>● 躯体感觉系统（肌肉/关节本体感受器、皮肤/压力感受器）→功能下降</p>
+<p>● 平衡和协调性↓→跌倒和相关损伤风险↑</p>
+<h4 class="sub-subsection-heading" id="s189">认知与心理健康</h4>
+<p>● 认知能力下降→平衡能力、注意力、专注力下降</p>
+<p>● 抑郁症和焦虑症风险↑</p>
+<p>● 失去家人朋友→社会化程度↓</p>
+<p>● 身体活动可预防和减缓认知能力衰退（50岁以上人群，无论初始认知状态）</p>
+<p>● 运动为老年人提供社交机会和挑战/目标</p>
+<h3 class="subsection-heading" id="s195">3.2 老年人运动指南</h3>
+<h4 class="sub-subsection-heading" id="s196">核心建议</h4>
+<p>● 每周150-300分钟中等强度 或 75-150分钟高强度 或 两者结合</p>
+<p>● 最好将时间分散开</p>
+<p>● 多做身体活动可获得额外益处——做些运动总比不做的好</p>
+<p>● 缺乏定期运动计划时：一天中多动少坐</p>
+<p>● 每周≥2次肌力训练（主要肌群），维持或增加力量和耐力</p>
+<p>● 平衡训练必须纳入运动计划→提高本体感受，降低跌倒风险</p>
+<h4 class="sub-subsection-heading" id="s203">FITT建议</h4>
+<p>表8-3</p>
+<div class="table-wrapper"><table><thead><tr><th>维度</th><th>有氧</th><th>抗阻</th><th>柔韧性</th></tr></thead><tbody><tr><td>频率</td><td>中等：&gt;5天/周；高等：&gt;3天/周；结合：3-5天/周</td><td>≥2天/周</td><td>&gt;2天/周</td></tr><tr><td>强度</td><td>0-10量表：中等5-6，高等7-8</td><td>初学者低强度（40-50% 1-RM）→逐渐过渡至中高等（60-80% 1-RM）；或0-10量表中等(5-6)至高等(7-8)</td><td>拉伸至紧缩感或轻微不适</td></tr><tr><td>时间</td><td>中等30-60分钟/天；高等20-30分钟/天；可多次累计（每次≥10分钟）</td><td>8-10个动作，1-3组×8-12次</td><td>保持30-60秒</td></tr><tr><td>类型</td><td>不带来过多压力的运动：散步；负重困难者选水上运动/固定式自行车</td><td>渐进式训练、负重健美操、爬楼梯</td><td>慢速静态拉伸，每个肌群</td></tr></tbody></table></div>
+<h3 class="subsection-heading" id="s206">3.3 安全注意与计划设计</h3>
+<h4 class="sub-subsection-heading" id="s207">评估调整</h4>
+<p>● 关节炎在65岁以上人群中发病率49.6%——极常见</p>
+<p>● 评估顺序建议：先做姿势和柔韧性评估→再调整运动评估</p>
+<p>● 膝关节炎客户可能不适合自重深蹲→可改用坐下/站起测试</p>
+<p>● 平衡评估：安全第一，单脚站立优于Y平衡测试</p>
+<p>● 初始可借助墙壁/门框等外部稳定装置→进阶到拐杖/手杖→最终无外力支持</p>
+<h4 class="sub-subsection-heading" id="s213">计划设计重点</h4>
+<p>● 热身更重要（胶原含量↓+缔结组织弹性↓）→减少受伤风险</p>
+<p>● 放松时间用于静态拉伸（肌肉紧张妨碍灵活性/ADL时）</p>
+<p>● 平衡运动应在课程早期引入——此时力量最高、专注度最高、受伤风险最低</p>
+<p>● 重点放在功能训练上</p>
+<p>● 考虑客户能否正常俯身和起身（按摩床/椅可能有用）</p>
+<p>● 负重运动首选（在承受范围内）→强化骨骼</p>
+<p>● 固定式/卧式自行车：低中心栏方便上下</p>
+<p>● 不要为客户设限——激发冒险精神和成就感</p>
+<p>● 慢慢增加持续时间和运动量</p>
+<h3 class="subsection-heading" id="s223">🔑 老年人关键记忆点</h3>
+<p>● 150-300分钟中等强度/周；平衡训练必须纳入</p>
+<p>● 20%髋骨折老年人死于并发症；负重运动强化骨骼</p>
+<p>● 关节炎发病率49.6%（65岁以上）——先评估姿势和柔韧性</p>
+<p>● 热身比以往更重要（胶原↓、弹性↓）</p>
+<p>● 平衡训练放在课程早期（专注度最高时）</p>
+<p>● 运动可预防认知衰退、改善心理健康</p>
+<h2 class="section-heading" id="s230">各人群关键记忆点总结</h2>
+<p>表8-4</p>
+<div class="table-wrapper"><table><thead><tr><th>人群</th><th>关键记忆点</th></tr></thead><tbody><tr><td>青少年·活动量</td><td>每天≥60分钟中等至高强度；骨骼强化在青春期前/青春期尤为重要（骨量增长窗口期）</td></tr><tr><td>青少年·肌肉训练</td><td>安全（有监督时）；避免大重量和爆发力；优先自重/阻力带</td></tr><tr><td>青少年·风险</td><td>避免体育专业化和过劳性损伤；遵循周期化；高温/极冷环境特殊防护</td></tr><tr><td>孕期·运动量</td><td>每周≥150分钟中等强度，至少3天；谈话测试监控（&lt;VT1）</td></tr><tr><td>孕期·禁忌</td><td>避免仰卧、高温环境、接触性/高跌落风险运动；注意9项警示性体征</td></tr><tr><td>孕期·激素</td><td>松弛素↑→所有关节松弛→关节不稳；力量和稳定训练对抗</td></tr><tr><td>孕期·腹直肌分离</td><td>孕期发病率45%；运动可减少35%；推荐腹横肌等长收缩</td></tr><tr><td>产后·恢复</td><td>慢慢开始，9-12个月回到孕前水平；剖腹产需额外恢复时间</td></tr><tr><td>产后·注意</td><td>哺乳期需更多热量/水分；关注圆肩/头部前倾；加入后背和后肩运动</td></tr><tr><td>老年人·运动量</td><td>150-300分钟中等强度/周；平衡训练必须纳入；≥2次/周肌力训练</td></tr><tr><td>老年人·骨骼</td><td>20%髋骨折老年人死于并发症；负重运动在承受范围内强化骨骼</td></tr><tr><td>老年人·关节炎</td><td>65岁以上发病率49.6%；先评估姿势和柔韧性，再调整运动评估</td></tr><tr><td>老年人·计划设计</td><td>热身比以往更重要；平衡训练放在课程早期；重点放在功能训练</td></tr><tr><td>老年人·认知</td><td>运动可预防和减缓认知衰退，改善心理健康，提供社交机会</td></tr></tbody></table></div>
+<p>肌肉骨骼异常客户的注意事项</p>
+<p>第       9章</p>
+    </div>
+
+    <div id="tab-quiz" class="tab-content">
+      <div class="quiz-section">
+<div class="quiz-header"><h2>判断题</h2>
+<p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-tip">要点</span><span>仅20-26%的美国青少年达到身体活动推荐水平。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文引用2018年报告卡评分D-，仅20-26%的美国青少年达到推荐水平。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">2.</span><span class="quiz-tag quiz-warn">要点</span><span>久坐习惯不具有代际传递性，父母的运动习惯不影响子女。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出久坐习惯延续至成年，形成代际恶性循环——父母不运动→子女不运动可能性高6倍。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">3.</span><span class="quiz-tag quiz-warn">要点</span><span>青春期前儿童在适当监督下不可进行肌肉训练，因为会导致生长迟缓。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文明确澄清：青春期前儿童可安全进行肌肉训练（在适当监督下），无证据显示适当监督的渐进式肌肉训练会导致生长迟缓或骨骼损伤。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">4.</span><span class="quiz-tag quiz-tip">要点</span><span>10个月简单肌肉训练使9岁女孩骨密度增幅达对照组4倍。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文引用研究数据：10个月简单肌肉训练使9岁女孩骨密度增幅达对照组4倍（6.2% vs 1.4%）。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">5.</span><span class="quiz-tag quiz-tip">要点</span><span>青少年每天应总计≥60分钟中等至高强度身体活动。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文核心原则明确青少年每天总计≥60分钟中等至高强度身体活动，包含心肺活动+肌肉强化+骨骼强化运动。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">6.</span><span class="quiz-tag quiz-warn">要点</span><span>孕妇运动时应使用心率监控运动强度。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出孕妇的谈话测试优于心率监控，结果&lt;VT1即为中等强度。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">7.</span><span class="quiz-tag quiz-tip">要点</span><span>孕期运动可降低先兆子痫、妊娠期糖尿病和剖腹产的发生率。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确运动可降低先兆子痫、妊娠期糖尿病、剖腹产、下背痛、焦虑、恶心等多种不良结局的发生率。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">8.</span><span class="quiz-tag quiz-tip">要点</span><span>腹直肌分离在孕期的发病率高达45%。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出腹直肌分离孕期发病率高达45%，产后12个月仍达33%，孕前和孕期运动可减少35%发病率。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">9.</span><span class="quiz-tag quiz-warn">要点</span><span>孕期可以安全地进行热瑜伽练习。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出孕妇应避免极端高温环境（如热瑜伽），因环境温度/湿度升高可显著影响散热，可能导致高热症。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">10.</span><span class="quiz-tag quiz-tip">要点</span><span>产后运动恢复的目标是9-12个月回到孕前运动强度水平。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文建议产后慢慢开始，先增加持续时间和频率再增加强度，目标9-12个月回到孕前运动强度水平。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">11.</span><span class="quiz-tag quiz-tip">要点</span><span>老年人大约20%的髋骨折患者会死于相关并发症。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出约20%髋骨折老年人死于相关并发症，强调骨骼健康和防跌倒的重要性。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-warn">要点</span><span>老年人运动计划不需要包含平衡训练。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文明确平衡训练必须纳入老年人运动计划，以提高本体感受、降低跌倒风险。每周≥2次肌力训练同样必须纳入。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">13.</span><span class="quiz-tag quiz-tip">要点</span><span>身体活动可以预防和减缓50岁以上人群的认知能力衰退。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出身体活动可预防和减缓认知能力衰退，适用于50岁以上人群，无论初始认知状态。</p></details></div>
+</div>
+    </div>
+
+    <div id="tab-sop" class="tab-content">
+      <div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+    </div>
+
+    <div class="chapter-nav">
+      <a href="ch7.html" class="prev">← 上一章</a>
+      <a href="ch9.html" class="next">下一章 →</a>
+    </div>
+  </main>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+// 深色模式
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  localStorage.setItem('theme', html.getAttribute('data-theme'));
+}
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+// Tab切换
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tabId).classList.add('active');
+  btn.classList.add('active');
+}
+
+// 阅读进度条
+window.addEventListener('scroll', function() {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+  document.getElementById('progressBar').style.width = progress + '%';
+});
+
+// Lightbox
+function openLightbox(img) {
+  document.getElementById('lightboxImg').src = img.src;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+// TOC高亮
+const tocLinks = document.querySelectorAll('.toc-link');
+const headings = [];
+tocLinks.forEach(link => {
+  const id = link.getAttribute('href').substring(1);
+  const el = document.getElementById(id);
+  if (el) headings.push({el, link});
+});
+window.addEventListener('scroll', function() {
+  let current = null;
+  for (const h of headings) {
+    if (h.el.getBoundingClientRect().top <= 100) current = h;
+  }
+  tocLinks.forEach(l => l.classList.remove('active'));
+  if (current) current.link.classList.add('active');
+});
+</script>
+
+</body>
+</html>
