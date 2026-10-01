@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>第7章 慢性病客户注意事项 | ACEpresso</title>
 <style>
 :root {
@@ -387,111 +388,105 @@ tbody tr:hover { background: var(--accent-light); }
 </style>
 </head>
 <body>
-
 <div class="progress-bar" id="progressBar"></div>
-
 <header class="site-header">
-  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
-  <button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
+<div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+<button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
 </header>
-
 <div class="layout">
-  <nav class="sidebar">
-    <div class="toc-title">本章目录</div>
-    <a href="#s1" class="toc-link toc-h2">跨疾病通用原则（所有疾病都适用的原则）</a>
-<a href="#s2" class="toc-link toc-h4">医学许可与筛查</a>
-<a href="#s6" class="toc-link toc-h4">运动处方通用框架</a>
-<a href="#s10" class="toc-link toc-h4">多学科协作</a>
-<a href="#s13" class="toc-link toc-h4">生活方式干预核心</a>
-<a href="#s16" class="toc-link toc-h2">一、心脑血管疾病</a>
-<a href="#s17" class="toc-link toc-h3">1.1 冠状动脉疾病（CAD）</a>
-<a href="#s18" class="toc-link toc-h4">核心机制</a>
-<a href="#s21" class="toc-link toc-h4">症状要点</a>
-<a href="#s26" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s29" class="toc-link toc-h4">安全红线</a>
-<a href="#s34" class="toc-link toc-h3">1.2 高血压</a>
-<a href="#s37" class="toc-link toc-h4">核心机制</a>
-<a href="#s41" class="toc-link toc-h4">诊断标准（2017 ACC/AHA）</a>
-<a href="#s44" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s47" class="toc-link toc-h4">关键数据</a>
-<a href="#s51" class="toc-link toc-h4">安全注意</a>
-<a href="#s55" class="toc-link toc-h3">1.3 中风</a>
-<a href="#s58" class="toc-link toc-h4">核心机制</a>
-<a href="#s61" class="toc-link toc-h4">警示信号（FAST原则）</a>
-<a href="#s66" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s69" class="toc-link toc-h4">关键要点</a>
-<a href="#s74" class="toc-link toc-h3">1.4 外周动脉疾病（PAD）</a>
-<a href="#s77" class="toc-link toc-h4">核心机制</a>
-<a href="#s80" class="toc-link toc-h4">症状要点</a>
-<a href="#s84" class="toc-link toc-h4">运动改善模式（核心：间歇步行训练）</a>
-<a href="#s87" class="toc-link toc-h4">关键机制</a>
-<a href="#s90" class="toc-link toc-h4">安全注意</a>
-<a href="#s94" class="toc-link toc-h2">二、代谢紊乱</a>
-<a href="#s95" class="toc-link toc-h3">2.1 血脂异常</a>
-<a href="#s96" class="toc-link toc-h4">核心机制</a>
-<a href="#s105" class="toc-link toc-h4">诊断标准</a>
-<a href="#s108" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s111" class="toc-link toc-h4">关键要点</a>
-<a href="#s117" class="toc-link toc-h3">2.2 糖尿病</a>
-<a href="#s120" class="toc-link toc-h4">1型糖尿病</a>
-<a href="#s121" class="toc-link toc-h4">核心机制</a>
-<a href="#s125" class="toc-link toc-h4">运动注意</a>
-<a href="#s131" class="toc-link toc-h4">2型糖尿病（&gt;90%患者）</a>
-<a href="#s132" class="toc-link toc-h4">核心机制</a>
-<a href="#s136" class="toc-link toc-h4">症状要点</a>
-<a href="#s139" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s142" class="toc-link toc-h4">关键要点</a>
-<a href="#s148" class="toc-link toc-h4">安全注意</a>
-<a href="#s151" class="toc-link toc-h3">2.3 代谢综合征（MetS）</a>
-<a href="#s154" class="toc-link toc-h4">核心机制</a>
-<a href="#s160" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s163" class="toc-link toc-h4">关键要点</a>
-<a href="#s168" class="toc-link toc-h2">三、肺部疾病</a>
-<a href="#s169" class="toc-link toc-h3">3.1 哮喘（运动诱发性支气管收缩 EIB）</a>
-<a href="#s172" class="toc-link toc-h4">核心机制</a>
-<a href="#s176" class="toc-link toc-h4">症状要点</a>
-<a href="#s181" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s184" class="toc-link toc-h4">关键要点</a>
-<a href="#s189" class="toc-link toc-h4">安全注意</a>
-<a href="#s197" class="toc-link toc-h2">四、其他慢性病</a>
-<a href="#s198" class="toc-link toc-h3">4.1 癌症</a>
-<a href="#s199" class="toc-link toc-h4">核心机制</a>
-<a href="#s203" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s206" class="toc-link toc-h4">关键要点</a>
-<a href="#s212" class="toc-link toc-h4">安全注意</a>
-<a href="#s215" class="toc-link toc-h3">4.2 骨质疏松症</a>
-<a href="#s220" class="toc-link toc-h4">核心机制</a>
-<a href="#s226" class="toc-link toc-h4">风险因素</a>
-<a href="#s229" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s232" class="toc-link toc-h4">关键要点</a>
-<a href="#s235" class="toc-link toc-h4">安全红线</a>
-<a href="#s241" class="toc-link toc-h3">4.3 关节炎</a>
-<a href="#s243" class="toc-link toc-h4">骨关节炎（OA）</a>
-<a href="#s244" class="toc-link toc-h4">核心机制</a>
-<a href="#s248" class="toc-link toc-h4">症状要点</a>
-<a href="#s253" class="toc-link toc-h4">类风湿关节炎（RA）</a>
-<a href="#s254" class="toc-link toc-h4">核心机制</a>
-<a href="#s258" class="toc-link toc-h4">运动改善模式</a>
-<a href="#s261" class="toc-link toc-h4">关键要点</a>
-<a href="#s266" class="toc-link toc-h4">安全注意</a>
-  </nav>
-
-  <main class="main-content">
-    <div class="hero">
-      <div class="badge">第7章</div>
-      <h1>慢性病客户注意事项</h1>
-      <div class="subtitle">Considerations for Clients with Chronic Diseases</div>
-      <div class="intro">本章讲解私人教练在为慢性病客户提供服务时的注意事项，包括各类慢性疾病的运动适应证、禁忌证和运动处方调整要点。</div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
-      <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
-      <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
-    </div>
-
-    <div id="tab-lecture" class="tab-content active">
-<p>本章节内容按&quot;核心机制→症状要点→运动改善模式→安全注意&quot;四段结构组织</p>
+<nav class="sidebar">
+<div class="toc-title">本章目录</div>
+<a class="toc-link toc-h2" href="#s1">跨疾病通用原则（所有疾病都适用的原则）</a>
+<a class="toc-link toc-h4" href="#s2">医学许可与筛查</a>
+<a class="toc-link toc-h4" href="#s6">运动处方通用框架</a>
+<a class="toc-link toc-h4" href="#s10">多学科协作</a>
+<a class="toc-link toc-h4" href="#s13">生活方式干预核心</a>
+<a class="toc-link toc-h2" href="#s16">一、心脑血管疾病</a>
+<a class="toc-link toc-h3" href="#s17">1.1 冠状动脉疾病（CAD）</a>
+<a class="toc-link toc-h4" href="#s18">核心机制</a>
+<a class="toc-link toc-h4" href="#s21">症状要点</a>
+<a class="toc-link toc-h4" href="#s26">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s29">安全红线</a>
+<a class="toc-link toc-h3" href="#s34">1.2 高血压</a>
+<a class="toc-link toc-h4" href="#s37">核心机制</a>
+<a class="toc-link toc-h4" href="#s41">诊断标准（2017 ACC/AHA）</a>
+<a class="toc-link toc-h4" href="#s44">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s47">关键数据</a>
+<a class="toc-link toc-h4" href="#s51">安全注意</a>
+<a class="toc-link toc-h3" href="#s55">1.3 中风</a>
+<a class="toc-link toc-h4" href="#s58">核心机制</a>
+<a class="toc-link toc-h4" href="#s61">警示信号（FAST原则）</a>
+<a class="toc-link toc-h4" href="#s66">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s69">关键要点</a>
+<a class="toc-link toc-h3" href="#s74">1.4 外周动脉疾病（PAD）</a>
+<a class="toc-link toc-h4" href="#s77">核心机制</a>
+<a class="toc-link toc-h4" href="#s80">症状要点</a>
+<a class="toc-link toc-h4" href="#s84">运动改善模式（核心：间歇步行训练）</a>
+<a class="toc-link toc-h4" href="#s87">关键机制</a>
+<a class="toc-link toc-h4" href="#s90">安全注意</a>
+<a class="toc-link toc-h2" href="#s94">二、代谢紊乱</a>
+<a class="toc-link toc-h3" href="#s95">2.1 血脂异常</a>
+<a class="toc-link toc-h4" href="#s96">核心机制</a>
+<a class="toc-link toc-h4" href="#s105">诊断标准</a>
+<a class="toc-link toc-h4" href="#s108">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s111">关键要点</a>
+<a class="toc-link toc-h3" href="#s117">2.2 糖尿病</a>
+<a class="toc-link toc-h4" href="#s120">1型糖尿病</a>
+<a class="toc-link toc-h4" href="#s121">核心机制</a>
+<a class="toc-link toc-h4" href="#s125">运动注意</a>
+<a class="toc-link toc-h4" href="#s131">2型糖尿病（&gt;90%患者）</a>
+<a class="toc-link toc-h4" href="#s132">核心机制</a>
+<a class="toc-link toc-h4" href="#s136">症状要点</a>
+<a class="toc-link toc-h4" href="#s139">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s142">关键要点</a>
+<a class="toc-link toc-h4" href="#s148">安全注意</a>
+<a class="toc-link toc-h3" href="#s151">2.3 代谢综合征（MetS）</a>
+<a class="toc-link toc-h4" href="#s154">核心机制</a>
+<a class="toc-link toc-h4" href="#s160">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s163">关键要点</a>
+<a class="toc-link toc-h2" href="#s168">三、肺部疾病</a>
+<a class="toc-link toc-h3" href="#s169">3.1 哮喘（运动诱发性支气管收缩 EIB）</a>
+<a class="toc-link toc-h4" href="#s172">核心机制</a>
+<a class="toc-link toc-h4" href="#s176">症状要点</a>
+<a class="toc-link toc-h4" href="#s181">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s184">关键要点</a>
+<a class="toc-link toc-h4" href="#s189">安全注意</a>
+<a class="toc-link toc-h2" href="#s197">四、其他慢性病</a>
+<a class="toc-link toc-h3" href="#s198">4.1 癌症</a>
+<a class="toc-link toc-h4" href="#s199">核心机制</a>
+<a class="toc-link toc-h4" href="#s203">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s206">关键要点</a>
+<a class="toc-link toc-h4" href="#s212">安全注意</a>
+<a class="toc-link toc-h3" href="#s215">4.2 骨质疏松症</a>
+<a class="toc-link toc-h4" href="#s220">核心机制</a>
+<a class="toc-link toc-h4" href="#s226">风险因素</a>
+<a class="toc-link toc-h4" href="#s229">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s232">关键要点</a>
+<a class="toc-link toc-h4" href="#s235">安全红线</a>
+<a class="toc-link toc-h3" href="#s241">4.3 关节炎</a>
+<a class="toc-link toc-h4" href="#s243">骨关节炎（OA）</a>
+<a class="toc-link toc-h4" href="#s244">核心机制</a>
+<a class="toc-link toc-h4" href="#s248">症状要点</a>
+<a class="toc-link toc-h4" href="#s253">类风湿关节炎（RA）</a>
+<a class="toc-link toc-h4" href="#s254">核心机制</a>
+<a class="toc-link toc-h4" href="#s258">运动改善模式</a>
+<a class="toc-link toc-h4" href="#s261">关键要点</a>
+<a class="toc-link toc-h4" href="#s266">安全注意</a>
+</nav>
+<main class="main-content">
+<div class="hero">
+<div class="badge">第7章</div>
+<h1>慢性病客户注意事项</h1>
+<div class="subtitle">Considerations for Clients with Chronic Diseases</div>
+<div class="intro">本章讲解私人教练在为慢性病客户提供服务时的注意事项，包括各类慢性疾病的运动适应证、禁忌证和运动处方调整要点。</div>
+</div>
+<div class="tabs">
+<button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
+<button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
+</div>
+<div class="tab-content active" id="tab-lecture">
+<p>本章节内容按"核心机制→症状要点→运动改善模式→安全注意"四段结构组织</p>
 <h2 class="section-heading" id="s1">跨疾病通用原则（所有疾病都适用的原则）</h2>
 <h4 class="sub-subsection-heading" id="s2">医学许可与筛查</h4>
 <p>● 所有慢性病客户开始运动前需获得医学许可</p>
@@ -526,7 +521,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 避免Valsalva动作（憋气）</p>
 <p>● 低风险标准：住院过程无并发症、无缺血证据、功能能力&gt;7METs、射血分数&gt;50%</p>
 <h3 class="subsection-heading" id="s34">1.2 高血压</h3>
-<figure class="img-figure"><img src="images/ch7_fig1.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig1.jpeg"/></figure>
 <p>图7-1</p>
 <h4 class="sub-subsection-heading" id="s37">核心机制</h4>
 <p>● 原发性（90-95%）：病因不明，遗传+环境交互</p>
@@ -547,7 +542,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 服用利尿剂者：注意补液，防止脱水和运动后低血压</p>
 <p>● 体位性低血压者：转介医疗专业人员评估用药</p>
 <h3 class="subsection-heading" id="s55">1.3 中风</h3>
-<figure class="img-figure"><img src="images/ch7_fig2.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig2.jpeg"/></figure>
 <p>图7-2</p>
 <h4 class="sub-subsection-heading" id="s58">核心机制</h4>
 <p>● 缺血性（~80%）：脑血管被血栓/斑块堵塞</p>
@@ -566,7 +561,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 即使中风后数年，运动仍能改善运动功能</p>
 <p>● 运动指南应来自理疗师/职业治疗师</p>
 <h3 class="subsection-heading" id="s74">1.4 外周动脉疾病（PAD）</h3>
-<figure class="img-figure"><img src="images/ch7_fig3.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig3.png"/></figure>
 <p>图7-3</p>
 <h4 class="sub-subsection-heading" id="s77">核心机制</h4>
 <p>● 下肢动脉粥样硬化→病变远端血流减少→缺血性跛行（运动性下肢疼痛）</p>
@@ -580,7 +575,7 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="table-wrapper"><table><thead><tr><th>维度</th><th>处方</th></tr></thead><tbody><tr><td>频率</td><td>3-5天/周</td></tr><tr><td>强度</td><td>中等强度，以疼痛强度为准（非心率）；跛行疼痛量表3-4级（轻-中度）</td></tr><tr><td>时间</td><td>30-45分钟（不含休息），逐步至60分钟；12周为一周期</td></tr><tr><td>类型</td><td>承重步行（间歇性）：走至中度疼痛→坐下休息→疼痛消失→继续</td></tr></tbody></table></div>
 <h4 class="sub-subsection-heading" id="s87">关键机制</h4>
 <p>● 步行产生缺血→刺激侧支循环形成+毛细血管/线粒体密度增加→氧气利用改善</p>
-<p>● &quot;高强度&quot;在此语境指疼痛强度，非能量消耗</p>
+<p>● "高强度"在此语境指疼痛强度，非能量消耗</p>
 <h4 class="sub-subsection-heading" id="s90">安全注意</h4>
 <p>● 出现CAD症状（胸痛等）→立即停止，需医学评估</p>
 <p>● 足部护理至关重要（尤其合并糖尿病者）</p>
@@ -588,12 +583,12 @@ tbody tr:hover { background: var(--accent-light); }
 <h2 class="section-heading" id="s94">二、代谢紊乱</h2>
 <h3 class="subsection-heading" id="s95">2.1 血脂异常</h3>
 <h4 class="sub-subsection-heading" id="s96">核心机制</h4>
-<figure class="img-figure"><img src="images/ch7_fig4.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig4.jpeg"/></figure>
 <p>图7-4</p>
 <p>● 脂质代谢紊乱：总胆固醇↑、LDL↑、TG↑、HDL↓ → 动脉粥样硬化</p>
 <p>● 关键脂蛋白：</p>
-<p>● LDL（&quot;坏&quot;胆固醇）：促进动脉粥样硬化</p>
-<p>● HDL（&quot;好&quot;胆固醇）：运输脂质至肝脏排泄，与CAD负相关</p>
+<p>● LDL（"坏"胆固醇）：促进动脉粥样硬化</p>
+<p>● HDL（"好"胆固醇）：运输脂质至肝脏排泄，与CAD负相关</p>
 <p>● 非HDL胆固醇：HDL之外的总胆固醇，识别致动脉粥样硬化颗粒，优于LDL</p>
 <p>● TG：独立风险因素，慢性升高→内皮功能障碍</p>
 <h4 class="sub-subsection-heading" id="s105">诊断标准</h4>
@@ -609,7 +604,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 运动量阈值：每周250-300分钟，消耗~2000千卡→多数成年人可降低体重/体脂</p>
 <p>● 餐后脂血症（PPL）：单次中等强度运动30-60分钟→TG降低持续12-36小时→建议至少隔天运动一次</p>
 <h3 class="subsection-heading" id="s117">2.2 糖尿病</h3>
-<figure class="img-figure"><img src="images/ch7_fig5.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig5.jpeg"/></figure>
 <p>图7-5</p>
 <h4 class="sub-subsection-heading" id="s120">1型糖尿病</h4>
 <h4 class="sub-subsection-heading" id="s121">核心机制</h4>
@@ -643,7 +638,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 1型：运动前后监测血糖，调整胰岛素和碳水摄入</p>
 <p>● 2型：注意低血糖症状（出汗、颤抖、头晕、意识模糊）</p>
 <h3 class="subsection-heading" id="s151">2.3 代谢综合征（MetS）</h3>
-<figure class="img-figure"><img src="images/ch7_fig6.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig6.jpeg"/></figure>
 <p>图7-6</p>
 <h4 class="sub-subsection-heading" id="s154">核心机制</h4>
 <p>● 不是单一疾病，是一组增加心脏病/糖尿病/中风风险的代谢异常簇集</p>
@@ -661,7 +656,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 持续性运动和间歇性运动均可</p>
 <h2 class="section-heading" id="s168">三、肺部疾病</h2>
 <h3 class="subsection-heading" id="s169">3.1 哮喘（运动诱发性支气管收缩 EIB）</h3>
-<figure class="img-figure"><img src="images/ch7_fig7.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig7.jpeg"/></figure>
 <p>图7-7</p>
 <h4 class="sub-subsection-heading" id="s172">核心机制</h4>
 <p>● 呼吸道慢性炎症→对各种刺激因素过度反应→支气管平滑肌收缩+黏膜肿胀+黏液分泌↑→气道狭窄</p>
@@ -707,9 +702,9 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 运动计划个体化：癌症类型、治疗方案、当前健康状态</p>
 <p>● 建议转介肿瘤专科注册营养师</p>
 <h3 class="subsection-heading" id="s215">4.2 骨质疏松症</h3>
-<figure class="img-figure"><img src="images/ch7_fig8.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig8.jpeg"/></figure>
 <p>图7-8</p>
-<figure class="img-figure"><img src="images/ch7_fig9.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch7_fig9.jpeg"/></figure>
 <p>图7-9</p>
 <h4 class="sub-subsection-heading" id="s220">核心机制</h4>
 <p>● 骨量低+骨微结构破坏→骨骼脆弱→骨折风险↑</p>
@@ -767,10 +762,9 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="table-wrapper"><table><thead><tr><th>疾病/状况</th><th>关键记忆点</th></tr></thead><tbody><tr><td>冠状动脉疾病（CAD）</td><td>避免Valsalva动作（憋气用力）</td></tr><tr><td>高血压</td><td>记住三个阈值：120（正常上限）、130（1期起点）、140（2期起点）；生活方式改变可避免药物</td></tr><tr><td>中风</td><td>无特殊上下肢区分限制，重点在功能恢复（平衡/协调/步态）</td></tr><tr><td>外周动脉疾病（PAD）</td><td>以疼痛强度为准（非运动强度）——走至中等疼痛（跛行量表3-4级）→休息→继续</td></tr><tr><td>糖尿病</td><td>运动前减少胰岛素剂量；不可连续2天不运动（胰岛素敏感性24-48h后消失）；运动中注意低血糖症状</td></tr><tr><td>代谢综合征</td><td>诊断标准：出现≥3项（腰围↑、TG≥150、HDL↓、血压≥130/85、空腹血糖≥100）</td></tr><tr><td>哮喘</td><td>最佳运动时间：上午中间至晚些时候；保持吸入空气温暖湿润；随身携带急救药物</td></tr><tr><td>骨质疏松症</td><td>肌力训练+负重+冲击运动（跳跃）；高强度会受益</td></tr><tr><td>骨关节炎</td><td>避免疼痛范围外运动；避免高冲击和扭转动作</td></tr></tbody></table></div>
 <p>各个生命阶段的运动注意事项</p>
 <p>第     8章</p>
-    </div>
-
-    <div id="tab-quiz" class="tab-content">
-      <div class="quiz-section">
+</div>
+<div class="tab-content" id="tab-quiz">
+<div class="quiz-section">
 <div class="quiz-header"><h2>判断题</h2>
 <p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p></div>
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-tip">要点</span><span>所有慢性病客户开始运动前必须获得医学许可。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文明确指出所有慢性病客户开始运动前需获得医学许可，这是跨疾病通用原则的首要要求。</p></details></div>
@@ -784,25 +778,21 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">9.</span><span class="quiz-tag quiz-tip">要点</span><span>心肺训练是降低甘油三酯（TG）最有效的运动方式，肌力训练对此无效。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出心肺训练最有效（TG可作燃料），肌力训练对降低TG无效。</p></details></div>
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">10.</span><span class="quiz-tag quiz-tip">要点</span><span>单次中等强度运动30-60分钟可使TG降低持续12-36小时。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文报告餐后脂血症（PPL）单次中等强度运动30-60分钟后TG降低持续12-36小时，建议至少隔天运动一次。</p></details></div>
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">11.</span><span class="quiz-tag quiz-warn">要点</span><span>1型糖尿病患者运动时应增加胰岛素剂量以防止高血糖。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文指出1型糖尿病患者运动前应减少胰岛素剂量，运动前/中摄取易吸收碳水化合物，以防低血糖。</p></details></div>
-<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>PAD患者的间歇步行训练中，&#x27;高强度&#x27;指的是疼痛强度而非能量消耗。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文解释PAD间歇步行训练中&#x27;高强度&#x27;在此语境指疼痛强度，非能量消耗。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-tip">要点</span><span>PAD患者的间歇步行训练中，'高强度'指的是疼痛强度而非能量消耗。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文解释PAD间歇步行训练中'高强度'在此语境指疼痛强度，非能量消耗。</p></details></div>
 </div>
-    </div>
-
-    <div id="tab-sop" class="tab-content">
-      <div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
-    </div>
-
-    <div class="chapter-nav">
-      <a href="ch6.html" class="prev">← 上一章</a>
-      <a href="ch8.html" class="next">下一章 →</a>
-    </div>
-  </main>
 </div>
-
+<div class="tab-content" id="tab-sop">
+<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+</div>
+<div class="chapter-nav">
+<a class="prev" href="ch6.html">← 上一章</a>
+<a class="next" href="ch8.html">下一章 →</a>
+</div>
+</main>
+</div>
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img id="lightboxImg" src="" alt="">
+<img alt="" id="lightboxImg" src=""/>
 </div>
-
 <script>
 // 深色模式
 function toggleTheme() {
@@ -858,6 +848,5 @@ window.addEventListener('scroll', function() {
   if (current) current.link.classList.add('active');
 });
 </script>
-
 </body>
 </html>

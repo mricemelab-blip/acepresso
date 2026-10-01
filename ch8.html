@@ -1,8 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>第8章 各个生命阶段的运动注意事项 | ACEpresso</title>
 <style>
 :root {
@@ -387,90 +388,84 @@ tbody tr:hover { background: var(--accent-light); }
 </style>
 </head>
 <body>
-
 <div class="progress-bar" id="progressBar"></div>
-
 <header class="site-header">
-  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
-  <button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
+<div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+<button class="theme-toggle" onclick="toggleTheme()">◐ 主题</button>
 </header>
-
 <div class="layout">
-  <nav class="sidebar">
-    <div class="toc-title">本章目录</div>
-    <a href="#s1" class="toc-link toc-h2">跨人群通用原则</a>
-<a href="#s2" class="toc-link toc-h4">医学许可与筛查</a>
-<a href="#s6" class="toc-link toc-h4">运动处方通用框架</a>
-<a href="#s10" class="toc-link toc-h4">ACE IFT模型适用性</a>
-<a href="#s14" class="toc-link toc-h4">行为改变与社会支持</a>
-<a href="#s18" class="toc-link toc-h2">一、青少年</a>
-<a href="#s21" class="toc-link toc-h3">1.1 背景与现状</a>
-<a href="#s22" class="toc-link toc-h4">核心问题</a>
-<a href="#s28" class="toc-link toc-h4">缺乏活动的后果</a>
-<a href="#s31" class="toc-link toc-h4">身体素养（Physical Literacy）</a>
-<a href="#s35" class="toc-link toc-h3">1.2 青少年运动指南</a>
-<a href="#s36" class="toc-link toc-h4">核心原则</a>
-<a href="#s41" class="toc-link toc-h4">肌肉训练的安全性与有效性</a>
-<a href="#s46" class="toc-link toc-h4">FITT建议</a>
-<a href="#s49" class="toc-link toc-h3">1.3 安全注意</a>
-<a href="#s50" class="toc-link toc-h4">肌肉训练安全指南</a>
-<a href="#s57" class="toc-link toc-h4">极端环境防护</a>
-<a href="#s63" class="toc-link toc-h4">过劳性损伤与体育专业化</a>
-<a href="#s68" class="toc-link toc-h3">🔑 青少年关键记忆点</a>
-<a href="#s73" class="toc-link toc-h2">二、孕期与产后女性</a>
-<a href="#s74" class="toc-link toc-h3">2.1 孕期</a>
-<a href="#s77" class="toc-link toc-h4">生理变化</a>
-<a href="#s78" class="toc-link toc-h4">身体结构与重心</a>
-<a href="#s83" class="toc-link toc-h4">激素变化</a>
-<a href="#s87" class="toc-link toc-h4">心血管变化</a>
-<a href="#s92" class="toc-link toc-h4">体温调节</a>
-<a href="#s97" class="toc-link toc-h4">运动指南</a>
-<a href="#s98" class="toc-link toc-h4">核心建议</a>
-<a href="#s104" class="toc-link toc-h4">强度监控</a>
-<a href="#s109" class="toc-link toc-h4">FITT建议</a>
-<a href="#s112" class="toc-link toc-h4">安全注意</a>
-<a href="#s113" class="toc-link toc-h4">绝对禁忌——终止运动的警示性体征</a>
-<a href="#s123" class="toc-link toc-h4">运动禁忌与避免事项</a>
-<a href="#s128" class="toc-link toc-h4">营养与补水</a>
-<a href="#s132" class="toc-link toc-h4">腹直肌分离（Diastasis Recti）</a>
-<a href="#s138" class="toc-link toc-h3">2.2 产后</a>
-<a href="#s141" class="toc-link toc-h4">核心要点</a>
-<a href="#s142" class="toc-link toc-h4">恢复原则</a>
-<a href="#s148" class="toc-link toc-h4">运动恢复指南</a>
-<a href="#s155" class="toc-link toc-h4">哺乳期注意</a>
-<a href="#s160" class="toc-link toc-h4">计划设计重点</a>
-<a href="#s165" class="toc-link toc-h3">🔑 孕期与产后关键记忆点</a>
-<a href="#s173" class="toc-link toc-h2">三、老年人</a>
-<a href="#s176" class="toc-link toc-h3">3.1 衰老的结构性变化</a>
-<a href="#s177" class="toc-link toc-h4">肌肉骨骼系统</a>
-<a href="#s183" class="toc-link toc-h4">平衡与稳定性</a>
-<a href="#s189" class="toc-link toc-h4">认知与心理健康</a>
-<a href="#s195" class="toc-link toc-h3">3.2 老年人运动指南</a>
-<a href="#s196" class="toc-link toc-h4">核心建议</a>
-<a href="#s203" class="toc-link toc-h4">FITT建议</a>
-<a href="#s206" class="toc-link toc-h3">3.3 安全注意与计划设计</a>
-<a href="#s207" class="toc-link toc-h4">评估调整</a>
-<a href="#s213" class="toc-link toc-h4">计划设计重点</a>
-<a href="#s223" class="toc-link toc-h3">🔑 老年人关键记忆点</a>
-<a href="#s230" class="toc-link toc-h2">各人群关键记忆点总结</a>
-  </nav>
-
-  <main class="main-content">
-    <div class="hero">
-      <div class="badge">第8章</div>
-      <h1>各个生命阶段的运动注意事项</h1>
-      <div class="subtitle">Exercise Considerations Across the Lifespan</div>
-      <div class="intro">本章探讨不同生命阶段（儿童青少年、成年人、老年人）的运动注意事项，帮助教练针对不同年龄群体制定安全有效的训练方案。</div>
-    </div>
-
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
-      <button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
-      <button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
-    </div>
-
-    <div id="tab-lecture" class="tab-content active">
-<p>本章节按&quot;核心机制/背景→运动指南（FITT）→安全注意&quot;结构组织</p>
+<nav class="sidebar">
+<div class="toc-title">本章目录</div>
+<a class="toc-link toc-h2" href="#s1">跨人群通用原则</a>
+<a class="toc-link toc-h4" href="#s2">医学许可与筛查</a>
+<a class="toc-link toc-h4" href="#s6">运动处方通用框架</a>
+<a class="toc-link toc-h4" href="#s10">ACE IFT模型适用性</a>
+<a class="toc-link toc-h4" href="#s14">行为改变与社会支持</a>
+<a class="toc-link toc-h2" href="#s18">一、青少年</a>
+<a class="toc-link toc-h3" href="#s21">1.1 背景与现状</a>
+<a class="toc-link toc-h4" href="#s22">核心问题</a>
+<a class="toc-link toc-h4" href="#s28">缺乏活动的后果</a>
+<a class="toc-link toc-h4" href="#s31">身体素养（Physical Literacy）</a>
+<a class="toc-link toc-h3" href="#s35">1.2 青少年运动指南</a>
+<a class="toc-link toc-h4" href="#s36">核心原则</a>
+<a class="toc-link toc-h4" href="#s41">肌肉训练的安全性与有效性</a>
+<a class="toc-link toc-h4" href="#s46">FITT建议</a>
+<a class="toc-link toc-h3" href="#s49">1.3 安全注意</a>
+<a class="toc-link toc-h4" href="#s50">肌肉训练安全指南</a>
+<a class="toc-link toc-h4" href="#s57">极端环境防护</a>
+<a class="toc-link toc-h4" href="#s63">过劳性损伤与体育专业化</a>
+<a class="toc-link toc-h3" href="#s68">🔑 青少年关键记忆点</a>
+<a class="toc-link toc-h2" href="#s73">二、孕期与产后女性</a>
+<a class="toc-link toc-h3" href="#s74">2.1 孕期</a>
+<a class="toc-link toc-h4" href="#s77">生理变化</a>
+<a class="toc-link toc-h4" href="#s78">身体结构与重心</a>
+<a class="toc-link toc-h4" href="#s83">激素变化</a>
+<a class="toc-link toc-h4" href="#s87">心血管变化</a>
+<a class="toc-link toc-h4" href="#s92">体温调节</a>
+<a class="toc-link toc-h4" href="#s97">运动指南</a>
+<a class="toc-link toc-h4" href="#s98">核心建议</a>
+<a class="toc-link toc-h4" href="#s104">强度监控</a>
+<a class="toc-link toc-h4" href="#s109">FITT建议</a>
+<a class="toc-link toc-h4" href="#s112">安全注意</a>
+<a class="toc-link toc-h4" href="#s113">绝对禁忌——终止运动的警示性体征</a>
+<a class="toc-link toc-h4" href="#s123">运动禁忌与避免事项</a>
+<a class="toc-link toc-h4" href="#s128">营养与补水</a>
+<a class="toc-link toc-h4" href="#s132">腹直肌分离（Diastasis Recti）</a>
+<a class="toc-link toc-h3" href="#s138">2.2 产后</a>
+<a class="toc-link toc-h4" href="#s141">核心要点</a>
+<a class="toc-link toc-h4" href="#s142">恢复原则</a>
+<a class="toc-link toc-h4" href="#s148">运动恢复指南</a>
+<a class="toc-link toc-h4" href="#s155">哺乳期注意</a>
+<a class="toc-link toc-h4" href="#s160">计划设计重点</a>
+<a class="toc-link toc-h3" href="#s165">🔑 孕期与产后关键记忆点</a>
+<a class="toc-link toc-h2" href="#s173">三、老年人</a>
+<a class="toc-link toc-h3" href="#s176">3.1 衰老的结构性变化</a>
+<a class="toc-link toc-h4" href="#s177">肌肉骨骼系统</a>
+<a class="toc-link toc-h4" href="#s183">平衡与稳定性</a>
+<a class="toc-link toc-h4" href="#s189">认知与心理健康</a>
+<a class="toc-link toc-h3" href="#s195">3.2 老年人运动指南</a>
+<a class="toc-link toc-h4" href="#s196">核心建议</a>
+<a class="toc-link toc-h4" href="#s203">FITT建议</a>
+<a class="toc-link toc-h3" href="#s206">3.3 安全注意与计划设计</a>
+<a class="toc-link toc-h4" href="#s207">评估调整</a>
+<a class="toc-link toc-h4" href="#s213">计划设计重点</a>
+<a class="toc-link toc-h3" href="#s223">🔑 老年人关键记忆点</a>
+<a class="toc-link toc-h2" href="#s230">各人群关键记忆点总结</a>
+</nav>
+<main class="main-content">
+<div class="hero">
+<div class="badge">第8章</div>
+<h1>各个生命阶段的运动注意事项</h1>
+<div class="subtitle">Exercise Considerations Across the Lifespan</div>
+<div class="intro">本章探讨不同生命阶段（儿童青少年、成年人、老年人）的运动注意事项，帮助教练针对不同年龄群体制定安全有效的训练方案。</div>
+</div>
+<div class="tabs">
+<button class="tab-btn active" onclick="switchTab('lecture', this)">讲义</button>
+<button class="tab-btn" onclick="switchTab('quiz', this)">自测</button>
+<button class="tab-btn" onclick="switchTab('sop', this)">SOP工作单</button>
+</div>
+<div class="tab-content active" id="tab-lecture">
+<p>本章节按"核心机制/背景→运动指南（FITT）→安全注意"结构组织</p>
 <h2 class="section-heading" id="s1">跨人群通用原则</h2>
 <h4 class="sub-subsection-heading" id="s2">医学许可与筛查</h4>
 <p>● 所有特殊人群开始运动前需获得医学许可（尤其合并慢性病者）</p>
@@ -489,7 +484,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 社会支持是坚持运动的关键因素（家庭参与、同伴鼓励）</p>
 <p>● 运动计划设计应考虑个人目标、能量波动和日常限制</p>
 <h2 class="section-heading" id="s18">一、青少年</h2>
-<figure class="img-figure"><img src="images/ch8_fig1.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch8_fig1.jpeg"/></figure>
 <p>图8-1</p>
 <h3 class="subsection-heading" id="s21">1.1 背景与现状</h3>
 <h4 class="sub-subsection-heading" id="s22">核心问题</h4>
@@ -545,7 +540,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 高温/极冷环境需特殊防护</p>
 <h2 class="section-heading" id="s73">二、孕期与产后女性</h2>
 <h3 class="subsection-heading" id="s74">2.1 孕期</h3>
-<figure class="img-figure"><img src="images/ch8_fig2.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch8_fig2.jpeg"/></figure>
 <p>图8-2</p>
 <h4 class="sub-subsection-heading" id="s77">生理变化</h4>
 <h4 class="sub-subsection-heading" id="s78">身体结构与重心</h4>
@@ -609,7 +604,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 推荐运动：腹横肌等长收缩、姿势肌和腹部力量训练</p>
 <p>● 注意评估腹直肌分离情况后再设计核心训练</p>
 <h3 class="subsection-heading" id="s138">2.2 产后</h3>
-<figure class="img-figure"><img src="images/ch8_fig3.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch8_fig3.jpeg"/></figure>
 <p>图8-3</p>
 <h4 class="sub-subsection-heading" id="s141">核心要点</h4>
 <h4 class="sub-subsection-heading" id="s142">恢复原则</h4>
@@ -644,7 +639,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 产后：慢慢开始，9-12个月回到孕前水平</p>
 <p>● 产后：关注哺乳期营养补水+圆肩/头部前倾</p>
 <h2 class="section-heading" id="s173">三、老年人</h2>
-<figure class="img-figure"><img src="images/ch8_fig4.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
+<figure class="img-figure"><img alt="" loading="lazy" onclick="openLightbox(this)" src="images/ch8_fig4.jpeg"/></figure>
 <p>图8-4</p>
 <h3 class="subsection-heading" id="s176">3.1 衰老的结构性变化</h3>
 <h4 class="sub-subsection-heading" id="s177">肌肉骨骼系统</h4>
@@ -705,10 +700,9 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="table-wrapper"><table><thead><tr><th>人群</th><th>关键记忆点</th></tr></thead><tbody><tr><td>青少年·活动量</td><td>每天≥60分钟中等至高强度；骨骼强化在青春期前/青春期尤为重要（骨量增长窗口期）</td></tr><tr><td>青少年·肌肉训练</td><td>安全（有监督时）；避免大重量和爆发力；优先自重/阻力带</td></tr><tr><td>青少年·风险</td><td>避免体育专业化和过劳性损伤；遵循周期化；高温/极冷环境特殊防护</td></tr><tr><td>孕期·运动量</td><td>每周≥150分钟中等强度，至少3天；谈话测试监控（&lt;VT1）</td></tr><tr><td>孕期·禁忌</td><td>避免仰卧、高温环境、接触性/高跌落风险运动；注意9项警示性体征</td></tr><tr><td>孕期·激素</td><td>松弛素↑→所有关节松弛→关节不稳；力量和稳定训练对抗</td></tr><tr><td>孕期·腹直肌分离</td><td>孕期发病率45%；运动可减少35%；推荐腹横肌等长收缩</td></tr><tr><td>产后·恢复</td><td>慢慢开始，9-12个月回到孕前水平；剖腹产需额外恢复时间</td></tr><tr><td>产后·注意</td><td>哺乳期需更多热量/水分；关注圆肩/头部前倾；加入后背和后肩运动</td></tr><tr><td>老年人·运动量</td><td>150-300分钟中等强度/周；平衡训练必须纳入；≥2次/周肌力训练</td></tr><tr><td>老年人·骨骼</td><td>20%髋骨折老年人死于并发症；负重运动在承受范围内强化骨骼</td></tr><tr><td>老年人·关节炎</td><td>65岁以上发病率49.6%；先评估姿势和柔韧性，再调整运动评估</td></tr><tr><td>老年人·计划设计</td><td>热身比以往更重要；平衡训练放在课程早期；重点放在功能训练</td></tr><tr><td>老年人·认知</td><td>运动可预防和减缓认知衰退，改善心理健康，提供社交机会</td></tr></tbody></table></div>
 <p>肌肉骨骼异常客户的注意事项</p>
 <p>第       9章</p>
-    </div>
-
-    <div id="tab-quiz" class="tab-content">
-      <div class="quiz-section">
+</div>
+<div class="tab-content" id="tab-quiz">
+<div class="quiz-section">
 <div class="quiz-header"><h2>判断题</h2>
 <p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p></div>
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-tip">要点</span><span>仅20-26%的美国青少年达到身体活动推荐水平。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文引用2018年报告卡评分D-，仅20-26%的美国青少年达到推荐水平。</p></details></div>
@@ -725,23 +719,19 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-warn">要点</span><span>老年人运动计划不需要包含平衡训练。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：错误</strong>。原文明确平衡训练必须纳入老年人运动计划，以提高本体感受、降低跌倒风险。每周≥2次肌力训练同样必须纳入。</p></details></div>
 <div class="quiz-item"><div class="quiz-q"><span class="quiz-num">13.</span><span class="quiz-tag quiz-tip">要点</span><span>身体活动可以预防和减缓50岁以上人群的认知能力衰退。</span></div><details class="quiz-answer"><summary>查看答案</summary><p><strong>答案：正确</strong>。原文指出身体活动可预防和减缓认知能力衰退，适用于50岁以上人群，无论初始认知状态。</p></details></div>
 </div>
-    </div>
-
-    <div id="tab-sop" class="tab-content">
-      <div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
-    </div>
-
-    <div class="chapter-nav">
-      <a href="ch7.html" class="prev">← 上一章</a>
-      <a href="ch9.html" class="next">下一章 →</a>
-    </div>
-  </main>
 </div>
-
+<div class="tab-content" id="tab-sop">
+<div class="placeholder">SOP工作单将在讲义确认后逐章制作。</div>
+</div>
+<div class="chapter-nav">
+<a class="prev" href="ch7.html">← 上一章</a>
+<a class="next" href="ch9.html">下一章 →</a>
+</div>
+</main>
+</div>
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img id="lightboxImg" src="" alt="">
+<img alt="" id="lightboxImg" src=""/>
 </div>
-
 <script>
 // 深色模式
 function toggleTheme() {
@@ -797,6 +787,5 @@ window.addEventListener('scroll', function() {
   if (current) current.link.classList.add('active');
 });
 </script>
-
 </body>
 </html>
