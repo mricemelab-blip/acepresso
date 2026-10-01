@@ -323,10 +323,67 @@ tbody tr:hover { background: var(--accent-light); }
   .site-header, .sidebar, .tabs, .chapter-nav, .progress-bar, .theme-toggle, .lightbox { display: none !important; }
   .main-content { margin-left: 0; max-width: 100%; padding: 0; }
   .hero { background: none; margin: 0; padding: 20px 0; }
-  .card { break-inside: avoid; }
   table { break-inside: avoid; }
   .img-figure img { max-width: 80%; }
+  .quiz-item { break-inside: avoid; }
 }
+
+/* 自测判断题区 */
+.quiz-section { padding: 16px 0; }
+.quiz-header h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.quiz-header .quiz-instruction {
+  font-size: 14px; color: var(--text-secondary); margin-bottom: 24px;
+}
+.quiz-item {
+  margin: 16px 0; padding: 16px 20px;
+  border-radius: var(--card-radius); border-left: 4px solid;
+  background: var(--surface); box-shadow: 0 1px 3px var(--shadow);
+}
+.quiz-q { font-size: 15px; line-height: 1.8; margin-bottom: 8px; }
+.quiz-num { font-weight: 700; color: var(--accent); margin-right: 6px; }
+.quiz-tag {
+  display: inline-block; font-size: 11px; font-weight: 700;
+  padding: 1px 8px; border-radius: 4px; margin-right: 8px;
+  vertical-align: middle; letter-spacing: 0.5px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.quiz-tip { background: #e8f5e9; color: #2e7d32; border-color: #4caf50; }
+.quiz-wrong { background: #fce4ec; color: #c62828; border-color: #e53935; }
+.quiz-right { background: #e3f2fd; color: #1565c0; border-color: #1e88e5; }
+.quiz-warn { background: #fff8e1; color: #e65100; border-color: #ff8f00; }
+.quiz-scene { background: #f3e5f5; color: #6a1b9a; border-color: #7b1fa2; }
+.quiz-answer {
+  margin-top: 8px; font-size: 13px; color: var(--text-secondary);
+}
+.quiz-answer summary {
+  cursor: pointer; font-weight: 600; font-size: 12px;
+  color: var(--accent); user-select: none;
+}
+.quiz-answer p { margin-top: 6px; }
+[data-theme="dark"] .quiz-tip { background: #1b3a1b; }
+[data-theme="dark"] .quiz-wrong { background: #3a1b1b; }
+[data-theme="dark"] .quiz-right { background: #1b2a3a; }
+[data-theme="dark"] .quiz-warn { background: #3a2a1b; }
+[data-theme="dark"] .quiz-scene { background: #2a1b3a; }
+[data-theme="dark"] .quiz-item { background: var(--surface); }
+
+/* 知识速览折叠区 */
+.knowledge-overview {
+  margin: 0 0 32px; padding: 20px 24px;
+  border: 1px solid var(--border); border-radius: var(--card-radius);
+  background: var(--surface);
+}
+.knowledge-overview summary {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  cursor: pointer; margin-bottom: 16px; user-select: none;
+}
+.knowledge-overview[open] summary { margin-bottom: 20px; }
+.knowledge-overview p { margin-bottom: 10px; font-size: 14.5px; line-height: 1.8; }
 </style>
 </head>
 <body>
@@ -341,36 +398,36 @@ tbody tr:hover { background: var(--accent-light); }
 <div class="layout">
   <nav class="sidebar">
     <div class="toc-title">本章目录</div>
-    <a href="#s0" class="toc-link toc-h3">总述</a>
-<a href="#s2" class="toc-link toc-h3">分述：三大核心模块内容</a>
-<a href="#s3" class="toc-link toc-h3">行为理论模型概览</a>
-<a href="#s14" class="toc-link toc-h3">行为改变原理概览</a>
-<a href="#s26" class="toc-link toc-h3">身体活动与坚持概览</a>
-<a href="#s34" class="toc-link toc-h2">1 行为理论模型</a>
-<a href="#s37" class="toc-link toc-h3">分述：行为理论模型核心内容</a>
-<a href="#s38" class="toc-link toc-h3">一、行为理论模型的存在原因（3个关键要点）</a>
-<a href="#s46" class="toc-link toc-h3">1.1 健康信念模型</a>
-<a href="#s67" class="toc-link toc-h3">1.2 自我决定理论</a>
-<a href="#s123" class="toc-link toc-h3">1.3 行为改变的跨理论模型</a>
-<a href="#s124" class="toc-link toc-h3">总述</a>
-<a href="#s132" class="toc-link toc-h3">分述：TTM四大核心部分详解</a>
-<a href="#s133" class="toc-link toc-h3">一、改变阶段（TTM第一部分，5个核心阶段）</a>
-<a href="#s144" class="toc-link toc-h3">二、改变过程：进阶到下一个阶段（TTM第二部分，阶段进阶的核心）</a>
-<a href="#s162" class="toc-link toc-h3">自我效能（TTM第三部分，改变的核心信念）</a>
-<a href="#s174" class="toc-link toc-h3">四、决策平衡（TTM第四部分，改变的利弊权衡）</a>
-<a href="#s201" class="toc-link toc-h2">2 行为改变的原理</a>
-<a href="#s202" class="toc-link toc-h3">总述</a>
-<a href="#s205" class="toc-link toc-h3">分述</a>
-<a href="#s206" class="toc-link toc-h3">2.1 操作性条件反射</a>
-<a href="#s243" class="toc-link toc-h3">2.2 认知与行为</a>
-<a href="#s320" class="toc-link toc-h3">行为改变的原理 (Principles)</a>
-<a href="#s321" class="toc-link toc-h2">3 身体活动与坚持</a>
-<a href="#s322" class="toc-link toc-h3">总述</a>
-<a href="#s332" class="toc-link toc-h3">分述</a>
-<a href="#s333" class="toc-link toc-h3">3.1 个人特质</a>
-<a href="#s370" class="toc-link toc-h3">3.2 环境因素</a>
-<a href="#s405" class="toc-link toc-h3">3.3 身体活动因素</a>
-<a href="#s428" class="toc-link toc-h3">3.4 计划设计</a>
+    <a href="#s17" class="toc-link toc-h3">总述</a>
+<a href="#s19" class="toc-link toc-h3">分述：三大核心模块内容</a>
+<a href="#s20" class="toc-link toc-h3">行为理论模型概览</a>
+<a href="#s31" class="toc-link toc-h3">行为改变原理概览</a>
+<a href="#s43" class="toc-link toc-h3">身体活动与坚持概览</a>
+<a href="#s51" class="toc-link toc-h2">1 行为理论模型</a>
+<a href="#s54" class="toc-link toc-h3">分述：行为理论模型核心内容</a>
+<a href="#s55" class="toc-link toc-h3">一、行为理论模型的存在原因（3个关键要点）</a>
+<a href="#s63" class="toc-link toc-h3">1.1 健康信念模型</a>
+<a href="#s84" class="toc-link toc-h3">1.2 自我决定理论</a>
+<a href="#s140" class="toc-link toc-h3">1.3 行为改变的跨理论模型</a>
+<a href="#s141" class="toc-link toc-h3">总述</a>
+<a href="#s149" class="toc-link toc-h3">分述：TTM四大核心部分详解</a>
+<a href="#s150" class="toc-link toc-h3">一、改变阶段（TTM第一部分，5个核心阶段）</a>
+<a href="#s160" class="toc-link toc-h3">二、改变过程：进阶到下一个阶段（TTM第二部分，阶段进阶的核心）</a>
+<a href="#s178" class="toc-link toc-h3">自我效能（TTM第三部分，改变的核心信念）</a>
+<a href="#s190" class="toc-link toc-h3">四、决策平衡（TTM第四部分，改变的利弊权衡）</a>
+<a href="#s217" class="toc-link toc-h2">2 行为改变的原理</a>
+<a href="#s218" class="toc-link toc-h3">总述</a>
+<a href="#s221" class="toc-link toc-h3">分述</a>
+<a href="#s222" class="toc-link toc-h3">2.1 操作性条件反射</a>
+<a href="#s259" class="toc-link toc-h3">2.2 认知与行为</a>
+<a href="#s336" class="toc-link toc-h3">行为改变的原理 (Principles)</a>
+<a href="#s337" class="toc-link toc-h2">3 身体活动与坚持</a>
+<a href="#s338" class="toc-link toc-h3">总述</a>
+<a href="#s348" class="toc-link toc-h3">分述</a>
+<a href="#s349" class="toc-link toc-h3">3.1 个人特质</a>
+<a href="#s386" class="toc-link toc-h3">3.2 环境因素</a>
+<a href="#s421" class="toc-link toc-h3">3.3 身体活动因素</a>
+<a href="#s444" class="toc-link toc-h3">3.4 计划设计</a>
   </nav>
 
   <main class="main-content">
@@ -388,10 +445,30 @@ tbody tr:hover { background: var(--accent-light); }
     </div>
 
     <div id="tab-lecture" class="tab-content active">
-<h3 class="subsection-heading" id="s0">总述</h3>
+<details class="knowledge-overview" open>
+<summary>知识速览</summary>
+<p>学完本章，你应当能够：① 说明健康信念模型的主要变量；② 说明自我决定理论中的动机和三项基本心理需求；③ 识别TTM的五个改变阶段及其他组成；④ 区分操作性条件反射的主要类型，并识别常见认知扭曲；⑤ 说明个人、环境和身体活动因素如何影响运动坚持。</p>
+<p>行为改变不能只归因于意志力。私人教练需要结合行为理论模型、学习与认知原理，以及影响运动坚持的个人、环境和训练因素，为客户提供适合当前状态的支持。</p>
+<p>表2-1</p>
+<div class="table-wrapper"><table><thead><tr><th>板块</th><th>核心问题</th><th>高频考点</th></tr></thead><tbody><tr><td>1. 行为理论模型</td><td>用什么方法帮客户改变</td><td>HBM 两大变量 / SDT 三种需求 / TTM 五阶段 + 四部分</td></tr><tr><td>2. 行为改变原理</td><td>客户为什么做出或放弃改变</td><td>正强化 / 负强化 / 消退 / 惩罚 / 认知扭曲六类 / 目标设定 / 自我监测</td></tr><tr><td>3. 身体活动与坚持</td><td>怎么让客户长期坚持改变</td><td>个人特质五类 / 环境三要素 / 训练强度与损伤</td></tr></tbody></table></div>
+<p>表2-2</p>
+<div class="table-wrapper"><table><thead><tr><th>数字</th><th>含义</th></tr></thead><tbody><tr><td>5</td><td>TTM 五个改变阶段（思考前 → 思考 → 准备 → 行动 → 维持）</td></tr><tr><td>6</td><td>自我效能的 6 个来源</td></tr><tr><td>≥6 个月</td><td>规律运动 ≥ 6 个月 = 维持阶段</td></tr><tr><td>3</td><td>自我决定理论三大需求（能力感知 / 自主性 / 社群性）</td></tr><tr><td>4</td><td>操作性条件反射四种类型（正强化 / 负强化 / 消退 / 惩罚）</td></tr><tr><td>6</td><td>认知扭曲六类型（极 / 放 / 偏 / 断 / 标 / 责）</td></tr></tbody></table></div>
+<p>表2-3</p>
+<div class="table-wrapper"><table><thead><tr><th>缩写</th><th>全称</th><th>中文</th></tr></thead><tbody><tr><td>TTM</td><td>Transtheoretical Model</td><td>跨理论模型（改变阶段模型）</td></tr><tr><td>HBM</td><td>Health Belief Model</td><td>健康信念模型</td></tr><tr><td>SDT</td><td>Self-Determination Theory</td><td>自我决定理论</td></tr><tr><td>HIIT</td><td>High-Intensity Interval Training</td><td>高强度间歇训练</td></tr><tr><td>SMART</td><td>Specific, Measurable, Achievable, Relevant, Time-bound</td><td>具体、可测量、可达成、相关、有时限</td></tr></tbody></table></div>
+<p>表2-4</p>
+<div class="table-wrapper"><table><thead><tr><th>想法 \ 行动</th><th>无行动</th><th>不定期行动</th><th>规律行动</th></tr></thead><tbody><tr><td>无想法</td><td>思考前阶段</td><td>—</td><td>—</td></tr><tr><td>有想法</td><td>思考阶段（6 个月内）</td><td>准备阶段</td><td>行动（＜6 月）/ 维持（≥6 月）</td></tr></tbody></table></div>
+<p>第一站：理解为什么需要行为理论模型（板块 1 导入）→ 第二站：掌握三大理论模型（板块 1 主体）→ 第三站：理解行为改变的底层原理（板块 2）→ 第四站：掌握影响坚持的三大因素（板块 3）。每一站后面都配小节回顾与练习，每节读完即时自测，章末有完整收口总结。</p>
+<p>思考题：如果一个客户说&quot;我知道运动好，但我就是懒得动&quot;，请问这可能是哪些原因导致的？请结合本章三大板块的知识进行分析。</p>
+<p>选择题：根据自我决定理论，以下哪种做法最能帮助客户建立长期运动习惯？</p>
+<p>A. 承诺完成目标后奖励自己一顿大餐</p>
+<p>B. 找一个志同道合的训练搭档互相监督</p>
+<p>C. 每次训练后给自己打分并记录进步</p>
+<p>D. 请专业教练全程指导训练计划</p>
+</details>
+<h3 class="subsection-heading" id="s17">总述</h3>
 <p>本章核心讲的是：如何帮一个人告别久坐少动、不健康的旧生活方式，建立从开始运动到坚持运动的全新模式。一个人的改变，靠的是实实在在的具体行为。一名成功的私人教练，不光要会制定运动计划、教运动技巧，还要会指导客户完成健康行为的改变，并创造产生运动动机的条件。本章通过三大核心模块，把行为改变的方法、原理和坚持运动的关键系统梳理。</p>
-<h3 class="subsection-heading" id="s2">分述：三大核心模块内容</h3>
-<h3 class="subsection-heading" id="s3">行为理论模型概览</h3>
+<h3 class="subsection-heading" id="s19">分述：三大核心模块内容</h3>
+<h3 class="subsection-heading" id="s20">行为理论模型概览</h3>
 <p>这部分是帮客户改变行为的基础方法，主要包含三个核心模型：</p>
 <p>健康信念模型</p>
 <figure class="img-figure"><img src="images/ch2_fig1.png" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
@@ -402,7 +479,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>行为改变的跨理论模型，也叫TTM</p>
 <figure class="img-figure"><img src="images/ch2_fig3.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
 <p>图2-3</p>
-<h3 class="subsection-heading" id="s14">行为改变原理概览</h3>
+<h3 class="subsection-heading" id="s31">行为改变原理概览</h3>
 <p>知道了方法模型，还要懂背后的道理，才能真正用起来，核心分为以下内容：</p>
 <p>1. 操作性条件反射</p>
 <p>人的行为出现，要么是被前因刺激产生的，也就是刺激控制法；要么是被事情的结果反馈影响，结果的好坏会决定人要不要继续做这个行为，这就是操作性条件反射的核心。</p>
@@ -414,7 +491,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>图2-5</p>
 <p>3. 自我监测</p>
 <p>自我监测是对目标相关的行为、情境和反应进行系统记录与观察。客户可以通过训练日志、步数、运动时间、主观用力程度或情绪反应等信息，了解自己的行为模式，并为后续目标调整提供依据。自我监测是自我调节的一部分，但不等同于单纯依靠自律。</p>
-<h3 class="subsection-heading" id="s26">身体活动与坚持概览</h3>
+<h3 class="subsection-heading" id="s43">身体活动与坚持概览</h3>
 <p>让人下定决心开始运动、刚开始尝试都很简单，最难的是长期坚持。书中把影响坚持运动计划的因素分为三大类，也可以理解为天时、地利、人和：</p>
 <p>1. 个人特质</p>
 <p>2. 环境因素</p>
@@ -422,11 +499,11 @@ tbody tr:hover { background: var(--accent-light); }
 <p>总结</p>
 <p>本章整体逻辑清晰易懂，先给出了客户行为改变的方法论（三大理论模型），再讲解了行为改变背后的科学原理（操作性条件反射、认知行为、自我监测），最后说明了影响客户坚持运动的关键因素。整体围绕&quot;让人产生行为改变、并长期坚持运动&quot;展开，以上为全章框架概览。</p>
 <p>第一部分：</p>
-<h2 class="section-heading" id="s34">1 行为理论模型</h2>
+<h2 class="section-heading" id="s51">1 行为理论模型</h2>
 <p>一 总述</p>
 <p>本节讲解行为理论模型，首先要明确为什么会诞生这些行为理论模型，原ACE教材第61页给出了三个关键原因，也正是基于这些原因，私人教练不能只设计训练计划，更要帮客户养成终身运动的习惯，由此衍生出三大行为改变模型，以下先讲解健康信念模型和自我决定理论这两大核心模型，帮大家掌握指导客户行为改变的基本原理。</p>
-<h3 class="subsection-heading" id="s37">分述：行为理论模型核心内容</h3>
-<h3 class="subsection-heading" id="s38">一、行为理论模型的存在原因（3个关键要点）</h3>
+<h3 class="subsection-heading" id="s54">分述：行为理论模型核心内容</h3>
+<h3 class="subsection-heading" id="s55">一、行为理论模型的存在原因（3个关键要点）</h3>
 <p>环境影响是健康行为改变的重大因素</p>
 <p>外界的身体环境、社会环境等，都是推动行为改变的重要因素，比如整个社会崇尚运动、自身身体感受到运动需求，都会促使人做出行为改变。</p>
 <p>行为改变是持续过程，而非单一过程</p>
@@ -434,7 +511,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>人的行为意向和行为通常不统一</p>
 <p>行为意向与实际行动之间常存在差距。客户可能真诚地想要运动，却因为环境障碍、能力感不足、动机质量或计划不适配而未能持续行动。</p>
 <p>基于这些特点，私人教练的工作不应局限于设计单次训练。教练还需要帮助客户逐步建立稳定的身体活动习惯。下文首先介绍健康信念模型。</p>
-<h3 class="subsection-heading" id="s46">1.1 健康信念模型</h3>
+<h3 class="subsection-heading" id="s63">1.1 健康信念模型</h3>
 <p>模型核心定义</p>
 <p>人们对疾病预防、治疗的看法和潜在情绪，会直接影响自身的健康行为，也会决定是否改变不健康的行为，简单说就是：一个人对自身健康状况的认知，决定了他要不要运动、要不要保持现状。</p>
 <p>核心判断逻辑：两大核心变量</p>
@@ -450,12 +527,9 @@ tbody tr:hover { background: var(--accent-light); }
 <p>① 自觉益处：认为采取运动、调整饮食等健康行为是有效的；</p>
 <p>② 自觉障碍：认为执行健康行为会遇到的困难，比如觉得改变饮食很痛苦、没时间运动。</p>
 <p>教练的核心作用</p>
-<p>帮客户树立健康行为的信念与信心，放大健康行为的益处，降低客户对执行障碍的感知，推动客户主动做出改变。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>威胁大 + 益处多 + 障碍少 = 改变自然来</p></div>
+<p>帮客户树立健康行为的信念与信心，放大健康行为的益处，降低客户对执行障碍的感知，推动客户主动做出改变。威胁大 + 益处多 + 障碍少 = 改变自然来</p>
 <p>● 想象一个天平：左边是&quot;健康威胁感&quot;，右边是&quot;运动利弊&quot;。只有左边够重、右边够轻，天平才会倾斜，你才会行动。</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>威胁是油门，益处是方向盘，障碍是刹车——三样配合好，车才能开走。</p></div>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>过度夸大健康威胁（比如用极端案例吓唬客户），短期可能有效果，但容易引发焦虑抵抗，长期适得其反。</p></div>
-<h3 class="subsection-heading" id="s67">1.2 自我决定理论</h3>
+<h3 class="subsection-heading" id="s84">1.2 自我决定理论</h3>
 <p>模型核心定义</p>
 <p>人们通常只愿意做自己感兴趣、自身认同的事，不喜欢被他人强迫，除非自己主动寻求指导，这一理论核心围绕动机展开，分为自主动机和受控动机。</p>
 <figure class="img-figure"><img src="images/ch2_fig6.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
@@ -482,21 +556,16 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 让亲友提醒训练目标、预约训练；</p>
 <p>● 和朋友开展趣味良性竞赛；</p>
 <p>● 训练计划中加入社交元素，定期开展社交互动；</p>
-<p>●  开展小团体私教、成立运动俱乐部或团体活动。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>内在动机三件套——：我能、我选、我归属</p></div>
+<p>●  开展小团体私教、成立运动俱乐部或团体活动。内在动机三件套——：我能、我选、我归属</p>
 <p>● 想象你在玩一个游戏：</p>
 <p>● 我能（能力感知）：每一关都设计得刚好有点挑战但能过</p>
 <p>● 我选（自主性）：游戏规则是你和设计师一起定的</p>
 <p>● 我归属（社群性）：你和一帮志同道合的玩家在一起</p>
 <p>● 当能力感、自主性和归属感得到支持时，客户更可能形成质量较高的自主动机。</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>自主动机体现为“我选择做”，受控动机体现为“我不得不做”。教练应通过支持自主性、能力感和归属感，促进动机内化。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户刚开始很有热情，两周后明显消退</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;你要坚持啊！加油！&quot;</p></div>
 <p>1. 先排查：消退是因为能力感知受挫（太难了）？自主性被剥夺（感觉被教练逼着练）？还是缺乏社群支持（一个人练很无聊）？</p>
 <p>2. 针对能力感知：降低难度，增加成功体验，哪怕只是做一个深蹲也要肯定</p>
 <p>3. 针对自主性：问&quot;你想练什么？&quot;&quot;你觉得这个强度OK吗？&quot;把决定权还给客户</p>
 <p>4. 针对社群性：介绍他认识同期训练的学员，约着一起练</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>过度依赖外在奖励（&quot;坚持一个月奖励你一节课&quot;），短期有效但会削弱内在动机。奖励要聚焦在体验感上，而非物质上。</p></div>
 <p>总结</p>
 <p>至此，两个模型的核心内容已经明确。HBM关注客户对健康威胁、行动益处与障碍的感知；SDT关注动机质量以及能力感、自主性和归属感的支持。</p>
 <p>健康信念模型主要解释客户如何判断健康威胁、行动益处与障碍；自我决定理论则强调动机质量以及自主性、能力感和归属感。健康风险认知可以促进行动意愿，但单纯依靠恐惧或压力通常不利于长期坚持。教练应将风险教育与自主支持结合起来。</p>
@@ -511,8 +580,8 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● SDT 三需求：能力感知 + 自主性 + 社群性（归属感）</p>
 <p>● 任务相关氛围 vs 自我相关氛围：前者提升信心与连接感，后者引发竞争与尴尬</p>
 <p>● 社会支持的五种做法：家人加入 / 亲友提醒 / 良性竞赛 / 社交元素 / 团体活动</p>
-<h3 class="subsection-heading" id="s123">1.3 行为改变的跨理论模型</h3>
-<h3 class="subsection-heading" id="s124">总述</h3>
+<h3 class="subsection-heading" id="s140">1.3 行为改变的跨理论模型</h3>
+<h3 class="subsection-heading" id="s141">总述</h3>
 <p>行为改变的跨理论模型简称TTM，也叫改变阶段模型，无论是教练实际工作中还是考试，都是重中之重的核心考点。</p>
 <p>这个模型一共由四个核心部分组成：改变阶段（含5个细分阶段）、改变过程、自我效能、决策平衡。</p>
 <p>简单理解四者的定位：</p>
@@ -520,8 +589,8 @@ tbody tr:hover { background: var(--accent-light); }
 <p>改变过程是客户从当前阶段进阶到下一阶段的方法；</p>
 <p>自我效能是客户对自己能做出健康改变的信念；</p>
 <p>决策平衡是客户衡量运动这件事的利弊，只有利大于弊，才会真正做出改变。</p>
-<h3 class="subsection-heading" id="s132">分述：TTM四大核心部分详解</h3>
-<h3 class="subsection-heading" id="s133">一、改变阶段（TTM第一部分，5个核心阶段）</h3>
+<h3 class="subsection-heading" id="s149">分述：TTM四大核心部分详解</h3>
+<h3 class="subsection-heading" id="s150">一、改变阶段（TTM第一部分，5个核心阶段）</h3>
 <p>改变阶段是判断客户当下运动状态的依据，可通过「想法+行动」两个维度区分，也是最容易记忆的方式：</p>
 <p>思考前阶段：没想法、没行动，完全没准备好进行运动</p>
 <p>思考阶段：有想法、没行动，考虑6个月内会多运动，但始终未开始</p>
@@ -530,9 +599,8 @@ tbody tr:hover { background: var(--accent-light); }
 <p>维持阶段：有想法、有行动，规律运动时长大于等于6个月</p>
 <p>表2-5</p>
 <div class="table-wrapper"><table><thead><tr><th>阶段名称</th><th>想法状态</th><th>行动状态</th></tr></thead><tbody><tr><td>思考前阶段</td><td>无</td><td>无行动，完全未准备好进行运动</td></tr><tr><td>思考阶段</td><td>有</td><td>无行动，计划 6 个月内运动，但尚未开始</td></tr><tr><td>准备阶段</td><td>有</td><td>不定期行动，偶尔运动但无常性，未形成规律</td></tr><tr><td>行动阶段</td><td>有</td><td>有规律行动，规律运动时长＜6 个月</td></tr><tr><td>维持阶段</td><td>有</td><td>有规律行动，规律运动时长≥6 个月</td></tr></tbody></table></div>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>【记忆技巧】</p></div>
 <p>唯一没想法的只有思考前阶段；从思考阶段开始，客户对运动的益处都有意识，核心区别在行动的规律度和持续时长；只有维持阶段，运动才成为固定长期的习惯。</p>
-<h3 class="subsection-heading" id="s144">二、改变过程：进阶到下一个阶段（TTM第二部分，阶段进阶的核心）</h3>
+<h3 class="subsection-heading" id="s160">二、改变过程：进阶到下一个阶段（TTM第二部分，阶段进阶的核心）</h3>
 <p>改变不是线性过程，很多人会在两个阶段间停摆好几年，教练不能急于求成；</p>
 <p>改变并非简单的线性过程。客户可能向前进展、停留，也可能退回早期阶段。教练应通过开放式提问和倾听识别客户当前阶段，再选择与其准备程度相匹配的干预策略。</p>
 <p>举例：不同阶段的进阶目标与干预方式：</p>
@@ -550,7 +618,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>核心是用实际行动替换旧的不健康习惯：比如用户外散步、健康午餐替代周末喝酒放松；搭建社会支持体系，让家人监督监督；设置个性化奖励，达成目标后奖励自己等，具体方法如下：</p>
 <p>表2-7</p>
 <div class="table-wrapper"><table><thead><tr><th>改变过程</th><th>理论定义 (Cognitive/Behavioral Processes)</th><th>机制解读 (Mechanistic Interpretation)</th><th>实践案例 (Practical Application)</th></tr></thead><tbody><tr><td>意识提高</td><td>增加关于不健康行为原因、后果及补救措施的各类信息摄入。</td><td>认知重组： 通过获取高质量证据（如流行病学数据），打破&quot;知识盲区&quot;，削弱对旧习惯的认知偏见。</td><td>向客户讲解关于&quot;久坐行为与全因死亡率相关性&quot;的Meta分析文献。</td></tr><tr><td>情感唤起</td><td>对不健康行为带来的负面后果产生深刻的情感体验，并由决定改变带来的宽慰感驱动。</td><td>情感驱动： 利用情绪（如恐惧或希望）作为行动催化剂，将抽象的健康风险具象化为个体的情绪波动。</td><td>客户在体检报告中看到高血糖指标后产生的焦虑，通过建立训练计划将其转化为&quot;行动即缓解&quot;的动力。</td></tr><tr><td>自我重新评价</td><td>对自我形象进行认知和情感上的评估，衡量旧习惯与个人核心价值观之间的冲突。</td><td>身份认同重塑： 评估&quot;不健康的自我&quot;与&quot;理想化的自我&quot;之间的差距，触发身份转变的内在动机。</td><td>客户意识到&quot;目前的肥胖状态与我作为职业管理者的精明、自律形象不符&quot;，从而确立改变意志。</td></tr><tr><td>环境重新评价</td><td>评估个人行为对社会环境（尤其是人际关系）产生的正面或负面影响。</td><td>社会责任感知： 将行为后果从个体扩展到系统，利用社会联结感增强改变的道德义务感。</td><td>父亲意识到自己的吸烟或缺乏运动习惯正在给孩子传递负面的生活方式范式。</td></tr><tr><td>自我解放</td><td>相信自己具备改变的能力，并做出坚定的改变承诺（意志力）。</td><td>自我效能与自主选择： 确认个体具备改变的代理权（Agency），通过公开承诺增加背弃成本。</td><td>训练营学员在开营仪式上签署《健康行为契约》，并在社交平台公布为期12周的训练目标。</td></tr><tr><td>辅助性关系</td><td>利用社会支持系统获取信任、关心和接纳，辅助行为坚持。</td><td>外部杠杆效应： 构建防御性的社会网络，通过情感支持和技术指导降低维持新行为的认知负荷。</td><td>建立&quot;1对1导师制&quot;或&quot;运动小组&quot;，利用教练的专业支持和同伴的归属感减少训练流失率。</td></tr><tr><td>反向调节</td><td>学习用健康的行为、思考方式来替代原有的不健康习惯。</td><td>习惯替代： 基于经典条件反射理论，通过建立新的神经通路来竞争并覆盖旧有的条件反射。</td><td>用周末和家人一起做饭露营替代外出饮酒聚餐。</td></tr><tr><td>强化管理</td><td>针对健康行为的进步给予正向奖励，或减少对不健康行为的强化。</td><td>结果预期调节： 利用操作性条件反射原理，通过即时反馈机制（内源性或外源性）固化目标行为。</td><td>达成月度减脂目标后奖励自己一套专业训练装备，或记录训练后的多巴胺分泌带来的心理愉悦感。</td></tr><tr><td>刺激控制</td><td>移除诱发旧习惯的提示物，并增加能触发新行为的视觉或环境提示。</td><td>环境预设（Nudging）： 改变微观环境中的选择架构，降低做出正确决策所需的认知能量损耗。</td><td>睡觉前将运动服放在床头；卸载手机内的外卖APP，将健身应用放在首屏醒目位置。</td></tr><tr><td>社会解放</td><td>意识到社会规范和环境机会正在向支持健康行为的方向转变。</td><td>社会常模同化： 利用宏观环境的变革（政策、文化）来降低个体改变的社会阻力。</td><td>意识到公司健身房的建立或城市慢行步道的完善，利用这些公共设施让运动变得触手可及。</td></tr></tbody></table></div>
-<h3 class="subsection-heading" id="s162">自我效能（TTM第三部分，改变的核心信念）</h3>
+<h3 class="subsection-heading" id="s178">自我效能（TTM第三部分，改变的核心信念）</h3>
 <figure class="img-figure"><img src="images/ch2_fig8.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
 <p>图2-8</p>
 <p>定义：自我效能就是一个人对自己能成功完成某项健康任务的信念，它和行为改变是双向影响的关系。自我效能决定是否参与运动，参与运动的经历又会反过来影响自我效能，二者互为因果。</p>
@@ -562,7 +630,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>⑤ 情感/情绪评价（运动时的情绪是积极还是焦虑沮丧）</p>
 <p>⑥ 想象经验（预想坚持运动后全新的自己，激发信念）</p>
 <p>教练的核心作用：优秀的教练不应注重在教学中展示自己的优秀，而应该聚焦挖掘客户潜能、提升客户的能力与信心，强化客户的自我主体意识和自我觉察。自我效能低的客户，容易选轻松任务、轻易放弃，因此提升自我效能是教练的核心工作之一。</p>
-<h3 class="subsection-heading" id="s174">四、决策平衡（TTM第四部分，改变的利弊权衡）</h3>
+<h3 class="subsection-heading" id="s190">四、决策平衡（TTM第四部分，改变的利弊权衡）</h3>
 <p>定义：客户决定是否运动，核心是权衡这件事的利与弊，利大于弊才会主动改变，且决策平衡是动态变化的过程。</p>
 <p>不同阶段的利弊认知：</p>
 <p>● 思考前、思考阶段客户：通常认为运动的弊大于利，所以迟迟不开始</p>
@@ -589,12 +657,12 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 自我效能 6 来源：过往经验（影响最大）/ 替代性经验 / 口头说服 / 生理评价 / 情感评价 / 想象经验</p>
 <p>● 决策平衡动态变化：思考前/思考阶段  弊 &gt; 利；行动/维持阶段  利 &gt; 弊</p>
 <p>● 改变通常是循环而非直线的；干预策略应与客户当前阶段相匹配</p>
-<h2 class="section-heading" id="s201">2 行为改变的原理</h2>
-<h3 class="subsection-heading" id="s202">总述</h3>
+<h2 class="section-heading" id="s217">2 行为改变的原理</h2>
+<h3 class="subsection-heading" id="s218">总述</h3>
 <p>本部分核心讲解行为改变的底层原理，</p>
 <p>很多专业教练能长期坚持运动，很难理解从不运动到开始运动的客户面临的巨大困难与挑战，这也体现出前一章行为改变理论模型的重要性。运用这些理论模型的核心价值，是把运动当作一项复杂的健康行为养成过程，而非简单的动作训练，需要教练依托科学原理，持续为客户提供行为指导，逐步扶持客户完成行为改变。这部分原理主要分为操作性条件反射（含先行条件）、认知与行为（非理性想法、目标设定、自我监测）两大核心内容。</p>
-<h3 class="subsection-heading" id="s205">分述</h3>
-<h3 class="subsection-heading" id="s206">2.1 操作性条件反射</h3>
+<h3 class="subsection-heading" id="s221">分述</h3>
+<h3 class="subsection-heading" id="s222">2.1 操作性条件反射</h3>
 <p>核心逻辑</p>
 <p>后果影响行为，一件事做完之后的结果，会直接决定一个人是否会再次做出这个行为，这是操作性条件反射的核心。</p>
 <figure class="img-figure"><img src="images/ch2_fig9.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
@@ -609,29 +677,22 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 消退：行为发生后，没有出现客户想要的正向刺激，行为发生概率降低。比如新客户坚持来健身房，教练却从未表扬，忽略&quot;到场运动&quot;这个核心行为，属于消退，会降低客户再来的意愿。</p>
 <p>● 惩罚：行为发生后，出现了客户不想要的厌恶刺激，行为发生概率大幅降低。比如客户坚持到场却被当众批评，就是惩罚+消退的双重负面效果。</p>
 <p>🤔思考题</p>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户迟到、穿拖鞋和宽松衣物来健身房，</p></div>
 <p>作为教练的你将如何应对</p>
-<p>提示：应对方式方式会决定客户下次是否依旧如此；想要减少这类不当行为，可通过消退（去掉阳性刺激）或合理的&quot;惩罚&quot;（增加厌恶刺激）实现。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>强化让行为变多，弱化让行为变少</p></div>
+<p>提示：应对方式方式会决定客户下次是否依旧如此；想要减少这类不当行为，可通过消退（去掉阳性刺激）或合理的&quot;惩罚&quot;（增加厌恶刺激）实现。强化让行为变多，弱化让行为变少</p>
 <p>● 强化 = 让行为重复</p>
 <p>● 正强化 = 加好东西（口头表扬、鼓励）</p>
 <p>● 负强化 = 减坏东西（解除痛苦、消除不适）</p>
 <p>● 弱化 = 让行为减少</p>
 <p>● 消退 = 不给好东西</p>
 <p>● 惩罚 = 加坏东西</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>正向刺激是&quot;胡萝卜&quot;，厌恶刺激是&quot;大棒&quot;——。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户完成了一次训练，你想强化他的行为</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;这次表现不错&quot;（太笼统）</p></div>
-<div class="card card-right"><span class="card-label">✓ 正确做法</span><p>——：真正实践中有效的增加正向刺激和去掉厌恶刺激的手段</p></div>
 <p>即时反馈：训练结束当场肯定，而不是下次见面才说（正向刺激，正强化）</p>
 <p>具体化：&quot;你今天的深蹲控制比上周稳多了，核心收紧的感觉找到了&quot;（增加正向刺激，正强化）</p>
 <p>关联价值：把表现和客户的个人目标联系起来——。&quot;你坚持训练，上周说的腰背不适是不是缓解了？&quot;（去掉厌恶刺激，负强化）</p>
 <p>视觉化：记录进步（训练日志、体测数据、照片对比），让客户看到自己的改变（增加正向刺激，正强化）</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>把&quot;自认为的严格&quot;和&quot;为他好&quot;用做了消退和惩罚。客户按时来上课，也努力在学习，你却对这些行为毫无反应（消退）只盯着他某个动作没做好，不断的批评（惩罚），这就是消退+惩罚的“王炸”——，会打击客户的到场意愿。</p></div>
 <p>先行条件（前因）与刺激控制</p>
 <p>先行条件是行为出现之前的刺激因素，也就是&quot;前因&quot;，前因诱发行为的方式被称为刺激控制，是行为矫正的重要工具。比如锻炼前设闹钟、写训练笔记、手机设屏保、车内放置运动服，这些前因都能有效触发客户的运动行为。</p>
 <p>操作性条件反射的核心启示是：教练要少用惩罚、多用强化。惩罚看似有效，但会产生两个问题：一是让客户把训练与负面体验绑定（消退 + 惩罚叠加），二是客户可能&quot;表面服从、实际逃避&quot;。好的教练永远优先用正强化（即时、具体、关联价值），只在涉及安全的底线问题上才用惩罚逻辑。这也是第一章&quot;消除风险 &gt; 告知风险&quot;原则在行为层面的延伸。</p>
-<h3 class="subsection-heading" id="s243">2.2 认知与行为</h3>
+<h3 class="subsection-heading" id="s259">2.2 认知与行为</h3>
 <p>一个人的行为（个体行为）会受自身看法直接影响，因此认知层面的引导是行为改变的关键，主要包含以下内容：</p>
 <p>取代非理性想法</p>
 <p>大多数人都存在不同程度的认知扭曲，比如极端思想（要么不做、要么做最好）、以偏概全（吃一块巧克力就彻底放纵）、责备他人（加班没管好饮食都怪老板）、固有偏见（女生天生力气小不用练力量）、忽视健康（高血压多年觉得无所谓）等，这些认知扭曲会阻碍客户建立健康的思维方式。</p>
@@ -643,8 +704,7 @@ tbody tr:hover { background: var(--accent-light); }
 <p>偏：以偏概全</p>
 <p>断：妄下断论（读心 + 占卜）</p>
 <p>标：贴标签</p>
-<p>责：自责/ 责备他人</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>认知扭曲六兄弟——：极、放、偏、断、标、责</p></div>
+<p>责：自责/ 责备他人。认知扭曲六兄弟——：极、放、偏、断、标、责</p>
 <p>● 想象这六个认知扭曲是一个犯罪团伙：</p>
 <p>● 极端思想：要么最好，要么最差，没有中间地带</p>
 <p>● 放大/灾难化：把小事变大，或把大事缩小</p>
@@ -652,27 +712,19 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 断妄下结论：读心术（猜别人怎么想）和占卜术（预言坏事）</p>
 <p>● 标贴标签：给自己贴负面永久标签</p>
 <p>● 责责备他人：都是别人的错</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>遇到&quot;全或无&quot;、&quot;永远/从不&quot;的句式，就要警惕可能是认知扭曲在作祟。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户说：&quot;我昨晚没忍住吃了一顿火锅，我这周的努力全白费了，我果然不适合健身。&quot;这属于哪种认知扭曲？</p></div>
 <p>拓展一下，遇到以上问题，作为教练的你将如何应对呢？</p>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>直接反驳：&quot;一顿火锅不会长胖的&quot;</p></div>
 <p>不要否定情绪：先共情：&quot;能感觉到你对自己要求很高&quot;</p>
 <p>用提问引导：问&quot;一顿火锅真的等于全毁吗？你能帮我算算热量吗？&quot;</p>
 <p>重建认知：引导客户意识到这是&quot;极端思想&quot;：&quot;吃了一顿不代表整个计划失败，明天正常吃回来就好&quot;</p>
 <p>设定弹性规则：提前告诉客户&quot;允许自己每周有1次&#x27;欺骗餐&#x27;，这不算失控，而是人性&quot;</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>教练急于纠正客户的认知扭曲，结果变成说教，客户防御心理更强。记住：引导比纠正更有效。</p></div>
 <p>目标设定</p>
 <p>目标设定是目前应用最广泛、最直接的行为改变策略，但多数人设定目标后很快放弃，核心是方法错误。教练在目标设定中需遵循三个要点：</p>
 <p>● 目标必须由教练和客户共同制定，教练可提供制定目标所需的信息，但不能替代客户做决定</p>
 <p>● 目标遵循SMART原则（第四章详细讲解）；</p>
-<p>● 教练全程辅导客户完成目标设定，帮助其掌握制定有效目标的方法。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>目标设定三步走——：共同定、SMART、持续陪</p></div>
+<p>● 教练全程辅导客户完成目标设定，帮助其掌握制定有效目标的方法。目标设定三步走——：共同定、SMART、持续陪</p>
 <p>● 共同定：目标不是你给客户拍脑袋定的，是你们一起商量的</p>
 <p>● SMART：具体、可测量、可达成、相关、有时限</p>
 <p>● 持续陪：设定只是开始，辅导完成才是教练的价值</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>目标不是定完就结束，定目标只是开始，陪客户完成才是本事。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户说&quot;我要减肥，三个月瘦20斤&quot;</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>直接接受这个目标，开始制定计划</p></div>
 <p>63. 先问&quot;为什么&quot;：减肥是为了什么？找到更深层的动机（穿得下婚礼礼服/体检指标正常/陪孩子跑步不喘）</p>
 <p>64. 拆解成过程目标：定&quot;每周3次训练，每次50分钟&quot;。过程目标比结果目标更能坚持</p>
 <p>66. 设置检查点：每周复盘一次，根据进展调整</p>
@@ -680,19 +732,14 @@ tbody tr:hover { background: var(--accent-light); }
 <p>🥵 常见误区：目标太大、太远，客户看不到进步就放弃了。把大目标拆成小里程碑，让客户持续有成就感。</p>
 <p>自我监测</p>
 <p>自我监测属于自我调节的认知过程，反映一个人对自身想法、感受的评价，以及如何用这些信息影响目标和行为，通俗来说就是自律的核心部分，包含自我控制、抵制冲动行为，做出符合自身愿景与价值观的选择。</p>
-<p>行为改变靠的是科学方法。教练不要通过说教解决客户问题，而是用开放式问题辅助客户自我监测，让客户清晰自身进度、意识到潜在障碍，主动调整计划，提升自我认知。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>自我监测三步骤——：记录、对比、调整</p></div>
+<p>行为改变靠的是科学方法。教练不要通过说教解决客户问题，而是用开放式问题辅助客户自我监测，让客户清晰自身进度、意识到潜在障碍，主动调整计划，提升自我认知。自我监测三步骤——：记录、对比、调整</p>
 <p>● 记录：把训练、饮食、睡眠、体重等数据写下来</p>
 <p>● 对比：和上周、上个月对比，看看进步在哪里</p>
 <p>● 调整：根据数据调整下一阶段的计划</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>没有记录的进步都是感觉，有记录的进步才是证据。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户说&quot;我感觉没什么进步&quot;</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;你要坚持，时间会证明一切&quot;</p></div>
 <p>翻出记录：把客户之前的数据（训练日志、体测报告、训练视频）调出来</p>
 <p>量化进步：说&quot;你的深蹲重量从40公斤提到50公斤，这就是10公斤的进步&quot;</p>
 <p>引导自我监测：问&quot;你自己觉得，和刚来的时候比，有什么不一样？&quot;</p>
 <p>制造可视反馈：定期拍照、量围度、测体成分，让客户看到肉眼可见的改变</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>教练替客户监测，而不让客户学会自己监测。</p></div>
 <p>好的教练是让自己&quot;失业&quot;，让客户自己能管自己，建立自我主体性。</p>
 <p>看到这里，作为教练和准教练的你们或许会有疑问：那我岂不是要失业了？我们可以用心理学中的&quot;脚手架理论&quot;（Scaffolding Theory）来帮助你理解：随着学员能力的提升，脚手架必须主动拆除，否则就会阻碍主体性的发展。拆除脚手架不代表建筑工人的失业，而是意味着一座新建筑或者一个阶段的工程的落成，工人可以开始下一阶段和更多新的工程的开始，直至完成教练生涯更多的摩天大楼的建造。</p>
 <p>不要追求&quot;学员对我的依赖&quot;，要转换为追求“学员的自我成就感”乃至&quot;行业对我的专业口碑&quot;。当一个教练能不断让新手&quot;毕业&quot;并成为能够自我管理的高水平训练者时，他的专业声誉会带来更多的源头活水，根本无需担心失业。好的教练目标是让客户实现自我管理，而非持续依赖教练。客户能独立时，恰恰说明你的专业能力。</p>
@@ -708,9 +755,9 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 目标设定三要点：共同制定 + SMART 原则 + 全程辅导</p>
 <p>● 自我监测 = 自律核心：自我控制 + 抵制冲动 + 做出符合愿景的选择</p>
 <p>● 刺激控制：用前因（闹钟/运动服/屏保）诱发运动行为</p>
-<h3 class="subsection-heading" id="s320">行为改变的原理 (Principles)</h3>
-<h2 class="section-heading" id="s321">3 身体活动与坚持</h2>
-<h3 class="subsection-heading" id="s322">总述</h3>
+<h3 class="subsection-heading" id="s336">行为改变的原理 (Principles)</h3>
+<h2 class="section-heading" id="s337">3 身体活动与坚持</h2>
+<h3 class="subsection-heading" id="s338">总述</h3>
 <p>我们要明白一个核心事实：让人开始运动很简单，让人长期坚持运动，才是最难的事。</p>
 <p>绝大多数客户，心里都清楚规律训练、坚持运动对身体有益，甚至很多人会反复尝试运动，但最终都无法长期坚持。</p>
 <p>所以，一名专业私人教练的核心能力，不只是会排训练动作、带客户完成单次训练，更要依靠沟通能力、行为改变知识、科学的计划设计能力，制定全面且适配的运动方案。</p>
@@ -720,8 +767,8 @@ tbody tr:hover { background: var(--accent-light); }
 <p>1. 个人特质（主观因素）</p>
 <p>2. 环境因素（客观因素）</p>
 <p>3. 身体活动因素（训练方案本身）</p>
-<h3 class="subsection-heading" id="s332">分述</h3>
-<h3 class="subsection-heading" id="s333">3.1 个人特质</h3>
+<h3 class="subsection-heading" id="s348">分述</h3>
+<h3 class="subsection-heading" id="s349">3.1 个人特质</h3>
 <p>指客户自身自带的个人特点，分为五大类：</p>
 <p>1. 人口统计变量</p>
 <figure class="img-figure"><img src="images/ch2_fig10.jpeg" loading="lazy" onclick="openLightbox(this)" alt=""></figure>
@@ -750,15 +797,12 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 现在：心理状态、认知态度</p>
 <p>● 将来：个人目标与动机</p>
 <p>一句话记牢：了解一个人过去怎么运动，比问他&quot;你想要什么&quot;更能预测他将来会不会坚持。</p>
-<div class="card card-scene"><span class="card-label">场景</span><p>新客户第一次见面，评估个人特质</p></div>
-<div class="card card-right"><span class="card-label">✓ 正确做法</span><p>标准问诊流程：</p></div>
 <p>90. 运动史：&quot;你以前有运动习惯吗？做过什么运动？为什么停了？&quot;</p>
 <p>91. 健康状况：&quot;有没有慢性病、旧伤、体检异常？&quot;</p>
 <p>92. 心理状态：&quot;最近压力大吗？睡眠怎么样？&quot;</p>
 <p>93. 动机来源：&quot;你为什么现在决定开始运动？&quot;</p>
 <p>94. 障碍预判：&quot;你觉得开始运动最大的困难是什么？&quot;</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>只问目标，不问过去。很多人会说&quot;我要减肥&quot;，但如果你知道他过去尝试过3次都放弃了，你应该更关注&quot;是什么让你放弃了&quot;而不是&quot;这次你要减多少&quot;。</p></div>
-<h3 class="subsection-heading" id="s370">3.2 环境因素</h3>
+<h3 class="subsection-heading" id="s386">3.2 环境因素</h3>
 <p>可以通俗理解为：天时、地利、人和。</p>
 <p>1. 天时：时间因素</p>
 <p>「没有时间」是客户放弃运动、无法坚持的最常见原因。</p>
@@ -772,28 +816,19 @@ tbody tr:hover { background: var(--accent-light); }
 <p>● 有时间：天时</p>
 <p>● 有地方：地利（设施便利）</p>
 <p>● 有人陪：人和（社会支持）</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>再强的意志力也扛不住&quot;没时间、设施远、没人陪&quot;三连击。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户说&quot;最近太忙了，实在没时间运动&quot;</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;你要挤时间！鲁迅说过时间像海绵里的水&quot;</p></div>
 <p>1.不要否定：客户确实可能很忙，先认可</p>
 <p>2.挖掘碎片时间：问&quot;你每天通勤多久？午休有多长？晚上孩子睡觉后你有时间吗？&quot;</p>
 <p>3. 降低门槛：说&quot;每天10分钟的训练要不要尝试一下？&quot;</p>
 <p>4. 改变环境：如果客户总说忙，帮他把运动环境搬到最近的地方。在家练比去健身房更容易坚持</p>
-<p>社会支持与承诺：可邀请客户与可信任的亲友共同约定训练时间或进度检查方式。这类安排应以支持和鼓励为主，避免羞辱性惩罚或过度施压。</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>认为&quot;没时间&quot;是借口。实际上很多客户是真的忙。教练不应拆穿借口，要帮客户找到他真正能用的时间窗口。</p></div>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>社会支持三层次——：家人、朋友、团队</p></div>
+<p>社会支持与承诺：可邀请客户与可信任的亲友共同约定训练时间或进度检查方式。这类安排应以支持和鼓励为主，避免羞辱性惩罚或过度施压。社会支持三层次——：家人、朋友、团队</p>
 <p>● 核心层：家人/伴侣（最可靠的坚持因素）</p>
 <p>● 中间层：朋友、同事（陪伴和监督）</p>
 <p>● 外围层：教练、团队（专业支持和社群归属）</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>一个人走得快，一群人走得远——。运动这件事，社交元素越多，坚持越久。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户说&quot;家人不支持我健身，说我浪费时间&quot;</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;他们不懂，你坚持自己的&quot;</p></div>
 <p>86. 理解立场：先问&quot;他们担心的是什么？&quot;：可能是怕你受伤、花钱、没时间陪家人</p>
 <p>87. 关联家人利益：帮客户找到运动的&quot;家庭价值&quot;：&quot;你精力好了，陪孩子更有耐心；你体态好了，一家人拍照都好看&quot;</p>
 <p>88. 邀请参与：能不能带家人一起？哪怕只是周末散步</p>
 <p>89. 建立替代支持：如果家人真的不支持，帮客户在健身房或线上找到支持社群</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>把家人当敌人。教练不应挑拨客户和家庭的关系，要帮客户找到运动和家庭利益的结合点。</p></div>
-<h3 class="subsection-heading" id="s405">3.3 身体活动因素</h3>
+<h3 class="subsection-heading" id="s421">3.3 身体活动因素</h3>
 <p>也就是我们给到客户的训练计划内容，核心包含两大关键点：</p>
 <p>1. 训练强度</p>
 <p>很多教练固有认知：新手只能做低强度训练。</p>
@@ -803,20 +838,15 @@ tbody tr:hover { background: var(--accent-light); }
 <p>2. 运动损伤</p>
 <p>运动损伤是可能中断训练、降低运动坚持度的重要因素。</p>
 <p>运动损伤会干扰正常训练，并可能降低运动坚持度。因此，计划设计应重视负荷管理、恢复和及时调整。</p>
-<p>因此训练计划必须遵循循序渐进原则，科学进阶、合理负荷，规避损伤风险。</p>
-<div class="card card-memory"><span class="card-label">记忆提示</span><p>训练刺激要与客户能力和目标匹配，同时通过循序渐进和恢复管理降低损伤风险。</p></div>
+<p>因此训练计划必须遵循循序渐进原则，科学进阶、合理负荷，规避损伤风险。训练刺激要与客户能力和目标匹配，同时通过循序渐进和恢复管理降低损伤风险。</p>
 <p>● 强度要与客户目标、能力、偏好和恢复状态相匹配</p>
 <p>● 损伤防控：通过筛查、技术指导、负荷进阶和恢复管理维持训练连续性</p>
-<div class="card card-tip"><span class="card-label">要点</span><p>训练方案好不好，看客户愿不愿意明天还来。</p></div>
-<div class="card card-scene"><span class="card-label">场景</span><p>客户抱怨&quot;训练太累了，我坚持不下来&quot;</p></div>
-<div class="card card-wrong"><span class="card-label">✗ 错误做法</span><p>&quot;坚持就是胜利！&quot;</p></div>
 <p>1. 区分疲劳和无聊：客户可能只是&quot;无聊&quot;。如果是无聊，换换训练形式</p>
 <p>2. 调整强度：训练强度过大，或客户无法恢复时，适当降低强度，增加恢复时间</p>
 <p>3. 增加变化：每周换一个训练主题（力量日、有氧日、灵活性日），让训练有新鲜感</p>
 <p>4. 设定小目标：每次训练要求&quot;完成今天的30分钟&quot;，不要求&quot;坚持一辈子&quot;</p>
 <p>5. 关注恢复：疲劳感太强可能是睡眠、营养没跟上，帮客户找原因而不是逼他继续</p>
-<div class="card card-warn"><span class="card-label">⚠ 常见误区</span><p>将过度疲劳或强烈不适视为训练有效的证据。有效的计划应当安全、符合目标，并且能够长期执行。</p></div>
-<h3 class="subsection-heading" id="s428">3.4 计划设计</h3>
+<h3 class="subsection-heading" id="s444">3.4 计划设计</h3>
 <p>设计运动计划时，应将客户的个人特质、环境条件和对身体活动的反应综合起来。</p>
 <p>结合客户的个人特质、生活环境、空余时间、运动经验、消费顾虑、场地便利性、个人喜好等全部条件，设计安全、有效、适配的专属方案。</p>
 <p>✍️小节回顾与练习第四部分：身体活动与坚持</p>
@@ -835,7 +865,50 @@ tbody tr:hover { background: var(--accent-light); }
     </div>
 
     <div id="tab-quiz" class="tab-content">
-      <div class="placeholder">本章自测题目已移除。</div>
+      <div class="quiz-section">
+<div class="quiz-header">
+<h2>判断题</h2>
+<p class="quiz-instruction">判断以下说法是否正确，点击展开参考答案。</p>
+</div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">1.</span><span class="quiz-tag quiz-tip">要点</span><span>威胁是油门，益处是方向盘，障碍是刹车——三样配合好，车才能开走。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">2.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>过度夸大健康威胁（比如用极端案例吓唬客户），短期可能有效果，但容易引发焦虑抵抗，长期适得其反。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">3.</span><span class="quiz-tag quiz-tip">要点</span><span>自主动机体现为“我选择做”，受控动机体现为“我不得不做”。教练应通过支持自主性、能力感和归属感，促进动机内化。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">4.</span><span class="quiz-tag quiz-scene">场景</span><span>客户刚开始很有热情，两周后明显消退</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">5.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;你要坚持啊！加油！&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">6.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>过度依赖外在奖励（&quot;坚持一个月奖励你一节课&quot;），短期有效但会削弱内在动机。奖励要聚焦在体验感上，而非物质上。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">7.</span><span class="quiz-tag quiz-scene">场景</span><span>客户迟到、穿拖鞋和宽松衣物来健身房，</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">8.</span><span class="quiz-tag quiz-tip">要点</span><span>正向刺激是&quot;胡萝卜&quot;，厌恶刺激是&quot;大棒&quot;——。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">9.</span><span class="quiz-tag quiz-scene">场景</span><span>客户完成了一次训练，你想强化他的行为</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">10.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;这次表现不错&quot;（太笼统）</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">11.</span><span class="quiz-tag quiz-right">✅ 正确做法</span><span>——：真正实践中有效的增加正向刺激和去掉厌恶刺激的手段</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">12.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>把&quot;自认为的严格&quot;和&quot;为他好&quot;用做了消退和惩罚。客户按时来上课，也努力在学习，你却对这些行为毫无反应（消退）只盯着他某个动作没做好，不断的批评（惩罚），这就是消退+惩罚的“王炸”——，会打击客户的到场意愿。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">13.</span><span class="quiz-tag quiz-tip">要点</span><span>遇到&quot;全或无&quot;、&quot;永远/从不&quot;的句式，就要警惕可能是认知扭曲在作祟。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">14.</span><span class="quiz-tag quiz-scene">场景</span><span>客户说：&quot;我昨晚没忍住吃了一顿火锅，我这周的努力全白费了，我果然不适合健身。&quot;这属于哪种认知扭曲？</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">15.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>直接反驳：&quot;一顿火锅不会长胖的&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">16.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>教练急于纠正客户的认知扭曲，结果变成说教，客户防御心理更强。记住：引导比纠正更有效。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">17.</span><span class="quiz-tag quiz-tip">要点</span><span>目标不是定完就结束，定目标只是开始，陪客户完成才是本事。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">18.</span><span class="quiz-tag quiz-scene">场景</span><span>客户说&quot;我要减肥，三个月瘦20斤&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">19.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>直接接受这个目标，开始制定计划</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">20.</span><span class="quiz-tag quiz-tip">要点</span><span>没有记录的进步都是感觉，有记录的进步才是证据。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">21.</span><span class="quiz-tag quiz-scene">场景</span><span>客户说&quot;我感觉没什么进步&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">22.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;你要坚持，时间会证明一切&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">23.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>教练替客户监测，而不让客户学会自己监测。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">24.</span><span class="quiz-tag quiz-scene">场景</span><span>新客户第一次见面，评估个人特质</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">25.</span><span class="quiz-tag quiz-right">✅ 正确做法</span><span>标准问诊流程：</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">26.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>只问目标，不问过去。很多人会说&quot;我要减肥&quot;，但如果你知道他过去尝试过3次都放弃了，你应该更关注&quot;是什么让你放弃了&quot;而不是&quot;这次你要减多少&quot;。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">27.</span><span class="quiz-tag quiz-tip">要点</span><span>再强的意志力也扛不住&quot;没时间、设施远、没人陪&quot;三连击。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">28.</span><span class="quiz-tag quiz-scene">场景</span><span>客户说&quot;最近太忙了，实在没时间运动&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">29.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;你要挤时间！鲁迅说过时间像海绵里的水&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">30.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>认为&quot;没时间&quot;是借口。实际上很多客户是真的忙。教练不应拆穿借口，要帮客户找到他真正能用的时间窗口。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">31.</span><span class="quiz-tag quiz-tip">要点</span><span>一个人走得快，一群人走得远——。运动这件事，社交元素越多，坚持越久。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">32.</span><span class="quiz-tag quiz-scene">场景</span><span>客户说&quot;家人不支持我健身，说我浪费时间&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">33.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;他们不懂，你坚持自己的&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">34.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>把家人当敌人。教练不应挑拨客户和家庭的关系，要帮客户找到运动和家庭利益的结合点。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">35.</span><span class="quiz-tag quiz-tip">要点</span><span>训练方案好不好，看客户愿不愿意明天还来。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">36.</span><span class="quiz-tag quiz-scene">场景</span><span>客户抱怨&quot;训练太累了，我坚持不下来&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">37.</span><span class="quiz-tag quiz-wrong">❌ 错误做法</span><span>&quot;坚持就是胜利！&quot;</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>错误</strong>。</p></details></div>
+<div class="quiz-item"><div class="quiz-q"><span class="quiz-num">38.</span><span class="quiz-tag quiz-warn">⚠ 常见误区</span><span>将过度疲劳或强烈不适视为训练有效的证据。有效的计划应当安全、符合目标，并且能够长期执行。</span></div><details class="quiz-answer"><summary>查看答案</summary><p>该说法<strong>正确（属于要点/场景/误区陈述）</strong>。</p></details></div>
+</div>
     </div>
 
     <div id="tab-sop" class="tab-content">
