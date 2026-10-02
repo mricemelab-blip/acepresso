@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>学员仪表盘 | ACEpresso</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --shadow: rgba(0,0,0,0.06);
+  --card-radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; height: 54px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.header-right {
+  display: flex; align-items: center; gap: 16px;
+}
+.student-name-display {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; color: var(--text-secondary);
+}
+.btn-back {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; color: var(--accent); text-decoration: none;
+  padding: 6px 16px; border: 1px solid var(--accent); border-radius: 20px;
+  transition: all 0.25s;
+}
+.btn-back:hover { background: var(--accent); color: #fff; }
+.btn-logout {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; color: #999; text-decoration: none;
+  padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px;
+  cursor: pointer; background: none; transition: all 0.25s;
+}
+.btn-logout:hover { border-color: #c0392b; color: #c0392b; }
+
+.main-content {
+  margin-top: 54px; padding: 40px 28px;
+  max-width: 1100px; margin-left: auto; margin-right: auto;
+}
+
+.welcome-section {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+.welcome-section h1 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 24px; font-weight: 700; color: var(--accent);
+  margin-bottom: 8px;
+}
+.welcome-section .meta {
+  font-size: 14px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.stat-card .stat-value {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 32px; font-weight: 800; color: var(--accent);
+}
+.stat-card .stat-label {
+  font-size: 13px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+  margin-top: 4px;
+}
+
+.progress-section {
+  margin-bottom: 32px;
+}
+.progress-section h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  margin-bottom: 16px;
+}
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 8px;
+  height: 12px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.progress-bar-fill {
+  background: linear-gradient(90deg, var(--accent), #4caf50);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+.progress-text {
+  font-size: 13px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.chapter-list {
+  margin-bottom: 32px;
+}
+.chapter-list h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  margin-bottom: 16px;
+}
+.chapter-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: border-color 0.2s;
+}
+.chapter-item:hover { border-color: var(--accent); }
+.chapter-item .ch-info {
+  flex: 1;
+}
+.chapter-item .ch-num {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.chapter-item .ch-title {
+  font-size: 15px; font-weight: 600; margin-top: 2px;
+}
+.chapter-item .ch-status {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; color: var(--text-secondary);
+  margin-top: 4px;
+}
+.chapter-item .ch-action a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; color: var(--accent); text-decoration: none;
+  padding: 6px 14px; border: 1px solid var(--accent); border-radius: 20px;
+  transition: all 0.25s;
+}
+.chapter-item .ch-action a:hover { background: var(--accent); color: #fff; }
+
+.status-badge {
+  display: inline-block;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; padding: 2px 8px;
+  border-radius: 10px; margin-left: 8px;
+}
+.status-badge.visited { background: #fff3e0; color: #e65100; }
+.status-badge.completed { background: var(--accent-light); color: var(--accent); }
+.status-badge.not-visited { background: #f5f5f5; color: #999; }
+
+.activity-section {
+  margin-bottom: 32px;
+}
+.activity-section h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  margin-bottom: 16px;
+}
+.activity-item {
+  font-size: 14px; color: var(--text-secondary);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.activity-item:last-child { border-bottom: none; }
+.activity-item .activity-time {
+  font-size: 12px; color: #999; margin-right: 12px;
+}
+
+footer {
+  text-align: center; padding: 32px 28px;
+  border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .chapter-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <div class="header-right">
+    <span class="student-name-display" id="headerName"></span>
+    <a href="index.html" class="btn-back">← 课程首页</a>
+    <button class="btn-logout" onclick="logout()">退出</button>
+  </div>
+</header>
+
+<div class="main-content">
+  <section class="welcome-section">
+    <h1 id="welcomeText"></h1>
+    <p class="meta" id="metaText"></p>
+  </section>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-value" id="statChapters">0</div>
+      <div class="stat-label">已访问章节</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statDays">0</div>
+      <div class="stat-label">学习天数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="statQuizzes">0</div>
+      <div class="stat-label">已完成自测</div>
+    </div>
+  </div>
+
+  <section class="progress-section">
+    <h2>学习进度</h2>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <p class="progress-text" id="progressText">0 / 9 章节已访问</p>
+  </section>
+
+  <section class="chapter-list">
+    <h2>章节详情</h2>
+    <div id="chapterListContainer"></div>
+  </section>
+
+  <section class="activity-section">
+    <h2>最近活动</h2>
+    <div id="activityContainer">
+      <p class="activity-item">暂无活动记录</p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  © 2026 3HFIT × Arise. All rights reserved.
+</footer>
+
+<script>
+var chapters = [
+  {num:1, title:'私人教练的角色和执业范围'},
+  {num:2, title:'行为改变的基础'},
+  {num:3, title:'有效的沟通、目标设定和教学技巧'},
+  {num:4, title:'运动前健康筛查'},
+  {num:5, title:'心肺训练：生理机能、评估和计划'},
+  {num:6, title:'肌肉训练：基础、益处和计划设计'},
+  {num:7, title:'慢性病客户注意事项'},
+  {num:8, title:'各个生命阶段的运动注意事项'},
+  {num:9, title:'肌肉骨骼异常客户的注意事项'}
+];
+
+(function(){
+  var name = localStorage.getItem('acepresso_student_name');
+  if(!name){ window.location.href = 'index.html'; return; }
+
+  document.getElementById('headerName').textContent = name;
+  document.getElementById('welcomeText').textContent = '欢迎回来，' + name;
+
+  var firstLogin = localStorage.getItem('acepresso_first_login');
+  var days = 0;
+  if(firstLogin){
+    days = Math.max(1, Math.ceil((Date.now() - new Date(firstLogin).getTime()) / 86400000));
+  }
+  document.getElementById('metaText').textContent = '学习天数：' + days + ' 天';
+  document.getElementById('statDays').textContent = days;
+
+  var visited = 0;
+  var quizzes = 0;
+  var listHTML = '';
+  chapters.forEach(function(ch){
+    var v = localStorage.getItem('acepresso_ch_' + ch.num + '_visited');
+    var q = localStorage.getItem('acepresso_ch_' + ch.num + '_quiz_score');
+    var statusClass = 'not-visited';
+    var statusText = '未开始';
+    var timeText = '';
+    if(v){
+      visited++;
+      var d = new Date(v);
+      timeText = '上次访问：' + d.toLocaleDateString('zh-CN') + ' ' + d.toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
+      if(q){
+        statusClass = 'completed';
+        statusText = '已完成（自测 ' + q + '分）';
+        quizzes++;
+      } else {
+        statusClass = 'visited';
+        statusText = '已访问';
+      }
+    }
+    listHTML += '<div class="chapter-item">' +
+      '<div class="ch-info">' +
+        '<div class="ch-num">CHAPTER ' + (ch.num < 10 ? '0' : '') + ch.num + '</div>' +
+        '<div class="ch-title">' + ch.title +
+          '<span class="status-badge ' + statusClass + '">' + statusText + '</span>' +
+        '</div>' +
+        (timeText ? '<div class="ch-status">' + timeText + '</div>' : '') +
+      '</div>' +
+      '<div class="ch-action"><a href="ch' + ch.num + '.html">进入学习</a></div>' +
+    '</div>';
+  });
+
+  document.getElementById('statChapters').textContent = visited;
+  document.getElementById('statQuizzes').textContent = quizzes;
+  document.getElementById('progressFill').style.width = Math.round(visited/9*100) + '%';
+  document.getElementById('progressText').textContent = visited + ' / 9 章节已访问';
+  document.getElementById('chapterListContainer').innerHTML = listHTML;
+
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem('acepresso_study_log') || '[]'); } catch(e){}
+  if(log.length > 0){
+    var actHTML = '';
+    log.slice(-10).reverse().forEach(function(item){
+      var d = new Date(item.timestamp);
+      var ts = d.toLocaleDateString('zh-CN') + ' ' + d.toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
+      actHTML += '<div class="activity-item"><span class="activity-time">' + ts + '</span>' + item.action + '</div>';
+    });
+    document.getElementById('activityContainer').innerHTML = actHTML;
+  }
+})();
+
+function logout(){
+  if(confirm('确定退出？学习记录将保留存在本设备。')){
+    localStorage.removeItem('acepresso_student_name');
+    window.location.href = 'index.html';
+  }
+}
+</script>
+</body>
+</html>

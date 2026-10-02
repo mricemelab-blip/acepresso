@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACEpresso | ACE Certified Personal Trainer Study Platform</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --shadow: rgba(0,0,0,0.06);
+  --hero-gradient: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  --card-radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; height: 54px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.header-nav a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; color: var(--accent); text-decoration: none;
+  padding: 6px 16px; border: 1px solid var(--accent); border-radius: 20px;
+  transition: all 0.25s;
+}
+.header-nav a:hover {
+  background: var(--accent); color: #fff;
+}
+
+.hero {
+  margin-top: 54px;
+  background: var(--hero-gradient);
+  padding: 60px 28px 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 36px; font-weight: 800; color: var(--accent);
+  letter-spacing: 2px; margin-bottom: 8px;
+}
+.hero .subtitle {
+  font-size: 15px; color: var(--text-secondary);
+  letter-spacing: 1px; margin-bottom: 32px;
+}
+
+.login-box {
+  max-width: 420px; margin: 0 auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 28px 32px;
+  box-shadow: 0 2px 12px var(--shadow);
+}
+.login-box label {
+  display: block; font-size: 14px; color: var(--text-secondary);
+  margin-bottom: 8px; font-family: 'Noto Sans SC', sans-serif;
+}
+.login-box input {
+  width: 100%; padding: 12px 16px; font-size: 16px;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--text);
+  outline: none; transition: border-color 0.25s;
+  font-family: inherit;
+}
+.login-box input:focus { border-color: var(--accent); }
+.login-box button {
+  width: 100%; margin-top: 16px; padding: 12px;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.25s;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+.login-box button:hover { opacity: 0.88; }
+
+.chapters-section {
+  max-width: 1100px; margin: 48px auto; padding: 0 28px;
+}
+.chapters-section h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 20px; font-weight: 700; color: var(--accent);
+  margin-bottom: 24px; text-align: center;
+}
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+.chapter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 24px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  text-decoration: none; color: inherit;
+  display: block;
+}
+.chapter-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  border-color: var(--accent);
+}
+.chapter-card .ch-num {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.chapter-card h3 {
+  font-size: 17px; font-weight: 700; margin-bottom: 8px;
+  line-height: 1.5;
+}
+.chapter-card p {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.7;
+}
+
+footer {
+  text-align: center; padding: 32px 28px;
+  border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 26px; }
+  .chapter-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <div class="header-nav" id="dashLink" style="display:none">
+    <a href="dashboard.html">学员仪表盘</a>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>ACEpresso</h1>
+  <p class="subtitle">ACE Certified Personal Trainer Study Platform</p>
+  <div class="login-box">
+    <label for="studentName">学员姓名</label>
+    <input type="text" id="studentName" placeholder="请输入您的姓名" autocomplete="off"/>
+    <button onclick="enterStudy()">进入学习</button>
+  </div>
+</section>
+
+<section class="chapters-section">
+  <h2>课程章节</h2>
+  <div class="chapter-grid">
+    <a class="chapter-card" href="ch1.html">
+      <div class="ch-num">Chapter 01</div>
+      <h3>私人教练的角色和执业范围</h3>
+      <p>私人教练的职责边界、执业范围与专业定位，建立合规 practise 框架。</p>
+    </a>
+    <a class="chapter-card" href="ch2.html">
+      <div class="ch-num">Chapter 02</div>
+      <h3>行为改变的基础</h3>
+      <p>行为心理学理论与客户行为改变策略，动机访谈与跨理论模型。</p>
+    </a>
+    <a class="chapter-card" href="ch3.html">
+      <div class="ch-num">Chapter 03</div>
+      <h3>有效的沟通、目标设定和教学技巧</h3>
+      <p>沟通模型、目标设定框架（SMART）与教学方法的循证应用。</p>
+    </a>
+    <a class="chapter-card" href="ch4.html">
+      <div class="ch-num">Chapter 04</div>
+      <h3>运动前健康筛查</h3>
+      <p>客户健康筛查流程、风险分层与医学许可（medical clearance）标准。</p>
+    </a>
+    <a class="chapter-card" href="ch5.html">
+      <div class="ch-num">Chapter 05</div>
+      <h3>心肺训练：生理机能、评估和计划</h3>
+      <p>心肺生理学基础、体能评估方法与心肺训练计划设计。</p>
+    </a>
+    <a class="chapter-card" href="ch6.html">
+      <div class="ch-num">Chapter 06</div>
+      <h3>肌肉训练：基础、益处和计划设计</h3>
+      <p>抗阻训练生理学、肌力评估与周期化训练计划设计原则。</p>
+    </a>
+    <a class="chapter-card" href="ch7.html">
+      <div class="ch-num">Chapter 07</div>
+      <h3>慢性病客户注意事项</h3>
+      <p>心血管疾病、代谢综合征等慢性病客户的运动处方调整。</p>
+    </a>
+    <a class="chapter-card" href="ch8.html">
+      <div class="ch-num">Chapter 08</div>
+      <h3>各个生命阶段的运动注意事项</h3>
+      <p>青少年、孕产期、中老年等特殊人群的训练适配与安全考量。</p>
+    </a>
+    <a class="chapter-card" href="ch9.html">
+      <div class="ch-num">Chapter 09</div>
+      <h3>肌肉骨骼异常客户的注意事项</h3>
+      <p>常见肌肉骨骼问题的评估、动作修正与训练方案设计。</p>
+    </a>
+  </div>
+</section>
+
+<footer>
+  © 2026 3HFIT × Arise. All rights reserved.
+</footer>
+
+<script>
+(function(){
+  var name = localStorage.getItem('acepresso_student_name');
+  if(name){
+    document.getElementById('dashLink').style.display = '';
+  }
+})();
+
+function enterStudy(){
+  var name = document.getElementById('studentName').value.trim();
+  if(!name){ alert('请输入学员姓名'); return; }
+  localStorage.setItem('acepresso_student_name', name);
+  localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
+  window.location.href = 'dashboard.html';
+}
+</script>
+</body>
+</html>
