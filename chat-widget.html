@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ACE AI 助教</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: #f5f5f5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.chat-header {
+  background: #2d5016;
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.chat-header .avatar {
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.chat-header .info h3 {
+  font-size: 16px; font-weight: 600;
+}
+.chat-header .info p {
+  font-size: 12px; opacity: 0.8;
+}
+
+/* Messages area */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.message {
+  display: flex;
+  gap: 10px;
+  max-width: 85%;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message.ai {
+  align-self: flex-start;
+}
+.message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message .bubble {
+  padding: 12px 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+.message.ai .bubble {
+  background: white;
+  color: #333;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.message.user .bubble {
+  background: #2d5016;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message .msg-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.message.ai .msg-avatar {
+  background: #e8f5e9;
+}
+.message.user .msg-avatar {
+  background: #e0e0e0;
+}
+
+/* Suggestion chips */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 20px 12px;
+}
+.suggestion-chip {
+  background: white;
+  border: 1px solid #e0ddd8;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px;
+  color: #2d5016;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.suggestion-chip:hover {
+  background: #e8f5e9;
+  border-color: #2d5016;
+}
+
+/* Input area */
+.chat-input {
+  padding: 16px 20px;
+  background: white;
+  border-top: 1px solid #e0ddd8;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.chat-input input {
+  flex: 1;
+  border: 1px solid #e0ddd8;
+  border-radius: 24px;
+  padding: 10px 18px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.chat-input input:focus {
+  border-color: #2d5016;
+}
+.chat-input button {
+  width: 40px; height: 40px;
+  background: #2d5016;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.chat-input button:hover {
+  background: #1b3a0e;
+}
+
+/* Typing indicator */
+.typing {
+  display: none;
+  align-self: flex-start;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-left: 42px;
+}
+.typing.show { display: flex; gap: 4px; align-items: center; }
+.typing span {
+  width: 6px; height: 6px;
+  background: #999;
+  border-radius: 50%;
+  animation: bounce 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-6px); }
+}
+</style>
+</head>
+<body>
+
+<div class="chat-header">
+  <div class="avatar">🎓</div>
+  <div class="info">
+    <h3>ACE 教材 AI 助教</h3>
+    <p>基于 ACEpresso 教材内容答疑</p>
+  </div>
+</div>
+
+<div class="chat-messages" id="messages">
+  <div class="message ai">
+    <div class="msg-avatar">🎓</div>
+    <div class="bubble">你好！我是 ACE 教材 AI 助教。你可以问我任何关于课程内容的问题，比如：<br>• 第5章的VT1和VT2有什么区别？<br>• 客户有高血压，该怎么调整训练？<br>• 帮我出几道第3章的练习题</div>
+  </div>
+</div>
+
+<div class="suggestions" id="suggestions">
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">VT1和VT2区别</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">高血压训练建议</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">SMART目标设定</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">执业范围</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">动机理论</div>
+</div>
+
+<div class="typing" id="typing">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="chat-input">
+  <input type="text" id="userInput" placeholder="输入你的问题..." onkeydown="if(event.key==='Enter')sendMessage()"/>
+  <button onclick="sendMessage()">↑</button>
+</div>
+
+<script>
+const responses = {
+  vt: '根据第5章（运动生理学），VT1（第一通气阈，First Ventilatory Threshold）和VT2（第二通气阈，Second Ventilatory Threshold）是递增负荷测试中的两个关键转折点：\n\n• VT1：有氧代谢开始无法满足能量需求，乳酸首次积累的点。此时呼吸频率明显增加，但仍可通过谈话测试（Talk Test）维持对话。\n• VT2：无氧代谢显著加速，乳酸快速积累。此时无法维持谈话，RPE达到7-8。\n\n在实际应用中，VT1标记了有氧训练区间（Zone 1）的上限，VT1-VT2之间为间歇训练区间（Zone 2），VT2以上为高强度区间（Zone 3）。\n\n💡 考试重点：VT1和VT2的判定方法（RPE、谈话测试、呼吸商变化）是常考点。',
+  bp: '根据第7章（特殊人群），高血压客户的训练建议：\n\n1. 避免Valsalva动作（屏气用力），这会导致血压骤升\n2. 优先选择有氧运动，每周≥150分钟中等强度\n3. 抗阻训练使用较轻负荷（60-70% 1RM），高次数（12-15次）\n4. 避免头低位动作（如decline bench press）\n5. 训练中持续监测RPE，保持在11-13（较轻松到有些吃力）\n6. 如收缩压>200mmHg或舒张压>110mmHg，禁止训练并建议就医\n\n⚠️ 私人教练不得调整客户降压药物，这属于医疗范畴。',
+  motivation: '根据第2章（行为改变的基础），动机相关核心理论：\n\n1. 自我决定理论（Self-Determination Theory, SDT）：内在动机的三个基本心理需求——自主性（Autonomy）、胜任感（Competence）、归属感（Relatedness）\n2. 跨理论模型（Transtheoretical Model, TTM）：行为改变5阶段——前沉思期→沉思期→准备期→行动期→维持期\n3. 自我效能理论（Self-Efficacy Theory, Bandura）：过往成功体验是最强的自我效能来源\n\n实践应用：教练应帮助客户从外部动机（如医生要求）逐步转向内部动机（如享受运动本身），这对应SDT中的内化过程。\n\n💡 考试常考：TTM各阶段对应的教练策略。',
+  smart: '根据第3章（目标设定相关内容），SMART目标设定原则：\n\n• S — Specific（具体的）：目标必须清晰明确，不能模糊\n• M — Measurable（可衡量的）：必须有量化指标来追踪进度\n• A — Attainable（可达成的）：目标应在客户能力范围内\n• R — Realistic（现实的）：与客户生活实际相符\n• T — Timely（有时限的）：设定明确的截止日期\n\n示例对比：\n❌ "我想减肥" → 模糊\n✅ "12周内减重5kg，通过每周3次力量训练+2次有氧实现" → SMART\n\n💡 考试中常结合案例分析，要求判断一个目标是否符合SMART标准。',
+  scope: '根据第1章（私人教练的角色和执业范围），私人教练的执业边界：\n\n✅ 执业范围内：\n• 体适能评估与训练计划设计\n• 营养一般性建议（参考MyPlate等指南）\n• 行为改变策略支持\n• 损伤预防与功能性训练\n\n❌ 超出执业范围（需转介）：\n• 疾病诊断与治疗\n• 营养处方/膳食计划制定\n• 心理治疗\n• 按摩治疗（除非持有相应执照）\n\n关键原则：当客户的问题超出你的专业范围时，应转介给相应专业人士（如注册营养师RD、物理治疗师PT、医生MD）。'
+};
+
+function getDefaultResponse() {
+  return '这个问题我需要查一下教材。AI助教正在学习中，敬请期待完整版。\n\n目前我可以回答以下方向的问题：\n• VT1/VT2 通气阈\n• 高血压客户训练\n• 动机与行为改变理论\n• SMART目标设定\n• 私人教练执业范围';
+}
+
+function getAIResponse(input) {
+  const lower = input.toLowerCase();
+  if (lower.includes('vt1') || lower.includes('vt2') || lower.includes('通气阈') || lower.includes('ventilatory')) {
+    return responses.vt;
+  }
+  if (lower.includes('高血压') || lower.includes('hypertension') || lower.includes('血压')) {
+    return responses.bp;
+  }
+  if (lower.includes('动机') || lower.includes('motivation') || lower.includes('行为改变') || lower.includes('self-determination')) {
+    return responses.motivation;
+  }
+  if (lower.includes('smart') || lower.includes('目标设定') || lower.includes('goal')) {
+    return responses.smart;
+  }
+  if (lower.includes('执业') || lower.includes('范围') || lower.includes('scope') || lower.includes('边界')) {
+    return responses.scope;
+  }
+  return getDefaultResponse();
+}
+
+function addMessage(text, type) {
+  const messages = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'message ' + type;
+  div.innerHTML = '<div class="msg-avatar">' + (type === 'ai' ? '🎓' : '👤') + '</div><div class="bubble">' + text.replace(/\n/g, '<br>') + '</div>';
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  addMessage(text, 'user');
+  input.value = '';
+  
+  // Hide suggestions after first message
+  document.getElementById('suggestions').style.display = 'none';
+  
+  // Show typing indicator
+  const typing = document.getElementById('typing');
+  typing.classList.add('show');
+  
+  // Simulate AI response delay
+  setTimeout(function() {
+    typing.classList.remove('show');
+    addMessage(getAIResponse(text), 'ai');
+  }, 800 + Math.random() * 700);
+}
+
+function sendSuggestion(el) {
+  document.getElementById('userInput').value = el.textContent;
+  sendMessage();
+}
+</script>
+
+</body>
+</html>

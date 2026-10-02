@@ -1343,5 +1343,20 @@ function resetFlipcards(btn) {
 }
 
 </script>
+<!-- ACE AI Tutor Chat Widget -->
+<script>
+(function() {
+  var btn = document.createElement('div');
+  btn.innerHTML = '💬';
+  btn.id = 'ace-tutor-btn';
+  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;width:56px;height:56px;background:#2d5016;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:9999;transition:transform 0.2s;';
+  btn.onmouseover = function(){ this.style.transform='scale(1.1)'; };
+  btn.onmouseout = function(){ this.style.transform='scale(1)'; };
+  btn.onclick = function() {
+    window.open('chat-widget.html', 'ACETutor', 'width=400,height=600,resizable=yes,scrollbars=yes');
+  };
+  document.body.appendChild(btn);
+})();
+</script>
 </body>
 </html>
