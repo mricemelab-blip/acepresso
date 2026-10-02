@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACE 导览 | ACEpresso</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --shadow: rgba(0,0,0,0.06);
+  --card-radius: 10px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, 'Times New Roman', serif;
+  background: var(--bg); color: var(--text); line-height: 1.9; font-size: 16.5px;
+  -webkit-font-smoothing: antialiased;
+}
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; height: 54px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; z-index: 100;
+  box-shadow: 0 1px 6px var(--shadow);
+}
+.logo {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 22px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1.5px;
+}
+.logo span {
+  font-size: 11px; font-weight: 400; color: var(--text-secondary);
+  margin-left: 10px; letter-spacing: 0.5px;
+}
+.btn-back {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px; color: var(--accent); text-decoration: none;
+  padding: 6px 16px; border: 1px solid var(--accent); border-radius: 20px;
+  transition: all 0.25s;
+}
+.btn-back:hover { background: var(--accent); color: #fff; }
+
+.main-content {
+  margin-top: 54px; padding: 40px 28px 80px;
+  max-width: 1100px; margin-left: auto; margin-right: auto;
+}
+
+.page-hero {
+  background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 50%, #fafaf8 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 40px 36px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+.page-hero h1 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 28px; font-weight: 800; color: var(--accent);
+  margin-bottom: 10px;
+}
+.page-hero .subtitle {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 15px; color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 14px;
+}
+.page-hero .desc {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; color: var(--text-secondary);
+  max-width: 640px; margin: 0 auto; line-height: 1.7;
+}
+
+.toc-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 20px 28px;
+  margin-bottom: 36px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.toc-bar h2 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px; font-weight: 700; color: var(--accent);
+  margin-bottom: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.toc-links {
+  display: flex; flex-wrap: wrap; gap: 6px 12px;
+}
+.toc-links a {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12.5px; color: var(--text-secondary);
+  text-decoration: none; padding: 3px 10px;
+  border: 1px solid var(--border); border-radius: 14px;
+  transition: all 0.2s;
+}
+.toc-links a:hover {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--accent-light);
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.guide-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 24px 28px;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: border-color 0.2s;
+}
+.guide-card:hover { border-color: var(--accent); }
+
+.guide-card .card-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 14px;
+}
+.guide-card .ch-num {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11px; font-weight: 700; color: var(--accent);
+  letter-spacing: 1px; text-transform: uppercase;
+  background: var(--accent-light); padding: 4px 10px;
+  border-radius: 12px;
+}
+.guide-card .ch-title {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px; font-weight: 700; color: var(--text);
+}
+.guide-card .card-body {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13.5px; color: var(--text-secondary);
+  line-height: 1.85;
+}
+.guide-card .card-body ul {
+  margin: 0 0 0 4px; padding: 0; list-style: none;
+}
+.guide-card .card-body li {
+  margin-bottom: 6px;
+  padding-left: 14px;
+  position: relative;
+}
+.guide-card .card-body li::before {
+  content: '';
+  position: absolute; left: 0; top: 10px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); opacity: 0.5;
+}
+.guide-card .card-body li strong {
+  color: var(--text); font-weight: 600;
+}
+
+.term {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px; color: var(--accent);
+  background: var(--accent-light);
+  padding: 1px 6px; border-radius: 8px;
+  white-space: nowrap;
+}
+
+footer {
+  text-align: center; padding: 32px 28px;
+  border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-secondary);
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+@media (max-width: 768px) {
+  .chapter-grid { grid-template-columns: 1fr; }
+  .page-hero { padding: 28px 20px; }
+  .page-hero h1 { font-size: 22px; }
+  .guide-card { padding: 18px 20px; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">ACEpresso <span>循证私人教练教育</span></div>
+  <a href="dashboard.html" class="btn-back">← 学员仪表盘</a>
+</header>
+
+<div class="main-content">
+
+  <section class="page-hero">
+    <h1>ACE 认证私人教练学习导览</h1>
+    <p class="subtitle">ACE CPT Exam Study Guide — 汉化版</p>
+    <p class="desc">基于 ACE Personal Trainer Manual 考试学习指南，提炼 18 章核心要点。本导览为学习参考概览，帮助快速掌握每章关键概念，配合正文章节深入学习。</p>
+  </section>
+
+  <nav class="toc-bar">
+    <h2>快速导航</h2>
+    <div class="toc-links">
+      <a href="#g1">第1章</a><a href="#g2">第2章</a>
+      <a href="#g3">第3章</a><a href="#g4">第4章</a>
+      <a href="#g5">第5章</a><a href="#g6">第6章</a>
+      <a href="#g7">第7章</a><a href="#g8">第8章</a>
+      <a href="#g9">第9章</a><a href="#g10">第10章</a>
+      <a href="#g11">第11章</a><a href="#g14">第14章</a>
+      <a href="#g15">第15章</a><a href="#g16">第16章</a>
+      <a href="#g17">第17章</a><a href="#g18">第18章</a>
+    </div>
+  </nav>
+
+  <div class="chapter-grid">
+
+    <div class="guide-card" id="g1">
+      <div class="card-header">
+        <span class="ch-num">Chapter 01</span>
+        <span class="ch-title">私人教练的角色和执业范围</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>运动健康益处</strong>：每周至少 150 分钟中等强度有氧运动可降低全因死亡风险；规律运动改善心血管、代谢、骨骼及心理健康</li>
+          <li><strong>健康专业人员协作</strong>：物理治疗师（康复）、注册营养师（营养）、心理咨询师、替代医学从业者</li>
+          <li><strong>执业范围（Scope of Practice）</strong>：不诊断疾病、不开处方、不设计矫形方案、不治疗损伤</li>
+          <li><strong>转介网络</strong>：身心教练、戒烟项目、水中运动项目、饮食障碍专家</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g2">
+      <div class="card-header">
+        <span class="ch-num">Chapter 02</span>
+        <span class="ch-title">坚持和动机原则</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>动机类型</strong>：内在动机（intrinsic）——真正享受运动过程；外在动机（extrinsic）——减重、社交、奖励</li>
+          <li><strong>自我效能（Self-efficacy）</strong>：个体对自身完成特定任务能力的信念。来源包括：过往经验、替代经验、言语说服、情绪/生理状态</li>
+          <li><strong>社会支持</strong>：训练伙伴、家人鼓励、团体训练增加归属感</li>
+          <li><strong>坚持的影响因素</strong>：个人特征（年龄、性别、健康状态）、环境因素（气候、设施）、运动因素（强度、趣味性）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g3">
+      <div class="card-header">
+        <span class="ch-num">Chapter 03</span>
+        <span class="ch-title">有效沟通和教学策略</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>客户关系四阶段</strong>：融洽关系（Rapport）→ 调查（Investigation）→ 计划（Planning）→ 行动（Action）</li>
+          <li><strong>有效倾听五要素</strong>：鼓励（Encouraging）、释义（Paraphrasing）、开放式提问（Open-ended questions）、反映（Reflecting）、总结（Summarizing）</li>
+          <li><strong>SMART 目标</strong>：Specific 具体、Measurable 可测量、Attainable 可达成、Relevant 相关、Time-bound 有时限</li>
+          <li><strong>运动学习三阶段</strong>：认知阶段（Cognitive）→ 关联阶段（Associative）→ 自主阶段（Autonomous）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g4">
+      <div class="card-header">
+        <span class="ch-num">Chapter 04</span>
+        <span class="ch-title">行为与心理学</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>健康信念模型（Health Belief Model）</strong>：感知健康威胁的严重性（perceived severity）和易感性（perceived susceptibility）是行为改变的前提</li>
+          <li><strong>跨理论模型（TTM）</strong>：前沉思（Precontemplation）→ 沉思（Contemplation）→ 准备（Preparation）→ 行动（Action）→ 维持（Maintenance）</li>
+          <li><strong>行为改变原则</strong>：操作性条件反射（Operant conditioning）、刺激控制（Stimulus control）、塑造（Shaping）、观察学习（Observational learning）</li>
+          <li><strong>行为改变策略</strong>：目标设定、反馈、自我监控（Self-monitoring）、日记记录</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g5">
+      <div class="card-header">
+        <span class="ch-num">Chapter 05</span>
+        <span class="ch-title">综合健身训练模型（IFT）</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>FITT-VP 原则</strong>：Frequency、Intensity、Time、Type、Volume、Progression，用于制定运动处方</li>
+          <li><strong>ACE IFT 模型四阶段</strong>：稳定与灵活性（Stabilization & Mobility）→ 动作训练（Movement）→ 负荷训练（Load）→ 表现训练（Performance）</li>
+          <li><strong>心肺训练四阶段</strong>：有氧基础（Base）→ 有氧效率（Aerobic Efficiency）→ 无氧耐力（Anaerobic Endurance）→ 无氧功率（Anaerobic Power）</li>
+          <li><strong>训练分区</strong>：<span class="term">Zone 1</span> VT1 以下（低强度）/ <span class="term">Zone 2</span> VT1–VT2 之间（中强度）/ <span class="term">Zone 3</span> VT2 以上（高强度）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g6">
+      <div class="card-header">
+        <span class="ch-num">Chapter 06</span>
+        <span class="ch-title">建立融洽关系</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>融洽关系三要素</strong>：共情（Empathy）、温暖（Warmth）、真诚（Genuineness）</li>
+          <li><strong>沟通风格</strong>：说教式（Authoritative）→ 教育式（Educator）→ 咨询式（Counselor，最有效）→ 指导式（Director）</li>
+          <li><strong>健康风险评估</strong>：<span class="term">PAR-Q+</span> 体力活动准备问卷</li>
+          <li><strong>风险分层</strong>：根据阳性/阴性风险因素判定风险等级，决定是否需要医学转介或医学监督下运动</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g7">
+      <div class="card-header">
+        <span class="ch-num">Chapter 07</span>
+        <span class="ch-title">功能性评估</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>静态姿势评估</strong>：脊柱后凸（Kyphosis）、脊柱前凸（Lordosis）、扁平背（Flat-back）、摇摆背（Sway-back）</li>
+          <li><strong>五种基本动作</strong>：弯曲/抬起（Bend & Lift）、单腿（Single-leg）、推（Push）、拉（Pull）、旋转（Rotation）</li>
+          <li><strong>灵活性评估</strong>：<span class="term">Thomas Test</span> 髋屈肌紧张度、被动直腿抬高（Passive SLR）、肩部 ROM</li>
+          <li><strong>平衡测试</strong>：<span class="term">Sharpened Romberg</span> 测试、<span class="term">Stork</span> 单腿站立测试</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g8">
+      <div class="card-header">
+        <span class="ch-num">Chapter 08</span>
+        <span class="ch-title">生理学评估</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>体成分测量</strong>：水下称重（Hydrostatic weighing）、皮褶厚度（Skinfold）、<span class="term">BMI</span>、腰臀比（WHR）</li>
+          <li><strong>心肺适能测试</strong>：<span class="term">GXT</span> 运动负荷测试、<span class="term">VO₂max</span> 最大摄氧量、Rockport 步行测试、1.5 英里跑测试</li>
+          <li><strong>肌肉适能测试</strong>：俯卧撑测试（Push-up test）、卷腹测试（Curl-up test）、<span class="term">1RM</span> 单次最大重复测试</li>
+          <li><strong>运动技能测试</strong>：纵跳（Vertical jump）、敏捷性测试（Agility tests）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g9">
+      <div class="card-header">
+        <span class="ch-num">Chapter 09</span>
+        <span class="ch-title">功能性动作、稳定与灵活性</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>关节交互原则</strong>：相邻关节交替承担稳定与灵活功能（Joint-by-joint approach）</li>
+          <li><strong>近端稳定</strong>：核心激活，深层核心肌群包括腹横肌（Transversus abdominis）、多裂肌（Multifidus）、盆底肌</li>
+          <li><strong>近端灵活</strong>：髋关节活动度和胸椎旋转灵活性</li>
+          <li><strong>肩部稳定性</strong>：肩胛胸廓区域（Scapulothoracic region）——斜方肌中下束、前锯肌</li>
+          <li><strong>平衡训练</strong>：静态平衡 → 动态平衡，从稳定平面过渡到不稳定平面</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g10">
+      <div class="card-header">
+        <span class="ch-num">Chapter 10</span>
+        <span class="ch-title">抗阻训练</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>训练变量</strong>：频率（Frequency）、动作选择（Exercise selection）、训练量（Volume）、强度（Intensity）、节奏（Tempo）、休息间隔（Rest interval）</li>
+          <li><strong>训练原则</strong>：渐进超负荷（Progressive overload）、特异性（Specificity）、可逆性（Reversibility）、递减收益（Diminishing returns）</li>
+          <li><strong>周期化模型</strong>：大周期（Macrocyle）→ 中周期（Mesocycle）→ 小周期（Microcycle）；线性周期化 vs 每日波动周期化（DUP）</li>
+          <li><strong>高级方法</strong>：超级组（Superset）、复合组（Compound set）、递减组（Drop set）、辅助训练（Accessory work）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g11">
+      <div class="card-header">
+        <span class="ch-num">Chapter 11</span>
+        <span class="ch-title">心肺训练</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>生理适应</strong>：线粒体密度增加、毛细血管网络扩展、每搏输出量和心输出量增大</li>
+          <li><strong>ACE-IFT 心肺四阶段</strong>：Base → Aerobic Efficiency → Anaerobic Endurance → Anaerobic Power</li>
+          <li><strong>Karvonen 法</strong>：靶心率 = (HRmax − HRrest) × 强度% + HRrest，即储备心率百分比法</li>
+          <li><strong>特殊人群考量</strong>：青少年心肺训练需关注骨骺板和体温调节；老年人关注最大心率下降和合并用药</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g14">
+      <div class="card-header">
+        <span class="ch-num">Chapter 14</span>
+        <span class="ch-title">特殊人群</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>心血管疾病</strong>：冠心病、高血压（≥140/90 mmHg 需医学监督）、中风后运动方案</li>
+          <li><strong>糖尿病</strong>：1 型（胰岛素依赖）和 2 型（胰岛素抵抗）；运动前中后血糖监控；低血糖预防</li>
+          <li><strong>骨骼与关节</strong>：骨质疏松症（低冲击、抗阻训练为主）、骨关节炎（关节保护策略）</li>
+          <li><strong>生命阶段人群</strong>：老年人（防跌倒、肌少症）、青少年（骨骺安全）、孕产期（ACOG 指南、避免仰卧位和高冲击）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g15">
+      <div class="card-header">
+        <span class="ch-num">Chapter 15</span>
+        <span class="ch-title">常见损伤和矫正技术</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>肌肉拉伤分级</strong>：1 级（轻微纤维撕裂）→ 2 级（部分撕裂）→ 3 级（完全断裂）</li>
+          <li><strong>韧带扭伤分级</strong>：1 级（轻微拉伸）→ 2 级（部分撕裂）→ 3 级（完全断裂）</li>
+          <li><strong>过度使用损伤</strong>：肌腱炎（Tendinitis）、滑囊炎（Bursitis）、筋膜炎（Fasciitis）</li>
+          <li><strong>骨骼与软骨</strong>：软骨损伤、应力性骨折（Stress fracture）</li>
+          <li><strong>常见运动损伤</strong>：<span class="term">ACL</span> 损伤、肩袖损伤（Rotator cuff）、网球肘（Lateral epicondylitis）、髌股疼痛综合征（PFPS）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g16">
+      <div class="card-header">
+        <span class="ch-num">Chapter 16</span>
+        <span class="ch-title">紧急程序</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>评估流程</strong>：<span class="term">ABC</span>（Airway → Breathing → Circulation）→ 二次评估（Secondary assessment）→ 拨打急救电话</li>
+          <li><strong>CPR / AED</strong>：心肺复苏术和自动体外除颤器使用</li>
+          <li><strong>紧急情况处理</strong>：窒息（Heimlich 手法）、心绞痛（停止运动、舌下硝酸甘油）、晕厥、中风（FAST 识别）、低血糖（口服葡萄糖）</li>
+          <li><strong>热相关疾病</strong>：热衰竭（Heat exhaustion）vs 中暑（Heat stroke，体温 > 40°C，需立即降温并呼叫急救）</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g17">
+      <div class="card-header">
+        <span class="ch-num">Chapter 17</span>
+        <span class="ch-title">法律指南</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>商业结构</strong>：独资企业（Sole proprietorship）、合伙企业（Partnership）、公司（Corporation）</li>
+          <li><strong>过失四要素</strong>：责任（Duty）、违反责任（Breach of duty）、损害（Damages）、因果关系（Proximate cause）</li>
+          <li><strong>替代责任（Vicarious liability）</strong>：雇主对雇员工作范围内的过失承担责任</li>
+          <li><strong>贡献过失（Contributory negligence）</strong>：原告自身行为对损害有贡献时可减少赔偿</li>
+          <li><strong>风险管理</strong>：责任保险（Liability insurance）、知情同意书、健康筛查文件、急救预案</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="guide-card" id="g18">
+      <div class="card-header">
+        <span class="ch-num">Chapter 18</span>
+        <span class="ch-title">私人教练业务基础</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>直接雇员（Employee）模式</strong>：健身房提供客户、场地、保险；教练获得固定薪资或时薪，自主权较低</li>
+          <li><strong>独立承包商（Independent contractor）模式</strong>：教练自主经营，承担自身保险和税务；自主权高但风险自担</li>
+          <li><strong>商业计划要素</strong>：执行摘要（Executive summary）、财务规划、营销策略（Marketing strategy）</li>
+          <li><strong>品牌建设</strong>：个人品牌定位、目标市场选择、线上与线下获客渠道</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <a href="dashboard.html" class="btn-back" style="display:inline-block; text-decoration:none;">← 返回学员仪表盘</a>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 3HFIT × Arise. All rights reserved.
+</footer>
+
+</body>
+</html>
