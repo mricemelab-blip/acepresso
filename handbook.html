@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACE 认证与再认证手册（中文版）— ACEpresso</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Helvetica Neue',Arial,'PingFang SC','Noto Sans SC',sans-serif;background:#fafaf8;color:#1a1a1a;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:#2d5016;text-decoration:none}a:hover{text-decoration:underline}
+
+.nav{background:#2d5016;color:#fff;padding:0 6vw;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.nav-brand{display:flex;align-items:baseline;gap:12px}
+.nav-logo{font-size:16px;font-weight:800;letter-spacing:2px}
+.nav-logo span{color:#d4e6c3;font-size:12px;font-weight:400;margin-left:8px}
+.nav-back{color:#d4e6c3;font-size:13px;font-weight:500;transition:color .2s}
+.nav-back:hover{color:#fff;text-decoration:none}
+
+.layout{display:flex;min-height:100vh}
+.sidebar{width:280px;background:#f0ede6;border-right:1px solid #d8d2cb;padding:32px 0;position:fixed;top:56px;left:0;bottom:0;overflow-y:auto;z-index:100}
+.sidebar-title{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#888;padding:0 20px 12px;border-bottom:1px solid #d8d2cb;margin-bottom:8px}
+.toc-item{display:block;padding:8px 20px;font-size:13px;color:#555;transition:all .15s;border-left:3px solid transparent;text-decoration:none}
+.toc-item:hover{background:#e8e4dc;color:#2d5016;text-decoration:none;border-left-color:#2d5016}
+.toc-item.active{background:#e2ddd4;color:#2d5016;font-weight:600;border-left-color:#2d5016}
+.toc-item.level-2{padding-left:36px;font-size:12px;color:#777}
+.toc-item.level-3{padding-left:52px;font-size:11px;color:#999}
+.toc-divider{height:1px;background:#d8d2cb;margin:12px 20px}
+
+.main{margin-left:280px;flex:1;max-width:900px;padding:48px 6vw 80px}
+
+.hero{padding:64px 0 48px;border-bottom:2px solid #2d5016;margin-bottom:48px}
+.hero-title{font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.02em;line-height:1.2;color:#1a1a1a;margin-bottom:8px}
+.hero-subtitle{font-size:clamp(14px,2vw,18px);font-weight:400;color:#666;margin-bottom:16px}
+.hero-tagline{font-size:13px;font-weight:600;letter-spacing:2px;color:#2d5016;text-transform:uppercase;margin-bottom:16px}
+.hero-meta{font-size:11px;color:#999;letter-spacing:1px}
+
+.section{padding:32px 0;border-bottom:1px solid #e8e4dc}
+.section:last-child{border-bottom:none}
+.section-id{font-size:11px;font-weight:700;letter-spacing:2px;color:#2d5016;text-transform:uppercase;margin-bottom:4px}
+.section-title{font-size:clamp(20px,3vw,28px);font-weight:800;letter-spacing:-.01em;line-height:1.3;color:#1a1a1a;margin-bottom:24px;padding-bottom:12px;border-bottom:2px solid #d4e6c3}
+.section-title-en{font-size:13px;font-weight:400;color:#999;margin-bottom:24px}
+h3{font-size:clamp(16px,2vw,20px);font-weight:700;color:#2d5016;margin:32px 0 12px}
+h4{font-size:15px;font-weight:700;color:#1a1a1a;margin:24px 0 8px}
+
+p{margin-bottom:12px;font-size:15px;line-height:1.8;color:#333}
+.lead{font-size:16px;color:#555;font-weight:300}
+.en-note{font-size:13px;color:#888;font-style:italic}
+
+ul,ol{margin:12px 0 16px 24px;font-size:15px;line-height:1.8;color:#333}
+li{margin-bottom:4px}
+ul{list-style-type:disc}
+ol{list-style-type:decimal}
+ul.no-bullet{list-style:none;margin-left:0}
+ul.no-bullet li{padding-left:20px;position:relative}
+ul.no-bullet li::before{content:'+';position:absolute;left:0;color:#2d5016;font-weight:700}
+
+table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-size:14px}
+th{background:#2d5016;color:#fff;padding:10px 14px;text-align:left;font-weight:600;font-size:13px;letter-spacing:.5px}
+td{padding:10px 14px;border-bottom:1px solid #e8e4dc;vertical-align:top}
+tr:nth-child(even) td{background:#f7f5f0}
+tr:hover td{background:#eef3e8}
+
+.note{background:#f0ede6;border-left:4px solid #2d5016;padding:16px 20px;margin:16px 0 20px;font-size:14px;color:#444;line-height:1.7}
+.note strong{color:#2d5016}
+.warning{background:#fef9f0;border-left:4px solid #c8922a;padding:16px 20px;margin:16px 0 20px;font-size:14px;color:#5a4a2a;line-height:1.7}
+
+.appendix-box{background:#f0ede6;border:1px solid #d8d2cb;border-radius:4px;padding:24px 28px;margin:16px 0 20px}
+.appendix-box h4{margin-top:0}
+
+.footer{margin-left:280px;border-top:2px solid #2d5016;padding:32px 6vw;text-align:center;background:#2d5016;color:#d4e6c3}
+.footer-text{font-size:11px;letter-spacing:1px;line-height:2}
+.footer-text a{color:#d4e6c3}
+
+@media(max-width:1024px){.sidebar{width:220px}.main{margin-left:220px}.footer{margin-left:220px}}
+@media(max-width:768px){.sidebar{display:none;position:fixed;top:56px;left:0;right:0;bottom:0;width:100%;background:#fafaf8;z-index:150;padding:24px}.sidebar.open{display:block}.main{margin-left:0;padding:32px 5vw 60px}.footer{margin-left:0}.toc-toggle{display:block}}
+.toc-toggle{display:none;position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:#2d5016;color:#fff;border:none;font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:200;cursor:pointer}
+@media print{.nav,.sidebar,.toc-toggle{display:none}.main{margin-left:0;max-width:100%}.footer{margin-left:0}.section{break-inside:avoid}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand"><div class="nav-logo">ACEpresso <span>ACE-CPT 系统精读</span></div></div>
+  <a href="dashboard.html" class="nav-back">← 学员仪表盘</a>
+</nav>
+
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-title">目录导航</div>
+  <a href="#intro" class="toc-item">引言</a>
+  <a href="#mission" class="toc-item level-2">ACE 使命宣言</a>
+  <a href="#programs" class="toc-item level-2">ACE 认证项目</a>
+  <a href="#accreditation" class="toc-item level-2">认证认可</a>
+  <a href="#nondiscrimination" class="toc-item level-2">非歧视声明</a>
+  <a href="#edi" class="toc-item level-2">公平、多元与包容声明</a>
+  <div class="toc-divider"></div>
+  <a href="#eligibility" class="toc-item">认证考试资格条件</a>
+  <a href="#eligibility-req" class="toc-item level-2">资格要求</a>
+  <a href="#ethics" class="toc-item level-2">ACE 职业道德准则</a>
+  <div class="toc-divider"></div>
+  <a href="#exam-dev" class="toc-item">ACE 认证考试开发</a>
+  <a href="#credentialing" class="toc-item level-2">ACE 资质认证部</a>
+  <a href="#provider" class="toc-item level-2">考试服务提供商</a>
+  <a href="#dev-procedures" class="toc-item level-2">考试开发流程</a>
+  <a href="#committees" class="toc-item level-2">ACE 认证委员会</a>
+  <a href="#objectivity" class="toc-item level-2">考试开发的客观性</a>
+  <a href="#security" class="toc-item level-2">安全性</a>
+  <div class="toc-divider"></div>
+  <a href="#earning" class="toc-item">获取 ACE 认证</a>
+  <a href="#professionals" class="toc-item level-2">ACE 认证专业人士</a>
+  <a href="#cert-exams" class="toc-item level-2">ACE 认证考试</a>
+  <a href="#content-outlines" class="toc-item level-2">考试内容大纲</a>
+  <a href="#study-materials" class="toc-item level-2">学习材料与资源</a>
+  <div class="toc-divider"></div>
+  <a href="#exam-process" class="toc-item">认证考试流程</a>
+  <a href="#registration" class="toc-item level-2">考试注册</a>
+  <a href="#fees" class="toc-item level-2">考试费用</a>
+  <a href="#strategies" class="toc-item level-2">考试答题策略</a>
+  <a href="#scoring" class="toc-item level-2">考试评分与通过标准</a>
+  <a href="#results" class="toc-item level-2">考试结果</a>
+  <a href="#verification" class="toc-item level-2">认证状态验证</a>
+  <a href="#delivery-security" class="toc-item level-2">考试交付与安全</a>
+  <a href="#live-site-security" class="toc-item level-2">现场管理与安全</a>
+  <a href="#lrp-security" class="toc-item level-2">远程监考管理与安全</a>
+  <a href="#calculator" class="toc-item level-2">计算器政策</a>
+  <a href="#confidentiality" class="toc-item level-2">保密政策</a>
+  <a href="#cheating" class="toc-item level-2">作弊与其他考试违规</a>
+  <div class="toc-divider"></div>
+  <a href="#renewing" class="toc-item">续证要求</a>
+  <a href="#renewal-req" class="toc-item level-2">认证续期要求</a>
+  <a href="#expired" class="toc-item level-2">过期认证续期</a>
+  <a href="#cec" class="toc-item level-2">继续教育学分</a>
+  <a href="#petitions" class="toc-item level-2">继续教育申请</a>
+  <a href="#support" class="toc-item level-2">ACE 支持</a>
+  <a href="#career" class="toc-item level-2">职业发展</a>
+  <a href="#cert-marks" class="toc-item level-2">ACE 认证标识</a>
+  <div class="toc-divider"></div>
+  <a href="#privacy" class="toc-item">隐私、安全与记录保留</a>
+  <a href="#privacy-protection" class="toc-item level-2">隐私保护</a>
+  <a href="#records" class="toc-item level-2">记录保留期限</a>
+  <a href="#security-section" class="toc-item level-2">安全性</a>
+  <div class="toc-divider"></div>
+  <a href="#appendices" class="toc-item">附录</a>
+  <a href="#app-a" class="toc-item level-2">附录A：资格被拒申诉</a>
+  <a href="#app-b" class="toc-item level-2">附录B：职业行为与纪律程序</a>
+  <a href="#app-c" class="toc-item level-2">附录C：考试评分申诉与重新评分</a>
+  <a href="#app-d" class="toc-item level-2">附录D：2025年考试通过率</a>
+  <a href="#app-e" class="toc-item level-2">附录E：改期、重考与退款</a>
+</aside>
+
+<main class="main">
+
+<section class="hero" id="top">
+  <div class="hero-tagline">GETTING PEOPLE MOVING — 让每个人动起来</div>
+  <h1 class="hero-title">ACE 认证与再认证手册</h1>
+  <div class="hero-subtitle">Certification and Recertification Handbook（中文版）</div>
+  <div class="hero-meta">Copyright© 2026 American Council on Exercise® · P26-01 · Revised January 2026</div>
+</section>
+
+<!-- 引言 -->
+<section class="section" id="intro">
+  <div class="section-id">第一章</div>
+  <h2 class="section-title">引言 <span class="section-title-en">Introduction</span></h2>
+
+  <p class="lead">美国运动委员会（American Council on Exercise, ACE）成立于1985年，是一家致力于促进美国民众健康与福祉的非营利组织。过去40年间，ACE 已成为健康和运动专业人士及公众的可靠资源，提供全面、客观的研究，并确立了自身作为全国健康与健身领域权威机构的地位。</p>
+
+  <p>如今，ACE 是全球最大的非营利性健康与健身认证、教育和培训组织，拥有超过 <strong>77,000</strong> 名持证专业人士，持有约 <strong>89,000</strong> 项 ACE 资质。凭借在认证、教育、培训和公众推广方面的深厚积淀，ACE 是业内最受尊重的组织之一，也是公众信赖的健康与健身教育资源。</p>
+  <p>本《ACE 认证与再认证手册》涵盖了获取和维持 ACE 认证所需的各项要求与流程。</p>
+
+  <h3 id="mission">ACE 使命宣言 <span class="en-note">(ACE Mission Statement)</span></h3>
+  <div class="note"><strong>我们的使命：</strong>让每个人动起来（To get people moving）。</div>
+
+  <h3 id="programs">ACE 认证项目 <span class="en-note">(ACE Certification Programs)</span></h3>
+  <p>美国运动委员会为运动专业人士和健康教练设有四个核心认证项目，每个项目针对特定人群和/或编程重点。每项 ACE 认证均定期评估，以确保其跟上最新研究和行业标准。各认证项目的考核内容也定期更新，旨在评估候选人是否达到在指定认证执业范围内安全执业所要求的最低胜任水平。</p>
+
+  <h4>ACE 私人教练认证 <span class="en-note">(ACE Personal Trainer Certification)</span></h4>
+  <p>ACE 私人教练认证授予有资质的健康和运动专业人士，使其能够为明显健康或已获得运动医学许可的个体提供一对一和小团体训练。ACE 认证私人教练帮助客户设定以客户为中心的健康、健身和福祉目标，并通过设计、实施和调整个性化运动方案（线下或线上）来帮助客户达成目标。ACE 认证私人教练与多元化的客户群体建立关系，在各种环境中指导客户完成与健康相关的行为改变，从而提升项目效果。</p>
+
+  <h4>ACE 团体健身教练认证 <span class="en-note">(ACE Group Fitness Instructor Certification)</span></h4>
+  <p>ACE 团体健身教练认证授予有资质的健康和运动专业人士，使其能够在团体环境中为明显健康的个体教授任何形式的运动课程。ACE 认证团体健身教练准备并带领安全、有效且有趣的健身课程，以促进和支持健康、积极的生活方式。ACE 认证团体健身教练运用适合不同学习阶段和风格的教学技巧进行激励和引导，并根据课堂参与者的多样化需求调整训练内容。</p>
+
+  <h4>ACE 健康教练认证 <span class="en-note">(ACE Health Coach Certification)</span></h4>
+  <p>ACE 健康教练认证授予健康、运动、保健和医疗保健领域的专业人士，使其能够在各种环境（线下和线上）中为个人和团体提供教练服务。ACE 认证健康教练运用基于循证的教练技能来促进客户的健康与福祉，在个体和团体环境中推动以客户为中心的健康、保健和身体活动方法，以支持可持续的行为改变。ACE 认证健康教练善于与客户协作制定和实施个性化健康与保健计划，以满足健康客户以及患有急性和慢性疾病的客户的多样化需求。</p>
+
+  <h4>ACE 医疗运动专家认证 <span class="en-note">(ACE Medical Exercise Specialist Certification)</span></h4>
+  <p>ACE 医疗运动专家认证授予高级健康和运动专业人士，使其能够为患有或正处于各种疾病、障碍和状况的风险中或康复期的人群，提供基于循证的健康、运动和生活方式方案。ACE 认证医疗运动专家在医疗保健体系中扮演重要角色，通常在医院和医疗健身中心作为医疗团队的成员，为个人和小团体提供线下和线上训练。</p>
+
+  <h3 id="accreditation">认证认可 <span class="en-note">(Accreditation)</span></h3>
+  <h4>NCCA 认证认可</h4>
+  <p>ACE 的四项核心认证自2003年以来持续获得美国国家认证委员会（National Commission for Certifying Agencies, NCCA）的认可。NCCA 成立于1977年，是资质卓越研究所（Institute for Credentialing Excellence, ICE）（前身为国家能力保障组织 NOCA）的认证机构。NCCA 是一家独立的非政府机构，负责认证各行业的认证项目，包括运动训练、营养学、职业治疗、金融服务和健身等，以保障公众的健康、福祉和安全。NCCA 审查认证组织的结构、治理、政策、程序、协议和运营，以确定认证项目能否正确区分有资质和无资质的个体，从而确保：</p>
+  <ul>
+    <li>考试过程公平且无偏见</li>
+    <li>考试准确衡量候选人在该职业中的最低胜任能力</li>
+    <li>认证为公众提供有关合格专业人士的清晰信息，帮助其避免聘用不合格或无效从业者</li>
+    <li>组织有能力支持其认证项目</li>
+  </ul>
+  <p>NCCA 制定了23项标准，认证组织必须满足并持续遵守这些标准才能获得并保持 NCCA 认证认可。这些 NCCA 标准是组织应如何开展认证项目的基准。</p>
+  <div class="note"><strong>了解更多：</strong>有关 NCCA 的更多信息，请访问：www.credentialingexcellence.org/Accreditation</div>
+
+  <h4>NCCA 认证认可标准对您意味着什么？</h4>
+  <p>健康与健身协会（Health & Fitness Association，前身为 IHRSA）和医疗健身协会（Medical Fitness Association, MFA）建议俱乐部业主和医疗健身设施运营方聘用获得 NCCA 或同等认证机构认可的、持有认证的运动专业人士。由 allied health 教育认证委员会（CAAHEP）的运动科学教育认证委员会（CoAES）制定的《个人健身训练、运动科学和运动生理学教育项目认证标准与指南》，将学生在 NCCA 认可的国家级认证考试中的成绩作为获得 CAAHEP 教育项目认证认可的主要成果之一。此外，运动专业人士注册联盟®（CREP®）是一家由提供 NCCA 认可的运动专业人士认证的组织组成的 501(c)(6) 公司。</p>
+  <p>获得 ACE 及其他 CREP 成员组织认证的运动专业人士被列入美国运动专业人士注册系统（USREPS.org），这是国际公认的美国运动专业人士注册平台。通过获得 NCCA 认可的 ACE 认证，健康和运动专业人士证明其具备在定义的执业范围内在医疗保健体系中占据合法位置的资格。获得并维持 NCCA 认可的认证确认您有资格从事您获得认证的工作角色，使您在求职时获得竞争优势。</p>
+
+  <h3 id="nondiscrimination">非歧视声明 <span class="en-note">(Statement of Nondiscrimination)</span></h3>
+  <p>ACE 认识到其有责任以符合联邦、州和地方法律法规的方式管理其所有政策。特别是，ACE 认识到平等机会是所有形式人类事业中平等的基础。因此，所有行政实践和程序将不受以下因素歧视：种族、信仰、国籍或民族血统、年龄、宗教、性别、性别表达或性别认同、性取向、怀孕、身体或精神残疾、健康状况、祖籍、婚姻状况或在军队服役情况。</p>
+
+  <h3 id="edi">公平、多元与包容声明 <span class="en-note">(Equity, Diversity, and Inclusion Statement)</span></h3>
+  <p>作为美国运动委员会（ACE），我们在组织内部和健康与健身行业中积极追求和促进公平、多元与包容。我们致力于通过确保每个人都有平等的机会参与维持积极、健康生活所需的各项活动，将公平带到健康与健身领域。我们庆祝我们所服务的鼓舞人心的个人和社区的多元化，并将让<strong>所有</strong>人动起来并享受积极、健康生活的益处作为我们的使命。我们倡导包容性，鼓励并创造让每个人——不论年龄、种族、文化背景、性别、性取向、信仰、社会经济地位、教育水平、体型或身体/智力能力——都感到受欢迎和被接纳的环境。</p>
+  <div class="note"><strong>在 ACE：</strong>我们承诺。我们庆祝。我们倡导。</div>
+</section>
+
+<!-- 认证考试资格条件 -->
+<section class="section" id="eligibility">
+  <div class="section-id">第二章</div>
+  <h2 class="section-title">认证考试资格条件 <span class="section-title-en">Certification Exam Eligibility Criteria</span></h2>
+  <p class="lead">要参加 ACE 认证考试，您必须满足针对该特定认证考试所设立的所有资格要求，详见下文。考试当天，考生必须出示附有照片和签名的有效政府颁发身份证件，且姓名须与 ACE 注册信息中的姓和名一致。</p>
+
+  <h3 id="eligibility-req">资格要求 <span class="en-note">(Eligibility Requirements)</span></h3>
+  <h4>ACE 私人教练、团体健身教练和健康教练认证考试</h4>
+  <ul class="no-bullet">
+    <li>您必须年满 18 岁。</li>
+    <li>您必须持有有效的成人心肺复苏（CPR）和自动体外除颤器（AED）证书，且须包含实操（线下或线上）技能考核。*</li>
+    <li>您必须已完成高中（或同等学历）学业。</li>
+  </ul>
+
+  <h4>ACE 医疗运动专家认证考试</h4>
+  <ul class="no-bullet">
+    <li>您必须年满 18 岁。</li>
+    <li>您必须持有有效的成人 CPR 和 AED 证书，且须包含实操（线下或线上）技能考核。*</li>
+    <li>您必须为以下每项提交支持性文件：</li>
+  </ul>
+  <ul>
+    <li>运动科学或相关领域的四年制（学士）学位</li>
+    <li>500 小时为明显健康个体和/或高风险个体设计和实施运动项目的工作经验，须由合格专业人士出具证明†</li>
+  </ul>
+  <div class="note">医疗运动专家资格文件信息：ACEfitness.org/myace/exam-preapproval-mes<br>邮件联系：Credentialing@ACEfitness.org<br>有关资格被拒申诉的信息，请参阅附录 A。</div>
+  <div class="note">* CPR 和 AED 在美国和加拿大均为必需。美国和加拿大以外的考生仅需持有有效的 CPR 证书。<br>† ACE 医疗运动专家考试的考生还必须在考试注册前提交其 500 小时工作经验的证明文件。</div>
+
+  <h3 id="ethics">ACE 职业道德准则 <span class="en-note">(ACE Code of Ethics)</span></h3>
+  <p>ACE 职业道德准则规范 ACE 认证专业人士在与客户、公众或其他健康和运动专业人士合作时的道德和专业行为。每位注册参加 ACE 认证考试的个人必须同意在整个考试过程中以及在获得 ACE 认证后作为专业人士 uphold ACE 职业道德准则。</p>
+  <div class="note">作为 ACE 认证专业人士，我承诺：<ul style="margin-top:8px;margin-bottom:0"><li>提供安全有效的指导</li><li>为所有客户提供平等和公正的待遇</li><li>持续了解最新的健康与健身研究并理解其实际应用</li><li>维持有效的 CPR 和 AED 证书以及急救服务知识</li><li>遵守所有适用的商业、就业和知识产权法律</li><li>维护并提升公众对健康与健身行业的赞赏和信任</li><li>保密所有客户信息</li><li>在适当时将客户转介给更有资质的健康或医疗专业人士</li><li>建立并维持清晰的专业边界</li></ul></div>
+</section>
+
+<!-- ACE 认证考试开发 -->
+<section class="section" id="exam-dev">
+  <div class="section-id">第三章</div>
+  <h2 class="section-title">ACE 认证考试开发 <span class="section-title-en">ACE Certification Exam Development</span></h2>
+
+  <h3 id="credentialing">ACE 资质认证部 <span class="en-note">(ACE Credentialing Department)</span></h3>
+  <p>ACE 资质认证部在监督美国运动委员会认证活动方面拥有自主权。这包括对考试开发和管理、参加并获取 ACE 认证的资格要求、认证颁发、通过持续能力提升维持 ACE 认证的标准，以及制定和实施纪律程序的管辖权。ACE 资质认证部 uphold ACE 制定的政策和程序，以维持所有考试按照 NCCA 认证认可标准的完整性。ACE 认证仅颁发给满足认证资格要求并通过认证考试展示其达到或超过既定专业胜任水平的个人。</p>
+  <p>ACE 认证项目方向的治理由 ACE 认证咨询委员会、ACE 董事会和 ACE 高管团队提供。在 ACE 首席执行官的领导下，ACE 资质认证总监监督 ACE 资质认证部的所有行政事务。</p>
+  <p>ACE 资质认证部致力于实现以下专业目标：</p>
+  <ul class="no-bullet">
+    <li>制定并发布 ACE 认证项目开发和管理的标准、政策和程序</li>
+    <li>确定每位 ACE 认证考试的参加资格标准和再认证标准</li>
+    <li>为所有 ACE 认证专业人士制定继续教育和再认证的政策、程序和要求</li>
+    <li>向成功获得 ACE 资质并成功完成 ACE 制定的继续教育和再认证要求的个人授予认可</li>
+    <li>界定每项 ACE 认证的执业范围</li>
+    <li>制定专业行为标准（即 ACE 职业道德准则），并根据 ACE 职业行为与纪律程序实施违规处理程序（见附录 B）</li>
+    <li>维护并推广 ACE 资质对利益相关者的有效性</li>
+    <li>遵守标准、实施政策和项目，并向监管机构提交相关认证和再认证信息</li>
+    <li>为 ACE 的认证项目获取并维持认证认可（如 NCCA、ISO/IEC 17024）</li>
+    <li>获取、开发、分发和维护与 ACE 认证功能相关的信息</li>
+  </ul>
+
+  <h3 id="provider">考试服务提供商 <span class="en-note">(Testing Service Provider)</span></h3>
+  <p>ACE 利用 Meazure Learning 的服务来开发、管理、评分和报告所有 ACE 认证考试。Meazure Learning 提供全面的内容服务，建立在为各领域专业人士的专业知识许可或认证组织开发高质量高风险认证考试的历史基础上。</p>
+  <div class="note"><strong>Meazure Learning 地址：</strong><br>2200 Riverchase Center, Suite 600, Birmingham, AL 35244<br>电话：1 (855) 772-8678 · 网站：www.MeazureLearning.com<br>邮箱：candidatesupport@MeazureLearning.com</div>
+  <p>Meazure Learning 在全球范围内的现场考点设施和通过其 ProctorU 平台提供的家庭远程实时监考（LRP）考试管理方式下提供考试服务。</p>
+
+  <h3 id="dev-procedures">考试开发流程 <span class="en-note">(Exam Development Procedures)</span></h3>
+  <p>ACE 认证考试采用 APA、AERA 和 NCME 认可的六点考试开发流程：</p>
+  <h4>1. 工作分析/角色界定 (Job Analysis/Role Delineation)</h4>
+  <p>一组行业专家分析具体工作要求，以制定有效执行工作所需的任务、知识和技能大纲。</p>
+  <h4>2. 验证研究 (Validation Study)</h4>
+  <p>进行研究调查以确定工作分析的有效性。调查发送给大量、随机的全国性健康和运动专业人士样本进行验证。</p>
+  <h4>3. 题目开发 (Item Development)</h4>
+  <p>由全国代表性的行业专家小组开发与考试规范相关联的题目。每道题目必须由三位未参与撰写的 SME 进行验证。</p>
+  <h4>4. 试卷组配与验证 (Exam Assembly and Validation)</h4>
+  <p>题目由考试委员会审查、选择和批准，随后提交至 Meazure Learning 进行最终编辑。</p>
+  <h4>5. 通过分数线确定 (Cut Score Determination)</h4>
+  <p>通过分数线作为公众保护的标准来确定，由行业专家使用标准参照程序评级。</p>
+  <h4>6. 持续考试评估 (Continual Exam Evaluation)</h4>
+  <p>每次考试管理后，对每道题目进行持续评估和分析以确保有效性。</p>
+  <div class="note">新的考试开发流程大约每五年启动一次。所有 ACE 认证项目均遵守 NCCA 认证项目认可标准。</div>
+
+  <h3 id="committees">ACE 认证委员会 <span class="en-note">(ACE Certification Committees)</span></h3>
+  <p>ACE 为每项认证项目拥有一批致力于贡献且合格的志愿 SME 人才库。每项认证的每位 SME 必须持有该认证或等同于或超过该认证的资质。ACE 资质认证部为每次认证委员会会议组建临时合格 SME 委员会，并确保每个委员会包含该资质主要职能领域的代表，在地域和性别分布上代表认证人群，同时关注族裔多样性。</p>
+
+  <h3 id="objectivity">考试开发的客观性 <span class="en-note">(Objectivity in Exam Development)</span></h3>
+  <p>ACE 认识到平等机会是所有形式人类事业中平等的基础。所有行政实践和程序均不歧视。ACE SME 在每次认证委员会会议开始和虚拟命题前接受培训。关键要素是指示 SME 所有 ACE 认证考试题目应无偏见且客观。当性别或年龄信息对考生区分正确和错误回答至关重要时，ACE 允许考试题目包含性别或年龄信息（如风险因素指南、青少年运动编程指南）。</p>
+
+  <h3 id="security">安全性 <span class="en-note">(Security)</span></h3>
+  <p>禁止向考试开发委员会以外的人员披露考试内容或信息。所有考试开发成员在参与前必须签署保密协议。考试开发会议期间创建的所有文件在会议结束后销毁。</p>
+</section>
+
+<!-- 获取 ACE 认证 -->
+<section class="section" id="earning">
+  <div class="section-id">第四章</div>
+  <h2 class="section-title">获取 ACE 认证 <span class="section-title-en">Earning An ACE Certification</span></h2>
+  <p class="lead">要获得 ACE 认证，候选人必须首先满足资格要求，然后注册并通过认证考试。ACE 不会仅基于教育和/或经验授予认证，所有 ACE 认证必须通过考试获得。ACE 认证有效期为两年，须通过提交 20 小时或以上的 ACE 认可继续教育、有效的 CPR/AED 证书以及适用的续期费用进行续期。</p>
+
+  <h3 id="professionals">ACE 认证专业人士 <span class="en-note">(ACE Certified Professionals)</span></h3>
+  <table>
+    <thead><tr><th>ACE 认证</th><th>截至 2025/12/31 持证人数</th></tr></thead>
+    <tbody>
+      <tr><td>私人教练 (Personal Trainer)</td><td>47,355</td></tr>
+      <tr><td>团体健身教练 (Group Fitness Instructor)</td><td>20,422</td></tr>
+      <tr><td>健康教练 (Health Coach)</td><td>5,587</td></tr>
+      <tr><td>医疗运动专家 (Medical Exercise Specialist)</td><td>795</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="cert-exams">ACE 认证考试 <span class="en-note">(ACE Certification Exams)</span></h3>
+  <p>所有四项 ACE 认证项目均包含基于能力的评估，由多项选择题考试组成，共125道计分题和25道实验性题目构成完整的认证考试。考生有三个小时完成考试。ACE 聘请 Meazure Learning 确保认证遵守国家级考试标准。每道题目必须引用适当的文本或资源，由至少一位 SME 撰写，然后由至少三位其他 SME 审查和验证。</p>
+
+  <h3 id="content-outlines">考试内容大纲 <span class="en-note">(Exam Content Outlines)</span></h3>
+  <p>ACE 使用基于能力的考试来评估候选人是否达到获得特定 ACE 认证的既定胜任水平。所有考试由150道多项选择题组成（125道计分题+25道实验题）。25道实验题不计入考生分数。125道计分题根据考试规范分布。</p>
+  <p>ACE 私人教练和团体健身教练认证考试包含基于视频的题目（约10%），旨在评估实践技能。考试内容大纲每五年更新一次（医疗运动专家每五到七年）。</p>
+  <div class="note">详细考试内容大纲：ACEfitness.org/fitness-certifications/certification-exam-content</div>
+
+  <h3 id="study-materials">学习材料与资源 <span class="en-note">(Study Materials and Resources)</span></h3>
+  <p>ACE 为每项认证项目制作手册和相关学习材料。这些材料是可选的，购买不是注册或通过考试的要求。ACE 还提供免费在线资源（ACE Answers）：ACEfitness.org/fitness-certifications/ace-answers/。</p>
+  <h4>推荐阅读</h4>
+  <p><strong>私人教练：</strong>ACSM's Resources for the Personal Trainer (6th ed.) · The Exercise Professional's Guide to Personal Training · NSCA's Essentials of Personal Training (3rd ed.)</p>
+  <p><strong>团体健身教练：</strong>The Exercise Professional's Guide to Group Fitness Instruction · ACSM's Resources for the Group Exercise Instructor (2nd ed.) · Methods of Group Fitness Instruction (4th ed.)</p>
+  <p><strong>健康教练：</strong>The Professional's Guide to Health and Wellness Coaching · Psychology of Health and Fitness · Foundations of Sport and Exercise Psychology (8th ed.)</p>
+  <p><strong>医疗运动专家：</strong>ACE Medical Exercise Specialist Manual · ACSM's Resources for the Exercise Physiologist (3rd ed.) · Exercise Prescription for Medical Conditions · NASM Essentials of Corrective Exercise Training (2nd ed.)</p>
+  <p><strong>所有项目：</strong>Coaching Senior Fitness · ACE Essentials of Exercise Science · ACSM's Guidelines for Exercise Testing and Prescription (12th ed.) · ACE Youth Fitness Manual · Sports Nutrition for Health Professionals (3rd ed.) · ACE Fitness Nutrition Manual · 2020–2025 Dietary Guidelines for Americans</p>
+</section>
+
+<!-- 认证考试流程 -->
+<section class="section" id="exam-process">
+  <div class="section-id">第五章</div>
+  <h2 class="section-title">认证考试流程 <span class="section-title-en">The Certification Exam Process</span></h2>
+
+  <h3 id="registration">考试注册 <span class="en-note">(Exam Registration)</span></h3>
+  <p>考生可通过线上或电话注册现场考点考试和远程实时监考（LRP）考试。* 注册前必须持有有效 CPR 证书且 CPR 验证已在 ACE 存档。考生最早可在考试日期前3天注册现场考试，LRP 考试可最早提前24小时、最远提前60天安排。</p>
+  <div class="note">* ACE 医疗运动专家认证考试需要在注册前获得预审批。</div>
+
+  <h3 id="fees">考试费用 <span class="en-note">(Exam Fees)</span></h3>
+  <p>当前考试定价：ACEfitness.org/faqs/#Exam%20Registrations。支票或汇票应以美元计价，由美国银行开具，收款人为 ACE。现役军人、退伍军人及符合条件的配偶和家属可通过 benefits.va.gov/gibill/ 获得报销。</p>
+
+  <h3 id="strategies">考试答题策略 <span class="en-note">(Test-Taking Strategies)</span></h3>
+  <p>所有考试题目基于考试内容大纲。以下策略可能有帮助：</p>
+  <ul class="no-bullet">
+    <li>控制节奏，高效利用时间。时间过半时，应已完成一半（或略多）的题目。</li>
+    <li>仔细阅读每道题目，特别注意 BEST、MOST 等词语。</li>
+    <li>尝试预判答案，但仔细阅读所有选项后再确定。</li>
+    <li>不要过度分析，每道题目按呈现方式理解。</li>
+    <li>排除最不可能的选项以增加选中正确答案的机会。</li>
+    <li>回答每道题目，猜测不会扣分。</li>
+    <li>ACE 认证考试选项随机排列，完全不了解时直接猜测并继续。</li>
+  </ul>
+
+  <h3 id="scoring">考试评分与通过标准 <span class="en-note">(Exam Scoring and Passing Criteria)</span></h3>
+  <p>ACE 认证考试根据 APA、AERA 和 NCME 认可的程序评分。考生分数转换为200至800分的量表分数（scaled score），通过分数线设定为500分。ACE 使用项目反应理论（IRT）在不同试卷形式间建立等效通过分数。</p>
+
+  <h3 id="results">考试结果 <span class="en-note">(Exam Results)</span></h3>
+  <p>考试完成后立即评分，考生提交后立即收到量表分数和通过/未通过状态。500分或以上获得认证，低于500分未通过。通过的考生在 MyACE 账户中立即获得数字证书。</p>
+
+  <h3 id="verification">认证状态验证 <span class="en-note">(Verification of Certification Status)</span></h3>
+  <p>ACE 允许公众和雇主通过 ACEfitness.org/ACEFit/Locate-Trainer/ 的搜索引擎验证个人是否持有 ACE 认证。认证以法定姓名（姓和名）颁发。</p>
+
+  <h3 id="delivery-security">考试交付与安全 <span class="en-note">(Exam Delivery and Security)</span></h3>
+  <p>所有 ACE 认证由 Meazure Learning 交付，利用庞大的考试考点管理员、监考员和现场中心网络。现场考试仅在监考考点提供，家庭考试仅通过 ProctorU 平台提供远程实时监考。</p>
+
+  <h3 id="live-site-security">现场管理与安全 <span class="en-note">(Live Site Administration and Security)</span></h3>
+  <p>考生须携带准考证（打印版或电子版）和附有照片及签名的有效政府颁发身份证件。考试政策包括：不允许未经授权人员、必须独立完成工作、不允许字典/手机/包袋/武器/食物饮料等。违反政策可能导致取消资格且不退款。</p>
+
+  <h3 id="lrp-security">远程监考管理与安全 <span class="en-note">(LRP Administration and Security)</span></h3>
+  <p>LRP 考生须携带考试密码和有效身份证件。计算机要求包括：网络摄像头（640×480）、高速互联网（2 MBps）、1 GB RAM、正常扬声器和麦克风、禁用 VPN、Guardian 浏览器等。考试政策与现场考试类似，额外禁止耳塞、额外显示器、草稿纸、智能设备等。</p>
+
+  <h3 id="calculator">计算器政策 <span class="en-note">(Calculator Policy)</span></h3>
+  <p>所有四项认证项目的考生均可使用平台提供的在线基本四功能计算器（加、减、乘、除）。不允许自带计算器。</p>
+
+  <h3 id="confidentiality">保密政策 <span class="en-note">(Confidentiality Policy)</span></h3>
+  <p>考试题目、答案或其他源材料在任何情况下均不向考生发布。考生自愿同意维持考试保密。未经考生授权和书面同意，不会向第三方发布信息。ACE 向组织提供个人通过/未通过状态的唯一情况是与 MyCAA 计划相关。</p>
+
+  <h3 id="cheating">作弊与其他考试违规 <span class="en-note">(Cheating and Other Testing Violations)</span></h3>
+  <p>考生应凭借自身能力通过考试。以前考生分享考试信息会破坏考试目的。ACE、Meazure Learning 或监考员确定考生有违规行为的，可取消其考试资格或成绩。</p>
+</section>
+
+<!-- 续证要求 -->
+<section class="section" id="renewing">
+  <div class="section-id">第六章</div>
+  <h2 class="section-title">续证要求 <span class="section-title-en">Renewing Your ACE Certification</span></h2>
+  <p class="lead">ACE 认证有效期为两年，在获得认证两年后当月最后一天过期。ACE 认证专业人士必须每两年完成20小时继续教育（2.0 CECs），其中一小时（0.1 CEC）必须来自职业行为与职业道德类别。</p>
+
+  <h3 id="renewal-req">认证续期要求 <span class="en-note">(Certification Renewal Requirements)</span></h3>
+  <ul class="no-bullet">
+    <li>完成至少20小时 ACE 认可的 CECs（2.0 CECs），其中0.1 CEC 必须来自职业行为与职业道德类别</li>
+    <li>续期 CPR 和 AED 证书（必须包含实操技能考核）</li>
+    <li>与美国运动委员会保持良好信誉</li>
+    <li>在认证过期日期前在线提交续期并支付费用</li>
+  </ul>
+  <p>续期费率：www.acefitness.org/fitness-certifications/recertification/#renewalFees</p>
+
+  <h3 id="expired">过期认证续期 <span class="en-note">(Renewing an Expired Certification)</span></h3>
+  <p>ACE 提供六个月宽限期。宽限期内续期需支付罚款。宽限期后未续期的个人将失去认证，只能重新参加考试。对于严重疾病、丧亲、自然灾害等紧急情况，可逐案考虑例外。</p>
+
+  <h3 id="cec">继续教育学分 <span class="en-note">(Continuing Education Credits)</span></h3>
+  <p>ACE 专业教育部每年审查和批准来自400多个提供商的5,000多门课程。ACE 认可的 CECs 可在线搜索：ACEfitness.org/ContinuingEducation/default.aspx</p>
+  <p>其他可获得 CECs 的来源包括：大学课程（每季度0.8 CECs/每学期1.0 CECs）、通过额外 ACE 认证考试（2.0 CECs）、专业演讲（最多0.5 CECs）、作者身份（最多0.5 CECs）、担任 ACE 委员会委员（每年0.5 CECs）、获得其他 NCCA 认可认证（0.5或1.5 CECs）、临床观察（最多0.2 CECs）、实习（最多0.2 CECs）、社区外展（0.1 CEC）。</p>
+
+  <h3 id="petitions">继续教育申请 <span class="en-note">(Continuing Education Petitions)</span></h3>
+  <p>对于未提前提交审查的课程，可提交申请。每门课程收取 $25 申请费。申请须包含课程材料、大纲、学习目标、讲师简历和完成验证。审查在30天内完成。</p>
+
+  <h3 id="support">ACE 支持 <span class="en-note">(ACE Support)</span></h3>
+  <p>ACE 支持团队帮助认证专业人士维持认证并推进职业生涯。联系方式：电话 (888) 825-3636 · 邮件 Support@ACEfitness.org · 在线聊天 ACEfitness.org</p>
+
+  <h3 id="career">职业发展 <span class="en-note">(Career Development)</span></h3>
+  <p>ACE 提供折扣责任保险、专业折扣计划、健康保险和401K选项、"查找 ACE 专业人士"在线数据库、焦点小组和调查机会等职业发展资源。</p>
+
+  <h3 id="cert-marks">ACE 认证标识 <span class="en-note">(ACE Certification Marks)</span></h3>
+  <ul class="no-bullet">
+    <li>ACE 认证私人教练；ACE-CPT</li>
+    <li>ACE 认证团体健身教练；ACE-GFI</li>
+    <li>ACE 认证健康教练；ACE-CHC</li>
+    <li>ACE 认证医疗运动专家；ACE-CMES</li>
+  </ul>
+  <p>数字凭证通过 Accredible 提供，可在 MyACE 账户访问。未能遵守标识使用规则可能导致纪律处分。</p>
+</section>
+
+<!-- 隐私、安全与记录保留 -->
+<section class="section" id="privacy">
+  <div class="section-id">第七章</div>
+  <h2 class="section-title">隐私、安全与记录保留 <span class="section-title-en">Privacy, Security, and Records Retention</span></h2>
+
+  <h3 id="privacy-protection">隐私保护 <span class="en-note">(Protection of Privacy)</span></h3>
+  <p>未经个人明确书面同意，不得分发考生或专业人士信息。所有员工和志愿者必须签署保密协议。保密信息仅在法院传票或违反职业道德准则时向适当方提供。</p>
+  <p>非保密信息包括：认证状态、居住州、信誉状态、专业人士自愿发布在"查找专业人士"搜索引擎上的个人信息。</p>
+  <p>ACE 隐私政策：ACEfitness.org/Privacy.aspx</p>
+
+  <h3 id="records">记录保留期限 <span class="en-note">(Length of Records Retention)</span></h3>
+  <p>ACE 无限期保留所有考生和认证专业人士的记录，直到书面请求删除。删除后，ACE 将在五年内安全保留成员记录。ACE 继续教育提供商的记录保留五年。建议专业人士保留认证和继续教育信息四年。</p>
+
+  <h3 id="security-section">安全性 <span class="en-note">(Security)</span></h3>
+  <p>ACE 信息维护在安全数据库中，电子存档于本地和基于云的网络。个人信息仅可通过密码保护的 ACE 网络账户访问。纸质记录存储在安全区域的锁柜中。</p>
+</section>
+
+<!-- 附录 -->
+<section class="section" id="appendices">
+  <div class="section-id">附录</div>
+  <h2 class="section-title">附录 <span class="section-title-en">Appendices</span></h2>
+
+  <div class="appendix-box" id="app-a">
+    <h4>附录A：资格被拒申诉 <span class="en-note">(Appeals for Denied Eligibility)</span></h4>
+    <p>ACE 保留拒绝不符合资格要求的注册申请的权利。被拒者可提交申诉，须包含详细原因和支持性文件。申诉将在10个工作日内审查并回复。</p>
+    <div class="note">提交地址：ACE Credentialing Department, 9444 Balboa Ave. Suite #290, San Diego, CA 92123 · Email: Credentialing@ACEfitness.org</div>
+  </div>
+
+  <div class="appendix-box" id="app-b">
+    <h4>附录B：ACE 职业行为与纪律程序 <span class="en-note">(Professional Practices and Disciplinary Procedures)</span></h4>
+    <p>ACE 可在以下情况撤销认证或采取行动：不符合资格、考试不规则行为、未经授权占有/使用/分发考试材料、实质性虚假陈述或欺诈、损害专业表现的身体/心理/情绪状况、专业工作中的过失/故意不当行为、与公共健康/健身教育相关的犯罪定罪、未能满足认证或再认证要求。</p>
+    <p>ACE 已开发三阶段纪律流程：审查、听证和上诉。完整内容：www.acefitness.org/fitness-certifications/certified-code-of-ethics/</p>
+  </div>
+
+  <div class="appendix-box" id="app-c">
+    <h4>附录C：考试评分申诉与重新评分 <span class="en-note">(Exam Scoring Appeals and Rescoring)</span></h4>
+    <p><strong>评分申诉：</strong>考生认为考试受到不当指导、不专业监考或环境干扰负面影响的，必须立即向监考员报告，并在考试后30天内联系 ACE 考试注册部。</p>
+    <p><strong>重新评分：</strong>未通过但认为有评分错误的考生可申请手动重新评分。需提交完成表格和 $50 费用给 Meazure Learning，请求须在原始考试日期后30天内提出。结果在两到四周内通知。</p>
+  </div>
+
+  <div class="appendix-box" id="app-d">
+    <h4>附录D：2025年 ACE 认证考试通过率 <span class="en-note">(Pass Rates in 2025)</span></h4>
+    <table>
+      <thead><tr><th>认证</th><th>考生人数</th><th>通过率</th></tr></thead>
+      <tbody>
+        <tr><td>私人教练</td><td>7,105</td><td>73%</td></tr>
+        <tr><td>团体健身教练</td><td>5,525</td><td>72%</td></tr>
+        <tr><td>健康教练</td><td>884</td><td>62%</td></tr>
+        <tr><td>医疗运动专家</td><td>99</td><td>57%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="appendix-box" id="app-e">
+    <h4>附录E：改期、重考与退款 <span class="en-note">(Rescheduling, Retakes, and Refunds)</span></h4>
+    <p><strong>改期（现场）：</strong>考试前一天 PST 23:59 前可改期，费用 $149，仅可改期一次。紧急情况可逐案考虑豁免。</p>
+    <p><strong>改期（LRP）：</strong>考试前24小时内可免费改期（在60天资格窗口内）。超出窗口需 $149。</p>
+    <p><strong>重考：</strong>未通过考生在一年内可以折扣重考费再次考试。一年后需支付首次考试费。</p>
+    <p><strong>退款：</strong>考试代金券不可退款且不可转让。购买后30天内可退回材料（状况良好无补货费，状况不佳20%补货费）。包含已兑换代金券的学习项目不可退款。紧急情况可逐案考虑例外。</p>
+  </div>
+</section>
+
+<div class="footer">
+  <div class="footer-text">
+    9444 Balboa Ave. Suite #290, San Diego, CA 92123 · (888) 825-3636 · ACEfitness.org<br>
+    Printed in the United States of America.<br>
+    Copyright © 2026 American Council on Exercise (ACE) · 中文翻译版仅供学习参考<br>
+    ACEpresso · ACE-CPT 系统精读 · 3HFIT 教培中心
+  </div>
+</div>
+
+</main>
+</div>
+
+<button class="toc-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"></button>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var sections=document.querySelectorAll('.section,.hero');
+  var tocItems=document.querySelectorAll('.toc-item');
+  function updateActive(){
+    var scrollPos=window.scrollY+120;
+    var current='';
+    sections.forEach(function(s){if(s.offsetTop<=scrollPos)current=s.id});
+    tocItems.forEach(function(item){
+      item.classList.remove('active');
+      if(item.getAttribute('href')==='#'+current)item.classList.add('active');
+    });
+  }
+  window.addEventListener('scroll',updateActive);
+  updateActive();
+  tocItems.forEach(function(item){item.addEventListener('click',function(){document.getElementById('sidebar').classList.remove('open')})});
+});
+</script>
+</body>
+</html>
