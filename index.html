@@ -244,7 +244,7 @@ footer {
   if(from === 'mp'){
     var name = params.get('name');
     // If no name provided, use first whitelist entry as placeholder
-    var displayName = name || (typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST ? ACEpressoAuth.WHITELIST[0] : '3HFIT学员');
+    var displayName = name || '3HFIT学员';
     localStorage.setItem('acepresso_student_name', displayName);
     localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
     localStorage.setItem('acepresso_auth_whitelist', displayName);
