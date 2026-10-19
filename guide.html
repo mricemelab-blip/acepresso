@@ -178,8 +178,18 @@ footer {
   .guide-card { padding: 18px 20px; }
 }
 </style>
+<script src="auth.js"></script>
 </head>
 <body>
+<script>
+(function(){
+  if(typeof ACEpressoAuth !== 'undefined'){
+    ACEpressoAuth.guard();
+    if(ACEpressoAuth.isLoggedIn()) ACEpressoAuth.injectWatermark();
+  }
+})();
+</script>
+
 
 <header class="site-header">
   <div class="logo">3HFIT ACEpresso <span>循证私人教练教育</span></div>

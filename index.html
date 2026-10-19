@@ -162,9 +162,12 @@ footer {
   <h1>3HFIT ACEpresso</h1>
   <p class="subtitle">ACE Certified Personal Trainer Study Platform</p>
   <div class="login-box">
-    <label for="studentName">学员姓名</label>
+    <label for="inviteCode">邀请码</label>
+    <input type="text" id="inviteCode" placeholder="请输入邀请码（如 ACE-XXXX-XXXX）" autocomplete="off" style="text-transform:uppercase"/>
+    <label for="studentName" style="margin-top:14px">学员姓名</label>
     <input type="text" id="studentName" placeholder="请输入您的姓名" autocomplete="off"/>
-    <button onclick="enterStudy()">进入学习</button>
+    <button onclick="enterStudy()">验证并进入学习</button>
+    <p id="loginMsg" style="text-align:center;margin-top:10px;font-size:13px;color:#c62828;display:none"></p>
   </div>
 </section>
 
@@ -233,20 +236,42 @@ footer {
   © 2026 3HFIT × Arise. All rights reserved.
 </footer>
 
+<script src="auth.js"></script>
 <script>
 (function(){
-  var name = localStorage.getItem('acepresso_student_name');
-  if(name){
+  // Check if already logged in
+  if(typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.isLoggedIn()){
     document.getElementById('dashLink').style.display = '';
+    var name = ACEpressoAuth.getUserName();
+    document.getElementById('studentName').value = name;
+    // Show chapter list, hide login
+    var lb = document.querySelector('.login-box');
+    if(lb) lb.innerHTML = '<p style="text-align:center;color:var(--accent);font-weight:600">欢迎回来，' + name + '</p><p style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:8px">已登录，请直接选择章节</p>';
   }
 })();
 
-function enterStudy(){
+async function enterStudy(){
+  var code = document.getElementById('inviteCode').value.trim().toUpperCase();
   var name = document.getElementById('studentName').value.trim();
-  if(!name){ alert('请输入学员姓名'); return; }
-  localStorage.setItem('acepresso_student_name', name);
-  localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
-  window.location.href = 'dashboard.html';
+  var msg = document.getElementById('loginMsg');
+  
+  if(!code){ msg.textContent='请输入邀请码'; msg.style.display='block'; return; }
+  if(!name){ msg.textContent='请输入学员姓名'; msg.style.display='block'; return; }
+  
+  msg.textContent='验证中...'; msg.style.display='block'; msg.style.color='#2d5016';
+  
+  if(typeof ACEpressoAuth === 'undefined'){
+    msg.textContent='系统加载中，请刷新页面重试'; msg.style.color='#c62828'; return;
+  }
+  
+  var valid = await ACEpressoAuth.verifyCode(code, name);
+  if(valid){
+    msg.textContent='验证成功，正在进入...'; msg.style.color='#2d5016';
+    document.getElementById('dashLink').style.display = '';
+    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 800);
+  } else {
+    msg.textContent='邀请码无效或已过期，请检查后重试'; msg.style.color='#c62828';
+  }
 }
 </script>
 <!-- ACE AI Tutor Chat Widget -->

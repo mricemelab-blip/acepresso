@@ -77,8 +77,18 @@ tr:hover td{background:#eef3e8}
 .toc-toggle{display:none;position:fixed;bottom:24px;right:24px;width:48px;height:48px;border-radius:50%;background:#2d5016;color:#fff;border:none;font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:200;cursor:pointer}
 @media print{.nav,.sidebar,.toc-toggle{display:none}.main{margin-left:0;max-width:100%}.footer{margin-left:0}.section{break-inside:avoid}body{background:#fff}}
 </style>
+<script src="auth.js"></script>
 </head>
 <body>
+<script>
+(function(){
+  if(typeof ACEpressoAuth !== 'undefined'){
+    ACEpressoAuth.guard();
+    if(ACEpressoAuth.isLoggedIn()) ACEpressoAuth.injectWatermark();
+  }
+})();
+</script>
+
 
 <nav class="nav">
   <div class="nav-brand"><div class="nav-logo">3HFIT ACEpresso <span>ACE-CPT 系统精读</span></div></div>
