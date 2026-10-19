@@ -275,10 +275,14 @@ footer {
 <body>
 <script>
 (function(){
-  if(typeof ACEpressoAuth !== 'undefined'){
-    ACEpressoAuth.guard();
-    if(ACEpressoAuth.isLoggedIn()) ACEpressoAuth.injectWatermark();
-  }
+  if(typeof ACEpressoAuth === 'undefined') return;
+  var auth = ACEpressoAuth;
+  // Guard: redirect to login if not authenticated
+  if(auth.guardPage){ auth.guardPage('index.html'); }
+  else if(auth.guard){ auth.guard(); }
+  // Inject watermark
+  if(auth.checkAuth && auth.checkAuth().loggedIn){ auth.injectWatermark(); }
+  else if(auth.isLoggedIn && auth.isLoggedIn()){ auth.injectWatermark(); }
 })();
 </script>
 

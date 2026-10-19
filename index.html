@@ -240,11 +240,14 @@ footer {
 <script>
 (function(){
   // Check if already logged in
-  if(typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.isLoggedIn()){
+  var auth = ACEpressoAuth;
+  var loggedIn = false, name = '';
+  if(auth.checkAuth){ var r = auth.checkAuth(); loggedIn = r.loggedIn; if(r.loggedIn) name = r.authData.name; }
+  else if(auth.isLoggedIn){ loggedIn = auth.isLoggedIn(); if(loggedIn) name = auth.getUserName(); }
+  
+  if(loggedIn){
     document.getElementById('dashLink').style.display = '';
-    var name = ACEpressoAuth.getUserName();
     document.getElementById('studentName').value = name;
-    // Show chapter list, hide login
     var lb = document.querySelector('.login-box');
     if(lb) lb.innerHTML = '<p style="text-align:center;color:var(--accent);font-weight:600">欢迎回来，' + name + '</p><p style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:8px">已登录，请直接选择章节</p>';
   }
@@ -264,7 +267,18 @@ async function enterStudy(){
     msg.textContent='系统加载中，请刷新页面重试'; msg.style.color='#c62828'; return;
   }
   
-  var valid = await ACEpressoAuth.verifyCode(code, name);
+  var valid = false;
+  // Try new API first (200 codes), fall back to old API (9 codes)
+  if(ACEpressoAuth.verifyCode){
+    valid = await ACEpressoAuth.verifyCode(code, name);
+  } else if(ACEpressoAuth.validateCode){
+    var result = await ACEpressoAuth.validateCode(code);
+    if(result.valid){
+      ACEpressoAuth.completeLogin(result.codeHash, name, result.label);
+      valid = true;
+    }
+  }
+  
   if(valid){
     msg.textContent='验证成功，正在进入...'; msg.style.color='#2d5016';
     document.getElementById('dashLink').style.display = '';
