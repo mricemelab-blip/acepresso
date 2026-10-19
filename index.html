@@ -162,33 +162,10 @@ footer {
   <h1>3HFIT ACEpresso</h1>
   <p class="subtitle">ACE Certified Personal Trainer Study Platform</p>
   <div class="login-box">
-    <label for="inviteCode">邀请码</label>
-    <input type="text" id="inviteCode" placeholder="请输入邀请码（如 ACE-XXXX-XXXX）" autocomplete="off" style="text-transform:uppercase"/>
-    <label for="studentName" style="margin-top:14px">学员姓名</label>
-    <input type="text" id="studentName" placeholder="请输入您的姓名" autocomplete="off"/>
-    <button onclick="enterStudy()">验证并进入学习</button>
+    <label for="studentName">学员姓名</label>
+    <input type="text" id="studentName" placeholder="请输入您的真实姓名" autocomplete="off"/>
+    <button onclick="enterStudy()">进入学习</button>
     <p id="loginMsg" style="text-align:center;margin-top:10px;font-size:13px;color:#c62828;display:none"></p>
-    <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-secondary)">
-      还没有邀请码？<a href="#" onclick="showClaim();return false" style="color:var(--accent);font-weight:600">点此领取</a>
-    </p>
-  </div>
-  <!-- Claim section (hidden by default) -->
-  <div class="login-box" id="claimBox" style="display:none">
-    <p style="text-align:center;font-size:14px;color:var(--text-secondary);margin-bottom:16px">输入姓名领取专属邀请码</p>
-    <label for="claimName">您的姓名</label>
-    <input type="text" id="claimName" placeholder="请输入真实姓名" autocomplete="off"/>
-    <button onclick="doClaim()" id="claimBtn">领取邀请码</button>
-    <p id="claimMsg" style="text-align:center;margin-top:10px;font-size:13px;color:#c62828;display:none"></p>
-    <div id="claimResult" style="display:none;text-align:center;margin-top:16px">
-      <p style="font-size:13px;color:var(--text-secondary)">您的邀请码</p>
-      <p id="claimCode" style="font-size:26px;font-weight:800;color:var(--accent);letter-spacing:3px;font-family:monospace;background:var(--accent-light);padding:12px 20px;border-radius:8px;display:inline-block;margin:8px 0;user-select:all"></p>
-      <br/>
-      <button onclick="copyClaimCode()" id="copyClaimBtn" style="margin-top:12px;padding:10px 24px;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent);border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit">复制邀请码</button>
-      <p style="font-size:12px;color:var(--text-secondary);margin-top:12px">请复制上方邀请码，然后在上方登录框中输入使用</p>
-    </div>
-    <p style="text-align:center;margin-top:14px;font-size:13px">
-      <a href="#" onclick="hideClaim();return false" style="color:var(--accent)">← 返回登录</a>
-    </p>
   </div>
 </section>
 
@@ -274,139 +251,31 @@ footer {
   }
 })();
 
-async function enterStudy(){
-  var code = document.getElementById('inviteCode').value.trim().toUpperCase();
+function enterStudy(){
   var name = document.getElementById('studentName').value.trim();
   var msg = document.getElementById('loginMsg');
   
-  if(!code){ msg.textContent='请输入邀请码'; msg.style.display='block'; return; }
-  if(!name){ msg.textContent='请输入学员姓名'; msg.style.display='block'; return; }
+  if(!name){ msg.textContent='请输入您的姓名'; msg.style.display='block'; return; }
   
-  msg.textContent='验证中...'; msg.style.display='block'; msg.style.color='#2d5016';
-  
-  if(typeof ACEpressoAuth === 'undefined'){
-    msg.textContent='系统加载中，请刷新页面重试'; msg.style.color='#c62828'; return;
-  }
-  
-  var valid = false;
-  // Try new API first (200 codes), fall back to old API (9 codes)
-  if(ACEpressoAuth.verifyCode){
-    valid = await ACEpressoAuth.verifyCode(code, name);
-  } else if(ACEpressoAuth.validateCode){
-    var result = await ACEpressoAuth.validateCode(code);
-    if(result.valid){
-      ACEpressoAuth.completeLogin(result.codeHash, name, result.label);
-      valid = true;
-    }
-  }
-  
-  if(valid){
-    msg.textContent='验证成功，正在进入...'; msg.style.color='#2d5016';
-    document.getElementById('dashLink').style.display = '';
-    setTimeout(function(){ window.location.href = 'dashboard.html'; }, 800);
-  } else {
-    msg.textContent='邀请码无效或已过期，请检查后重试'; msg.style.color='#c62828';
-  }
-}
-</script>
-
-
-// ===== Invitation Code Claim System (Whitelist Mode) =====
-var WHITELIST = ["Jojo", "黄义睿", "Vicky", "龚艺莉", "林颖虹", "李普润", "蒋诗梦", "徐欢", "徐雯伶", "刘强", "赵赵赵", "李昕", "苏姝", "李平平", "孙玥", "李", "沈佳珏", "唐和佩", "刘将", "小水", "高骏成", "Rebirth", "金丰", "龚媛", "何宗颖", "高俊铭", "丁文鑫", "蔡晓东", "白叶", "任雅楠", "李瑞红", "兰清", "李秋婷", "陈稳举", "郝好", "瞿俊亮", "亚斯", "胡国弘", "李远哲", "李幸", "朱勤", "庄文康", "蓝麟", "李琦琦", "谢颖", "刘佳", "黄丽萍", "刘军利", "叶亚婷", "袁磊", "陈威志", "冯娜", "郭凯宁", "李玉", "郑庆", "龚帅", "吴轩乔", "谢雅云", "宋善哲", "谭圳桦"];
-var NAME_CODE_MAP = {"Jojo": "ACE-CTJ2-7YAY", "黄义睿": "ACE-7X8N-CK7G", "Vicky": "ACE-GHC2-85T9", "龚艺莉": "ACE-6D38-T7PJ", "林颖虹": "ACE-837A-8D5Y", "李普润": "ACE-X2TV-HJ6M", "蒋诗梦": "ACE-74GF-JH69", "徐欢": "ACE-GZDR-6UF2", "徐雯伶": "ACE-DBSP-5BRQ", "刘强": "ACE-BRFZ-UXY5", "赵赵赵": "ACE-5AX8-VWTH", "李昕": "ACE-W57F-R8D2", "苏姝": "ACE-N977-3GH6", "李平平": "ACE-5J7P-R75X", "孙玥": "ACE-NY25-KYXA", "李": "ACE-HEAD-RXDT", "沈佳珏": "ACE-KJ5R-6T7V", "唐和佩": "ACE-N3WY-XE8U", "刘将": "ACE-CU5X-R4QP", "小水": "ACE-J5A5-QV6K", "高骏成": "ACE-6KB4-FDM9", "Rebirth": "ACE-SP36-JUSB", "金丰": "ACE-EZX3-ZBZD", "龚媛": "ACE-Y39P-3B8U", "何宗颖": "ACE-CJNB-25YN", "高俊铭": "ACE-EJ9K-ERUB", "丁文鑫": "ACE-MTNQ-HZ7B", "蔡晓东": "ACE-JWAU-D552", "白叶": "ACE-PJ3P-P8Q4", "任雅楠": "ACE-7EGV-369K", "李瑞红": "ACE-BSY7-DDUH", "兰清": "ACE-9GJ9-9QH5", "李秋婷": "ACE-6EMJ-83QN", "陈稳举": "ACE-Z2X2-2DMW", "郝好": "ACE-FE9R-4JT6", "瞿俊亮": "ACE-9FYB-KCGP", "亚斯": "ACE-KJKM-A2DB", "胡国弘": "ACE-8VY7-Z5GX", "李远哲": "ACE-SSH7-3T5J", "李幸": "ACE-CRXV-ETGT", "朱勤": "ACE-HSKF-YWDR", "庄文康": "ACE-GS4N-Y7GV", "蓝麟": "ACE-UHSA-GF2U", "李琦琦": "ACE-4KHX-4UFC", "谢颖": "ACE-MA6D-UYDQ", "刘佳": "ACE-E4D9-N39T", "黄丽萍": "ACE-JGRW-GVH8", "刘军利": "ACE-PA55-J4C2", "叶亚婷": "ACE-YZGU-H7FS", "袁磊": "ACE-JY6S-ZUK3", "陈威志": "ACE-9TXZ-EMEN", "冯娜": "ACE-GREU-P2SD", "郭凯宁": "ACE-TXH6-MNER", "李玉": "ACE-VQTG-3FKR", "郑庆": "ACE-SFMG-4BD4", "龚帅": "ACE-TV7H-282J", "吴轩乔": "ACE-7RGJ-Y9ND", "谢雅云": "ACE-Q6D2-UQAN", "宋善哲": "ACE-VAT5-3F6Q", "谭圳桦": "ACE-QPTZ-E7B9"};
-var CLAIM_CLAIMED_KEY = 'acepresso_claimed_v2';
-var CLAIM_MY_KEY = 'acepresso_my_claimed_v2';
-
-function normalizeName(n) {
-  return n.replace(/\s+/g, '').toLowerCase();
-}
-function showClaim() {
-  document.querySelector('.login-box').style.display = 'none';
-  document.getElementById('claimBox').style.display = 'block';
-}
-function hideClaim() {
-  document.getElementById('claimBox').style.display = 'none';
-  document.querySelector('.login-box').style.display = 'block';
-}
-function doClaim() {
-  var name = document.getElementById('claimName').value.trim();
-  var msg = document.getElementById('claimMsg');
-  if (!name) { msg.textContent = '请输入您的姓名'; msg.style.display = 'block'; return; }
-  
-  // Whitelist check (case-insensitive, whitespace-insensitive)
-  var normName = normalizeName(name);
+  // Whitelist check
+  var normName = name.replace(/\s+/g,'').toLowerCase();
   var matched = null;
-  for (var i = 0; i < WHITELIST.length; i++) {
-    if (normalizeName(WHITELIST[i]) === normName) {
-      matched = WHITELIST[i];
-      break;
+  for(var i=0;i<WHITELIST.length;i++){
+    if(WHITELIST[i].replace(/\s+/g,'').toLowerCase()===normName){
+      matched = WHITELIST[i]; break;
     }
   }
-  if (!matched) {
-    msg.textContent = '您的姓名不在学员名单中，请联系管理员确认'; msg.style.display = 'block'; return;
+  
+  if(!matched){
+    msg.textContent='您的姓名不在学员名单中，请联系管理员'; msg.style.display='block'; return;
   }
   
-  // Get the pre-assigned code for this name
-  var code = NAME_CODE_MAP[matched];
-  if (!code) {
-    msg.textContent = '系统错误，未找到对应邀请码，请联系管理员'; msg.style.display = 'block'; return;
-  }
-  
-  // Check if already claimed on this browser
-  var myClaim = localStorage.getItem(CLAIM_MY_KEY);
-  if (myClaim) {
-    try {
-      var d = JSON.parse(myClaim);
-      if (d.name === matched) {
-        document.getElementById('claimResult').style.display = 'block';
-        document.getElementById('claimCode').textContent = d.code;
-        document.getElementById('claimBtn').style.display = 'none';
-        document.getElementById('claimName').disabled = true;
-        return;
-      }
-    } catch(e) {}
-  }
-  
-  // Check if code already claimed by someone else
-  var claimed = {};
-  try { claimed = JSON.parse(localStorage.getItem(CLAIM_CLAIMED_KEY) || '{}'); } catch(e) {}
-  if (claimed[code] && claimed[code].name !== matched) {
-    msg.textContent = '该邀请码已被领取，请联系管理员'; msg.style.display = 'block'; return;
-  }
-  
-  // Assign code
-  claimed[code] = { name: matched, time: new Date().toISOString() };
-  localStorage.setItem(CLAIM_CLAIMED_KEY, JSON.stringify(claimed));
-  localStorage.setItem(CLAIM_MY_KEY, JSON.stringify({ code: code, name: matched }));
-  
-  document.getElementById('claimBtn').style.display = 'none';
-  document.getElementById('claimName').disabled = true;
-  document.getElementById('claimResult').style.display = 'block';
-  document.getElementById('claimCode').textContent = code;
+  // Auto-login: store name and grant access
+  localStorage.setItem('acepresso_student_name', matched);
+  localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
+  localStorage.setItem('acepresso_auth_whitelist', matched);
+  document.getElementById('dashLink').style.display = '';
+  window.location.href = 'dashboard.html';
 }
-function copyClaimCode() {
-  var code = document.getElementById('claimCode').textContent;
-  navigator.clipboard.writeText(code).then(function() {
-    var btn = document.getElementById('copyClaimBtn');
-    btn.textContent = '已复制 ✓';
-    setTimeout(function() { btn.textContent = '复制邀请码'; }, 2000);
-  });
-}
-
-<!-- ACE AI Tutor Chat Widget -->
-<script>
-(function() {
-  var btn = document.createElement('div');
-  btn.innerHTML = '💬';
-  btn.id = 'ace-tutor-btn';
-  btn.style.cssText = 'position:fixed;bottom:20px;right:20px;width:56px;height:56px;background:#2d5016;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:9999;transition:transform 0.2s;';
-  btn.onmouseover = function(){ this.style.transform='scale(1.1)'; };
-  btn.onmouseout = function(){ this.style.transform='scale(1)'; };
-  btn.onclick = function() {
-    var ov=document.getElementById('ace-chat-overlay');if(ov){ov.style.display='flex'}else{(function(){var ov=document.createElement('div');ov.id='ace-chat-overlay';ov.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.4);z-index:99998;display:flex;align-items:center;justify-content:center;';var wrap=document.createElement('div');wrap.style.cssText='width:500px;height:600px;max-width:95vw;max-height:90vh;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.2);display:flex;flex-direction:column;position:relative;';var ifr=document.createElement('iframe');ifr.src='chat-widget.html';ifr.style.cssText='width:100%;height:100%;border:none;';wrap.appendChild(ifr);ov.appendChild(wrap);ov.addEventListener('click',function(e){if(e.target===ov)ov.style.display='none'});document.body.appendChild(ov)})()}
-  };
-  document.body.appendChild(btn);
-})();
 </script>
-</body>
-</html>
+
