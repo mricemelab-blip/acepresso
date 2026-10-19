@@ -484,7 +484,7 @@ tbody tr:hover { background: var(--accent-light); }
   // Mini program trust login: skip all checks when from=mp
   var params = new URLSearchParams(window.location.search);
   if(params.get('from') === 'mp'){
-    var name = params.get('name') || (typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST ? ACEpressoAuth.WHITELIST[0] : 'Jojo');
+    var name = params.get('name') || (typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST ? ACEpressoAuth.WHITELIST[0] : '3HFIT学员');
     localStorage.setItem('acepresso_student_name', name);
     localStorage.setItem('acepresso_auth_whitelist', name);
     if(typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.injectWatermark) ACEpressoAuth.injectWatermark();

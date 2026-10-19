@@ -244,7 +244,7 @@ footer {
   if(from === 'mp'){
     var name = params.get('name');
     // If no name provided, use first whitelist entry as placeholder
-    var displayName = name || (typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST ? ACEpressoAuth.WHITELIST[0] : 'Jojo');
+    var displayName = name || (typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST ? ACEpressoAuth.WHITELIST[0] : '3HFIT学员');
     localStorage.setItem('acepresso_student_name', displayName);
     localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
     localStorage.setItem('acepresso_auth_whitelist', displayName);
@@ -267,7 +267,7 @@ footer {
     document.getElementById('dashLink').style.display = '';
     document.getElementById('studentName').value = name;
     var lb = document.querySelector('.login-box');
-    if(lb) lb.innerHTML = '<p style="text-align:center;color:var(--accent);font-weight:600">欢迎回来，' + name + '</p><p style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:8px">已登录，请直接选择章节</p>';
+    if(lb) lb.innerHTML = '<p style="text-align:center;color:var(--accent);font-weight:600">' + (name === '3HFIT学员' ? '欢迎你' : '欢迎回来，' + name) + '</p><p style="text-align:center;font-size:13px;color:var(--text-secondary);margin-top:8px">已登录，请直接选择章节</p>';
   }
 })();
 
