@@ -521,25 +521,6 @@ tbody tr:hover { background: var(--accent-light); }
 </style>
 <script src="auth.v3.js"></script>
 
-<!-- Mini program trust login -->
-<script>
-(function(){
-  var params = new URLSearchParams(window.location.search);
-  var from = params.get('from');
-  var name = params.get('name');
-  if(from === 'mp'){
-    // Trust mini program - auto login
-    var displayName = name || '学员';
-    localStorage.setItem('acepresso_student_name', displayName);
-    localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
-    localStorage.setItem('acepresso_auth_whitelist', displayName);
-    if(window.location.pathname.endsWith('index.html') || window.location.pathname === '/acepresso/'){
-      window.location.href = 'dashboard.html';
-    }
-  }
-})();
-</script>
-
 </head>
 <body>
 <script>
