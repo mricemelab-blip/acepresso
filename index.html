@@ -249,7 +249,7 @@ footer {
     localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
     localStorage.setItem('acepresso_auth_whitelist', displayName);
     if(window.location.pathname.endsWith('index.html') || window.location.pathname === '/acepresso/'){
-      window.location.href = 'dashboard.html';
+      window.location.href = 'dashboard.html?from=mp';
     }
   }
 })();
@@ -295,7 +295,7 @@ function enterStudy(){
   localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
   localStorage.setItem('acepresso_auth_whitelist', matched);
   document.getElementById('dashLink').style.display = '';
-  window.location.href = 'dashboard.html';
+  window.location.href = 'dashboard.html?from=mp';
 }
 </script>
 
