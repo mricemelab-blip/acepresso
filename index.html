@@ -262,7 +262,7 @@ function enterStudy(){
   var matched = null;
   for(var i=0;i<ACEpressoAuth.WHITELIST.length;i++){
     if(ACEpressoAuth.WHITELIST[i].replace(/\s+/g,'').toLowerCase()===normName){
-      matched = WHITELIST[i]; break;
+      matched = ACEpressoAuth.WHITELIST[i]; break;
     }
   }
   
