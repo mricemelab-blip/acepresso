@@ -168,6 +168,27 @@ footer {
     <input type="text" id="studentName" placeholder="请输入您的姓名" autocomplete="off"/>
     <button onclick="enterStudy()">验证并进入学习</button>
     <p id="loginMsg" style="text-align:center;margin-top:10px;font-size:13px;color:#c62828;display:none"></p>
+    <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-secondary)">
+      还没有邀请码？<a href="#" onclick="showClaim();return false" style="color:var(--accent);font-weight:600">点此领取</a>
+    </p>
+  </div>
+  <!-- Claim section (hidden by default) -->
+  <div class="login-box" id="claimBox" style="display:none">
+    <p style="text-align:center;font-size:14px;color:var(--text-secondary);margin-bottom:16px">输入姓名领取专属邀请码</p>
+    <label for="claimName">您的姓名</label>
+    <input type="text" id="claimName" placeholder="请输入真实姓名" autocomplete="off"/>
+    <button onclick="doClaim()" id="claimBtn">领取邀请码</button>
+    <p id="claimMsg" style="text-align:center;margin-top:10px;font-size:13px;color:#c62828;display:none"></p>
+    <div id="claimResult" style="display:none;text-align:center;margin-top:16px">
+      <p style="font-size:13px;color:var(--text-secondary)">您的邀请码</p>
+      <p id="claimCode" style="font-size:26px;font-weight:800;color:var(--accent);letter-spacing:3px;font-family:monospace;background:var(--accent-light);padding:12px 20px;border-radius:8px;display:inline-block;margin:8px 0;user-select:all"></p>
+      <br/>
+      <button onclick="copyClaimCode()" id="copyClaimBtn" style="margin-top:12px;padding:10px 24px;background:var(--accent-light);color:var(--accent);border:1px solid var(--accent);border-radius:6px;font-size:13px;cursor:pointer;font-family:inherit">复制邀请码</button>
+      <p style="font-size:12px;color:var(--text-secondary);margin-top:12px">请复制上方邀请码，然后在上方登录框中输入使用</p>
+    </div>
+    <p style="text-align:center;margin-top:14px;font-size:13px">
+      <a href="#" onclick="hideClaim();return false" style="color:var(--accent)">← 返回登录</a>
+    </p>
   </div>
 </section>
 
@@ -288,6 +309,67 @@ async function enterStudy(){
   }
 }
 </script>
+
+
+// ===== Invitation Code Claim System =====
+var CLAIM_CODES = ["ACE-CTJ2-7YAY", "ACE-7X8N-CK7G", "ACE-GHC2-85T9", "ACE-6D38-T7PJ", "ACE-837A-8D5Y", "ACE-X2TV-HJ6M", "ACE-74GF-JH69", "ACE-GZDR-6UF2", "ACE-DBSP-5BRQ", "ACE-BRFZ-UXY5", "ACE-5AX8-VWTH", "ACE-W57F-R8D2", "ACE-N977-3GH6", "ACE-5J7P-R75X", "ACE-NY25-KYXA", "ACE-HEAD-RXDT", "ACE-KJ5R-6T7V", "ACE-N3WY-XE8U", "ACE-CU5X-R4QP", "ACE-J5A5-QV6K", "ACE-6KB4-FDM9", "ACE-SP36-JUSB", "ACE-EZX3-ZBZD", "ACE-Y39P-3B8U", "ACE-CJNB-25YN", "ACE-EJ9K-ERUB", "ACE-MTNQ-HZ7B", "ACE-JWAU-D552", "ACE-PJ3P-P8Q4", "ACE-7EGV-369K", "ACE-BSY7-DDUH", "ACE-9GJ9-9QH5", "ACE-6EMJ-83QN", "ACE-Z2X2-2DMW", "ACE-FE9R-4JT6", "ACE-9FYB-KCGP", "ACE-KJKM-A2DB", "ACE-8VY7-Z5GX", "ACE-SSH7-3T5J", "ACE-CRXV-ETGT", "ACE-HSKF-YWDR", "ACE-GS4N-Y7GV", "ACE-UHSA-GF2U", "ACE-4KHX-4UFC", "ACE-MA6D-UYDQ", "ACE-E4D9-N39T", "ACE-JGRW-GVH8", "ACE-PA55-J4C2", "ACE-YZGU-H7FS", "ACE-JY6S-ZUK3", "ACE-9TXZ-EMEN", "ACE-GREU-P2SD", "ACE-TXH6-MNER", "ACE-VQTG-3FKR", "ACE-SFMG-4BD4", "ACE-TV7H-282J", "ACE-7RGJ-Y9ND", "ACE-Q6D2-UQAN", "ACE-VAT5-3F6Q", "ACE-QPTZ-E7B9", "ACE-NF53-V42E", "ACE-QF3Y-3PVZ", "ACE-2Q94-22K6", "ACE-4EQF-5APC", "ACE-3YWJ-VY4V", "ACE-A8JG-2PQ9", "ACE-8E66-DJEM", "ACE-Z6YY-8GW4", "ACE-74KC-D9C7", "ACE-749Z-PKVD", "ACE-2CY5-SVEB", "ACE-CYXM-7FNP", "ACE-BNKK-C9HU", "ACE-GP98-QC39", "ACE-37NN-W76G", "ACE-ZZCP-EPE8", "ACE-7VWM-3DXD", "ACE-C9SG-Y8Y7", "ACE-4AEU-6QU7", "ACE-P62X-4NCV", "ACE-WBWV-RH63", "ACE-NAJ7-Z47V", "ACE-9GD4-H7Y3", "ACE-9W36-PTJJ", "ACE-CPX2-8TEU", "ACE-S8N4-D3H5", "ACE-SMZY-6UA2", "ACE-HGAM-7X9Z", "ACE-R4A3-55US", "ACE-KSEH-4XVE", "ACE-ZY7Z-63UH", "ACE-F3HU-6JRE", "ACE-C34B-YNEB", "ACE-85KF-RK2N", "ACE-HC2J-W2AJ", "ACE-H954-TY9Y", "ACE-PCPY-5HX4", "ACE-5F8M-E7G8", "ACE-YHXC-HNM2", "ACE-CK2U-CP7W", "ACE-5BYG-AXVG", "ACE-ZA4J-3A5M", "ACE-79JP-FX7A", "ACE-VYJG-TG2Z", "ACE-Y5Y3-6F34", "ACE-FDZ8-VWKQ", "ACE-98BH-CUNB", "ACE-A8TP-HZS5", "ACE-VHM5-SBHB", "ACE-BS2F-KFGT", "ACE-3BT3-WUKN", "ACE-8KQR-P58M", "ACE-Z2MG-89R4", "ACE-B99H-VRN6", "ACE-REA3-A5R2", "ACE-FVME-QM4K", "ACE-X3DK-YA7W", "ACE-N8MA-3JQW", "ACE-4T9J-K5Q9", "ACE-YAPQ-45DB", "ACE-23AX-Y7X8", "ACE-R7GP-4KFC", "ACE-UZZM-AVXF", "ACE-Q5U9-U5RP", "ACE-ZGF4-Q8WK", "ACE-CK7M-YJY8", "ACE-2UTW-7FGA", "ACE-XJNH-4BTC", "ACE-A6NN-JR3T", "ACE-XWTS-VVAY", "ACE-R3BB-7AU6", "ACE-URTF-RS5K", "ACE-KMNM-UWB5", "ACE-87WQ-J485", "ACE-8V7M-69MN", "ACE-97NX-9P5X", "ACE-B9CH-AFT5", "ACE-VTUG-Y2K9", "ACE-QA58-HWX2", "ACE-W4AJ-46NR", "ACE-9CQZ-NBG3", "ACE-3ZRB-C7N6", "ACE-9PDZ-TFA5", "ACE-NHK3-EQ8T", "ACE-9R7E-SDN9", "ACE-MD6U-QXSE", "ACE-CB7E-EEXP", "ACE-NV5B-DMHM", "ACE-8BDX-5VF7", "ACE-WXDP-XUN4", "ACE-EQQ8-53CX", "ACE-FEQ9-N2EE", "ACE-HNWB-QS2W", "ACE-K2PB-SZ28", "ACE-6BW4-SGHH", "ACE-MSXP-PP3J", "ACE-4QHF-FK7E", "ACE-UWHU-6GKR", "ACE-PNUC-VV68", "ACE-YQV3-G3NA", "ACE-X74B-PUCW", "ACE-TS52-6QTW", "ACE-ZSR2-HA2G", "ACE-H5HX-KQTT", "ACE-N4D8-ASH4", "ACE-2HZ3-A8T8", "ACE-PQ3K-XSS8", "ACE-2W6S-8RCV", "ACE-UF5B-6HJR", "ACE-6YZU-X4PH", "ACE-GXHM-ZQ2X", "ACE-RVAY-EGRM", "ACE-UJPE-GW92", "ACE-37AF-2FFW", "ACE-SQY5-4237", "ACE-64FV-DY4D", "ACE-2569-WC8P", "ACE-G7RF-F3B2", "ACE-335K-9MJN", "ACE-3QGS-MFM6", "ACE-79QB-2B9S", "ACE-AFWR-JSEZ", "ACE-46CW-VFFZ", "ACE-ZA7Z-MPVZ", "ACE-QRMC-8XFK", "ACE-2C3P-9CR5", "ACE-4CXQ-6YPQ", "ACE-NYQK-A7US", "ACE-99W6-J93U", "ACE-MC9K-BTMG", "ACE-E5NW-ZETT", "ACE-3CP7-F9AW", "ACE-ZEAT-GFVY", "ACE-SJVR-FGE9", "ACE-ECCV-MCJD", "ACE-FEAE-7TJ4", "ACE-S72N-T3X9", "ACE-4CY7-AX9N", "ACE-M78R-M4A4", "ACE-E4VQ-VJ2G"];
+var CLAIM_CLAIMED_KEY = 'acepresso_claimed_codes';
+var CLAIM_MY_KEY = 'acepresso_my_claimed';
+
+function getClaimedMap() {
+  try { return JSON.parse(localStorage.getItem(CLAIM_CLAIMED_KEY) || '{}'); } catch(e) { return {}; }
+}
+function showClaim() {
+  document.querySelector('.login-box').style.display = 'none';
+  document.getElementById('claimBox').style.display = 'block';
+}
+function hideClaim() {
+  document.getElementById('claimBox').style.display = 'none';
+  document.querySelector('.login-box').style.display = 'block';
+}
+function doClaim() {
+  var name = document.getElementById('claimName').value.trim();
+  var msg = document.getElementById('claimMsg');
+  if (!name) { msg.textContent = '请输入姓名'; msg.style.display = 'block'; return; }
+  if (name.length < 2) { msg.textContent = '姓名至少2个字符'; msg.style.display = 'block'; return; }
+  // Check if already claimed
+  var myClaim = localStorage.getItem(CLAIM_MY_KEY);
+  if (myClaim) {
+    try {
+      var d = JSON.parse(myClaim);
+      document.getElementById('claimResult').style.display = 'block';
+      document.getElementById('claimCode').textContent = d.code;
+      document.getElementById('claimBtn').style.display = 'none';
+      document.getElementById('claimName').disabled = true;
+      return;
+    } catch(e) {}
+  }
+  var claimed = getClaimedMap();
+  var available = CLAIM_CODES.filter(function(c) { return !claimed[c]; });
+  if (available.length === 0) {
+    msg.textContent = '所有邀请码已被领取，请联系管理员'; msg.style.display = 'block'; return;
+  }
+  var hash = 0;
+  for (var i = 0; i < name.length; i++) { hash = ((hash << 5) - hash) + name.charCodeAt(i); hash = hash & hash; }
+  var idx = Math.abs(hash) % available.length;
+  var code = available[idx];
+  claimed[code] = { name: name, time: new Date().toISOString() };
+  localStorage.setItem(CLAIM_CLAIMED_KEY, JSON.stringify(claimed));
+  localStorage.setItem(CLAIM_MY_KEY, JSON.stringify({ code: code, name: name }));
+  document.getElementById('claimBtn').style.display = 'none';
+  document.getElementById('claimName').disabled = true;
+  document.getElementById('claimResult').style.display = 'block';
+  document.getElementById('claimCode').textContent = code;
+}
+function copyClaimCode() {
+  var code = document.getElementById('claimCode').textContent;
+  navigator.clipboard.writeText(code).then(function() {
+    var btn = document.getElementById('copyClaimBtn');
+    btn.textContent = '已复制 ✓';
+    setTimeout(function() { btn.textContent = '复制邀请码'; }, 2000);
+  });
+}
+
 <!-- ACE AI Tutor Chat Widget -->
 <script>
 (function() {
