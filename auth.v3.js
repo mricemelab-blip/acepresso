@@ -101,6 +101,7 @@
   }
 
   window.ACEpressoAuth = {
+    WHITELIST: WHITELIST,
     verifyName: verifyName,
     isLoggedIn: isLoggedIn,
     getUserName: getUserName,
