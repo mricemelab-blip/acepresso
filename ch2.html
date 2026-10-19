@@ -479,6 +479,24 @@ tbody tr:hover { background: var(--accent-light); }
 </style>
 <script src="auth.v3.js"></script>
 
+
+<!-- Auto-append from=mp to all internal links -->
+<script>
+(function(){
+  if(new URLSearchParams(window.location.search).get('from') === 'mp'){
+    document.addEventListener('DOMContentLoaded', function(){
+      var links = document.querySelectorAll('a[href]');
+      for(var i=0;i<links.length;i++){
+        var href = links[i].getAttribute('href');
+        if(href && href.endsWith('.html') && href.indexOf('?') === -1 && href.indexOf('http') !== 0){
+          links[i].setAttribute('href', href + '?from=mp');
+        }
+      }
+    });
+  }
+})();
+</script>
+
 </head>
 <body>
 <script>
