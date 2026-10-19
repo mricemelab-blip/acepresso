@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACEpresso 邀请码领取</title>
+<style>
+:root {
+  --bg: #fafaf8; --surface: #ffffff; --text: #1a1a2e; --text-secondary: #555;
+  --accent: #2d5016; --accent-light: #e8f5e9; --border: #e0ddd8;
+  --shadow: rgba(0,0,0,0.06); --card-radius: 12px;
+  --danger: #c62828; --success: #2e7d32;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Noto Sans SC', 'Source Han Sans SC', -apple-system, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.7;
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.container {
+  max-width: 480px; width: 100%;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  padding: 36px 32px;
+  box-shadow: 0 4px 24px var(--shadow);
+}
+.logo {
+  text-align: center; margin-bottom: 28px;
+}
+.logo h1 {
+  font-size: 24px; font-weight: 800; color: var(--accent);
+  letter-spacing: 1px;
+}
+.logo p {
+  font-size: 13px; color: var(--text-secondary); margin-top: 4px;
+}
+.claim-section, .result-section, .already-section {
+  display: none;
+}
+.claim-section.active, .result-section.active, .already-section.active {
+  display: block;
+}
+label {
+  display: block; font-size: 14px; color: var(--text-secondary);
+  margin-bottom: 8px; font-weight: 500;
+}
+input[type="text"] {
+  width: 100%; padding: 14px 16px; font-size: 16px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--text);
+  outline: none; transition: border-color 0.25s;
+  font-family: inherit;
+}
+input:focus { border-color: var(--accent); }
+.btn {
+  width: 100%; margin-top: 18px; padding: 14px;
+  background: var(--accent); color: #fff; border: none;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  cursor: pointer; transition: opacity 0.25s, transform 0.15s;
+  font-family: inherit;
+}
+.btn:hover { opacity: 0.9; }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.result-box {
+  text-align: center; padding: 20px 0;
+}
+.result-box .label {
+  font-size: 13px; color: var(--text-secondary); margin-bottom: 8px;
+}
+.result-box .code {
+  font-size: 28px; font-weight: 800; color: var(--accent);
+  letter-spacing: 3px; font-family: 'SF Mono', 'Fira Code', monospace;
+  background: var(--accent-light); padding: 16px 24px;
+  border-radius: 8px; display: inline-block;
+  margin: 8px 0 16px; user-select: all;
+}
+.result-box .hint {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+}
+.result-box .hint strong { color: var(--text); }
+
+.copy-btn {
+  display: inline-block; margin-top: 12px; padding: 10px 24px;
+  background: var(--accent-light); color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 6px;
+  font-size: 13px; cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.copy-btn:hover { background: var(--accent); color: #fff; }
+
+.already-box { text-align: center; padding: 20px 0; }
+.already-box .code {
+  font-size: 24px; font-weight: 700; color: var(--accent);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 2px; margin: 12px 0;
+}
+.already-box p { font-size: 14px; color: var(--text-secondary); }
+
+.error-msg {
+  color: var(--danger); font-size: 13px; margin-top: 10px;
+  text-align: center; display: none;
+}
+
+.footer {
+  text-align: center; margin-top: 20px; font-size: 12px;
+  color: var(--text-secondary);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="logo">
+      <h1>3HFIT ACEpresso</h1>
+      <p>邀请码自助领取</p>
+    </div>
+
+    <!-- Step 1: Enter name -->
+    <div class="claim-section active" id="claimSection">
+      <label for="studentName">请输入您的真实姓名</label>
+      <input type="text" id="studentName" placeholder="例如：张三" autocomplete="off"/>
+      <button class="btn" id="claimBtn" onclick="claimCode()">领取邀请码</button>
+      <p class="error-msg" id="errorMsg"></p>
+    </div>
+
+    <!-- Step 2: Show code -->
+    <div class="result-section" id="resultSection">
+      <div class="result-box">
+        <div class="label">您的邀请码</div>
+        <div class="code" id="codeDisplay"></div>
+        <button class="copy-btn" onclick="copyCode()">复制邀请码</button>
+        <div class="hint" style="margin-top:20px">
+          <p><strong>使用方式：</strong></p>
+          <p>1. 打开 <strong>ACEpresso 课程网站</strong></p>
+          <p>2. 在登录页输入上方邀请码 + 您的姓名</p>
+          <p>3. 验证通过后即可学习全部章节</p>
+          <p style="margin-top:8px">邀请码 <strong>30 天有效</strong>，每人限领一次</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Already claimed -->
+    <div class="already-section" id="alreadySection">
+      <div class="already-box">
+        <p>您已领取过邀请码</p>
+        <div class="code" id="existingCode"></div>
+        <p>请妥善保管，每人限领一次</p>
+        <button class="btn" style="margin-top:20px;max-width:200px;margin-left:auto;margin-right:auto" onclick="copyExisting()">复制邀请码</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer">© 2026 3HFIT × Arise</div>
+</div>
+
+<script>
+// ====== 200 invitation codes (embedded) ======
+var CODES = ["ACE-CTJ2-7YAY", "ACE-7X8N-CK7G", "ACE-GHC2-85T9", "ACE-6D38-T7PJ", "ACE-837A-8D5Y", "ACE-X2TV-HJ6M", "ACE-74GF-JH69", "ACE-GZDR-6UF2", "ACE-DBSP-5BRQ", "ACE-BRFZ-UXY5", "ACE-5AX8-VWTH", "ACE-W57F-R8D2", "ACE-N977-3GH6", "ACE-5J7P-R75X", "ACE-NY25-KYXA", "ACE-HEAD-RXDT", "ACE-KJ5R-6T7V", "ACE-N3WY-XE8U", "ACE-CU5X-R4QP", "ACE-J5A5-QV6K", "ACE-6KB4-FDM9", "ACE-SP36-JUSB", "ACE-EZX3-ZBZD", "ACE-Y39P-3B8U", "ACE-CJNB-25YN", "ACE-EJ9K-ERUB", "ACE-MTNQ-HZ7B", "ACE-JWAU-D552", "ACE-PJ3P-P8Q4", "ACE-7EGV-369K", "ACE-BSY7-DDUH", "ACE-9GJ9-9QH5", "ACE-6EMJ-83QN", "ACE-Z2X2-2DMW", "ACE-FE9R-4JT6", "ACE-9FYB-KCGP", "ACE-KJKM-A2DB", "ACE-8VY7-Z5GX", "ACE-SSH7-3T5J", "ACE-CRXV-ETGT", "ACE-HSKF-YWDR", "ACE-GS4N-Y7GV", "ACE-UHSA-GF2U", "ACE-4KHX-4UFC", "ACE-MA6D-UYDQ", "ACE-E4D9-N39T", "ACE-JGRW-GVH8", "ACE-PA55-J4C2", "ACE-YZGU-H7FS", "ACE-JY6S-ZUK3", "ACE-9TXZ-EMEN", "ACE-GREU-P2SD", "ACE-TXH6-MNER", "ACE-VQTG-3FKR", "ACE-SFMG-4BD4", "ACE-TV7H-282J", "ACE-7RGJ-Y9ND", "ACE-Q6D2-UQAN", "ACE-VAT5-3F6Q", "ACE-QPTZ-E7B9", "ACE-NF53-V42E", "ACE-QF3Y-3PVZ", "ACE-2Q94-22K6", "ACE-4EQF-5APC", "ACE-3YWJ-VY4V", "ACE-A8JG-2PQ9", "ACE-8E66-DJEM", "ACE-Z6YY-8GW4", "ACE-74KC-D9C7", "ACE-749Z-PKVD", "ACE-2CY5-SVEB", "ACE-CYXM-7FNP", "ACE-BNKK-C9HU", "ACE-GP98-QC39", "ACE-37NN-W76G", "ACE-ZZCP-EPE8", "ACE-7VWM-3DXD", "ACE-C9SG-Y8Y7", "ACE-4AEU-6QU7", "ACE-P62X-4NCV", "ACE-WBWV-RH63", "ACE-NAJ7-Z47V", "ACE-9GD4-H7Y3", "ACE-9W36-PTJJ", "ACE-CPX2-8TEU", "ACE-S8N4-D3H5", "ACE-SMZY-6UA2", "ACE-HGAM-7X9Z", "ACE-R4A3-55US", "ACE-KSEH-4XVE", "ACE-ZY7Z-63UH", "ACE-F3HU-6JRE", "ACE-C34B-YNEB", "ACE-85KF-RK2N", "ACE-HC2J-W2AJ", "ACE-H954-TY9Y", "ACE-PCPY-5HX4", "ACE-5F8M-E7G8", "ACE-YHXC-HNM2", "ACE-CK2U-CP7W", "ACE-5BYG-AXVG", "ACE-ZA4J-3A5M", "ACE-79JP-FX7A", "ACE-VYJG-TG2Z", "ACE-Y5Y3-6F34", "ACE-FDZ8-VWKQ", "ACE-98BH-CUNB", "ACE-A8TP-HZS5", "ACE-VHM5-SBHB", "ACE-BS2F-KFGT", "ACE-3BT3-WUKN", "ACE-8KQR-P58M", "ACE-Z2MG-89R4", "ACE-B99H-VRN6", "ACE-REA3-A5R2", "ACE-FVME-QM4K", "ACE-X3DK-YA7W", "ACE-N8MA-3JQW", "ACE-4T9J-K5Q9", "ACE-YAPQ-45DB", "ACE-23AX-Y7X8", "ACE-R7GP-4KFC", "ACE-UZZM-AVXF", "ACE-Q5U9-U5RP", "ACE-ZGF4-Q8WK", "ACE-CK7M-YJY8", "ACE-2UTW-7FGA", "ACE-XJNH-4BTC", "ACE-A6NN-JR3T", "ACE-XWTS-VVAY", "ACE-R3BB-7AU6", "ACE-URTF-RS5K", "ACE-KMNM-UWB5", "ACE-87WQ-J485", "ACE-8V7M-69MN", "ACE-97NX-9P5X", "ACE-B9CH-AFT5", "ACE-VTUG-Y2K9", "ACE-QA58-HWX2", "ACE-W4AJ-46NR", "ACE-9CQZ-NBG3", "ACE-3ZRB-C7N6", "ACE-9PDZ-TFA5", "ACE-NHK3-EQ8T", "ACE-9R7E-SDN9", "ACE-MD6U-QXSE", "ACE-CB7E-EEXP", "ACE-NV5B-DMHM", "ACE-8BDX-5VF7", "ACE-WXDP-XUN4", "ACE-EQQ8-53CX", "ACE-FEQ9-N2EE", "ACE-HNWB-QS2W", "ACE-K2PB-SZ28", "ACE-6BW4-SGHH", "ACE-MSXP-PP3J", "ACE-4QHF-FK7E", "ACE-UWHU-6GKR", "ACE-PNUC-VV68", "ACE-YQV3-G3NA", "ACE-X74B-PUCW", "ACE-TS52-6QTW", "ACE-ZSR2-HA2G", "ACE-H5HX-KQTT", "ACE-N4D8-ASH4", "ACE-2HZ3-A8T8", "ACE-PQ3K-XSS8", "ACE-2W6S-8RCV", "ACE-UF5B-6HJR", "ACE-6YZU-X4PH", "ACE-GXHM-ZQ2X", "ACE-RVAY-EGRM", "ACE-UJPE-GW92", "ACE-37AF-2FFW", "ACE-SQY5-4237", "ACE-64FV-DY4D", "ACE-2569-WC8P", "ACE-G7RF-F3B2", "ACE-335K-9MJN", "ACE-3QGS-MFM6", "ACE-79QB-2B9S", "ACE-AFWR-JSEZ", "ACE-46CW-VFFZ", "ACE-ZA7Z-MPVZ", "ACE-QRMC-8XFK", "ACE-2C3P-9CR5", "ACE-4CXQ-6YPQ", "ACE-NYQK-A7US", "ACE-99W6-J93U", "ACE-MC9K-BTMG", "ACE-E5NW-ZETT", "ACE-3CP7-F9AW", "ACE-ZEAT-GFVY", "ACE-SJVR-FGE9", "ACE-ECCV-MCJD", "ACE-FEAE-7TJ4", "ACE-S72N-T3X9", "ACE-4CY7-AX9N", "ACE-M78R-M4A4", "ACE-E4VQ-VJ2G"];
+
+var CLAIMED_KEY = 'acepresso_claimed';
+var MY_CLAIM_KEY = 'acepresso_my_claim';
+
+function getClaimed() {
+  try { return JSON.parse(localStorage.getItem(CLAIMED_KEY) || '{}'); } catch(e) { return {}; }
+}
+function setClaimed(obj) {
+  localStorage.setItem(CLAIMED_KEY, JSON.stringify(obj));
+}
+
+function claimCode() {
+  var name = document.getElementById('studentName').value.trim();
+  var errEl = document.getElementById('errorMsg');
+  
+  if (!name) {
+    errEl.textContent = '请输入您的姓名';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (name.length < 2) {
+    errEl.textContent = '姓名至少需要2个字符';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Check if already claimed on this browser
+  var myClaim = localStorage.getItem(MY_CLAIM_KEY);
+  if (myClaim) {
+    try {
+      var data = JSON.parse(myClaim);
+      document.getElementById('claimSection').classList.remove('active');
+      document.getElementById('alreadySection').classList.add('active');
+      document.getElementById('existingCode').textContent = data.code;
+      return;
+    } catch(e) {}
+  }
+
+  // Find an unclaimed code
+  var claimed = getClaimed();
+  var available = CODES.filter(function(c) { return !claimed[c]; });
+  
+  if (available.length === 0) {
+    errEl.textContent = '所有邀请码已被领取，请联系管理员';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Deterministic assignment: hash(name) mod available.length
+  // This ensures the same name always gets the same code
+  var hash = 0;
+  for (var i = 0; i < name.length; i++) {
+    hash = ((hash << 5) - hash) + name.charCodeAt(i);
+    hash = hash & hash;
+  }
+  var idx = Math.abs(hash) % available.length;
+  var code = available[idx];
+
+  // Mark as claimed
+  claimed[code] = { name: name, time: new Date().toISOString() };
+  setClaimed(claimed);
+
+  // Save my claim
+  localStorage.setItem(MY_CLAIM_KEY, JSON.stringify({ code: code, name: name }));
+
+  // Show result
+  document.getElementById('claimSection').classList.remove('active');
+  document.getElementById('resultSection').classList.add('active');
+  document.getElementById('codeDisplay').textContent = code;
+}
+
+function copyCode() {
+  var code = document.getElementById('codeDisplay').textContent;
+  navigator.clipboard.writeText(code).then(function() {
+    var btn = document.querySelector('.copy-btn');
+    btn.textContent = '已复制 ✓';
+    setTimeout(function() { btn.textContent = '复制邀请码'; }, 2000);
+  });
+}
+
+function copyExisting() {
+  var code = document.getElementById('existingCode').textContent;
+  navigator.clipboard.writeText(code).then(function() {
+    var btn = document.querySelector('.already-section .btn');
+    btn.textContent = '已复制 ✓';
+    setTimeout(function() { btn.textContent = '复制邀请码'; }, 2000);
+  });
+}
+
+// Enter key support
+document.getElementById('studentName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') claimCode();
+});
+</script>
+</body>
+</html>
