@@ -272,25 +272,20 @@ footer {
 </style>
 <script src="auth.v3.js"></script>
 
-<!-- URL token auto-login from mini program -->
+<!-- Mini program trust login -->
 <script>
 (function(){
   var params = new URLSearchParams(window.location.search);
+  var from = params.get('from');
   var name = params.get('name');
-  if(name){
-    var normName = name.replace(/\s+/g,'').toLowerCase();
-    var matched = null;
-    if(typeof ACEpressoAuth !== 'undefined' && ACEpressoAuth.WHITELIST){
-      for(var i=0;i<ACEpressoAuth.WHITELIST.length;i++){
-        if(ACEpressoAuth.WHITELIST[i].replace(/\s+/g,'').toLowerCase()===normName){
-          matched = ACEpressoAuth.WHITELIST[i]; break;
-        }
-      }
-    }
-    if(matched){
-      localStorage.setItem('acepresso_student_name', matched);
-      localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
-      localStorage.setItem('acepresso_auth_whitelist', matched);
+  if(from === 'mp'){
+    // Trust mini program - auto login
+    var displayName = name || '学员';
+    localStorage.setItem('acepresso_student_name', displayName);
+    localStorage.setItem('acepresso_first_login', localStorage.getItem('acepresso_first_login') || new Date().toISOString());
+    localStorage.setItem('acepresso_auth_whitelist', displayName);
+    if(window.location.pathname.endsWith('index.html') || window.location.pathname === '/acepresso/'){
+      window.location.href = 'dashboard.html';
     }
   }
 })();
