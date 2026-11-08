@@ -205,8 +205,12 @@ async def logout(req:Request):
 async def change_password(req:Request):
     u=user(req);d=await payload(req,3000)
     pw=str(d.get("old_password",""));new=str(d.get("new_password",""))
-    if not password_valid(pw,u["passhash"]) or not 12<=len(new)<=128:
-        error(400,"旧密码错误或新密码少于12位")
+    if not pw:error(400,"请输入当前密码")
+    if len(new)<12:error(400,"新密码至少需要12个字符")
+    if len(new)>128:error(400,"新密码不能超过128个字符")
+    if not password_valid(pw,u["passhash"]):
+        error(400,"当前密码不正确，请输入登录时使用的密码")
+    if hmac.compare_digest(pw,new):error(400,"新密码不能与当前密码相同")
     with db() as c:c.execute("UPDATE users SET passhash=? WHERE id=?",(password_hash(new),u["id"]))
     return {"ok":True}
 
