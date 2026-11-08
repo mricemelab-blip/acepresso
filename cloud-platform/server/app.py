@@ -109,8 +109,10 @@ async def payload(req,size=10000):
         return value
     except (ValueError,UnicodeDecodeError):error(400,"JSON格式不正确")
 
-def limited(req):
-    ip=(req.client.host if req.client else "unknown")[:100];now=int(time.time())
+def limited(req,identity):
+    host=(req.client.host if req.client else "unknown")[:100]
+    ip=digest(host+":"+str(identity).strip().lower())
+    now=int(time.time())
     with db() as c:
         c.execute("BEGIN IMMEDIATE")
         c.execute("DELETE FROM attempts WHERE at<?",(now-900,))
@@ -150,7 +152,7 @@ def me(req:Request):return who(user(req))
 
 @app.post("/api/register")
 async def register(req:Request):
-    d=await payload(req,5000);limited(req)
+    d=await payload(req,5000);limited(req,d.get("login",""))
     login=str(d.get("login","")).strip().lower()
     name=str(d.get("name","")).strip();pw=str(d.get("password",""))
     invite=str(d.get("invite","")).strip().upper()
@@ -178,7 +180,7 @@ async def register(req:Request):
 
 @app.post("/api/login")
 async def login(req:Request):
-    d=await payload(req,4000);limited(req)
+    d=await payload(req,4000);limited(req,d.get("login",""))
     with db() as c:
         u=c.execute("SELECT * FROM users WHERE login=?",(str(d.get("login","")).strip().lower(),)).fetchone()
     if not u or not password_valid(str(d.get("password","")),u["passhash"]):
