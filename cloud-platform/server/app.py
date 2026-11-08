@@ -96,8 +96,13 @@ def cookie(response,uid):
 async def payload(req,size=10000):
     origin=req.headers.get("origin")
     if origin:
-        target=urlparse(origin); expected=urlparse(str(req.base_url))
-        if (target.scheme,target.netloc)!=(expected.scheme,expected.netloc):
+        target=urlparse(origin)
+        # Railway terminates HTTPS before forwarding to the ASGI app. The
+        # internal request URL may be http://, so compare against an explicit
+        # externally configured origin rather than the proxy-side base_url.
+        configured=os.getenv("ACE_PUBLIC_ORIGIN","").strip()
+        expected_origins=[urlparse(v.strip()) for v in configured.split(",") if v.strip()] if configured else [urlparse(str(req.base_url))]
+        if (target.scheme,target.netloc) not in {(o.scheme,o.netloc) for o in expected_origins}:
             error(403,"无效请求来源")
     if req.headers.get("content-type","").split(";")[0].lower()!="application/json":
         error(415,"需要JSON格式")
