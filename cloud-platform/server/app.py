@@ -129,7 +129,10 @@ def limited(req,identity):
 
 @app.get("/")
 def index(req:Request):
-    if user(req,True):return RedirectResponse("/study",status_code=303)
+    u=user(req,True)
+    if u:
+        destination={"admin":"/manage","leader":"/teacher","student":"/study"}.get(u["role"],"/study")
+        return RedirectResponse(destination,status_code=303)
     return HTMLResponse((ROOT/"web"/"login.html").read_text("utf8"))
 
 @app.get("/study")
@@ -137,16 +140,50 @@ def study(req:Request):
     user(req)
     return HTMLResponse((ROOT/"web"/"study.html").read_text("utf8"))
 
+def role_access_page(current_role,expected_role):
+    role_name={"student":"学员","leader":"组长","admin":"管理员"}.get(current_role,"其他账号")
+    home="/teacher" if current_role=="leader" else "/study"
+    # All interpolated values above are from fixed, validated role labels and routes.
+    return HTMLResponse(f"""<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ACEpresso｜账户权限</title><style>
+*{{box-sizing:border-box}}body{{margin:0;background:#f4f2ed;color:#252622;font:16px/1.65 system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif}}
+main{{max-width:620px;margin:12vh auto;padding:40px 42px;background:#fff;border:1px solid #d9d6ce}}
+small{{color:#76746d;letter-spacing:.08em}}h1{{font-size:30px;line-height:1.25;margin:22px 0}}
+p{{color:#52534c}}.status{{border-top:1px solid #ddd9d1;border-bottom:1px solid #ddd9d1;padding:17px 0;margin:28px 0}}
+button,a.action{{display:inline-block;background:#303c35;color:#fff;padding:12px 20px;border:0;border-radius:3px;font:inherit;text-decoration:none;cursor:pointer}}
+a.secondary{{color:#3d5043;margin-left:16px;text-decoration:underline}}#feedback{{color:#9e332d;font-size:14px}}
+@media(max-width:650px){{main{{margin:20px 12px;padding:28px 22px}}h1{{font-size:26px}}}}
+</style></head><body><main><small>3HFIT / ACEPRESSO</small>
+<h1>当前账号没有此页面的访问权限</h1>
+<div class="status">当前登录身份：<strong>{role_name}</strong><br>此页面需要：<strong>{expected_role}</strong></div>
+<p>如果你需要进入管理员工作台，请退出当前账号，再使用管理员账号登录。不会删除此账号的学习记录。</p>
+<button id="switch" type="button">退出当前账号并切换</button>
+<a class="secondary" href="{home}">返回我的页面</a>
+<p id="feedback" role="status"></p>
+</main><script>
+document.getElementById('switch').addEventListener('click',async function(){{
+ const btn=this;btn.disabled=true;
+ try{{
+  const res=await fetch('/api/logout',{{method:'POST',credentials:'same-origin',headers:{{'Content-Type':'application/json'}},body:'{{}}'}});
+  if(!res.ok)throw Error('退出失败，请重试');
+  location.replace('/');
+ }}catch(err){{document.getElementById('feedback').textContent=err.message;btn.disabled=false}}
+}});
+</script></body></html>""",status_code=403)
+
 @app.get("/manage")
 def manage(req:Request):
-    u=user(req)
-    if u["role"]!="admin":error(403,"仅管理员可以进入")
+    u=user(req,True)
+    if not u:return RedirectResponse("/",status_code=303)
+    if u["role"]!="admin":return role_access_page(u["role"],"管理员")
     return HTMLResponse((ROOT/"web"/"manage.html").read_text("utf8"))
 
 @app.get("/teacher")
 def teacher(req:Request):
-    u=user(req)
-    if u["role"] not in ("leader","admin"):error(403,"仅组长或管理员可以进入")
+    u=user(req,True)
+    if not u:return RedirectResponse("/",status_code=303)
+    if u["role"] not in ("leader","admin"):return role_access_page(u["role"],"组长或管理员")
     return HTMLResponse((ROOT/"web"/"teacher.html").read_text("utf8"))
 
 @app.get("/api/health")
