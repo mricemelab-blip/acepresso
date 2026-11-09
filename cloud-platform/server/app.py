@@ -192,6 +192,44 @@ def health():return {"status":"ok"}
 @app.get("/api/me")
 def me(req:Request):return who(user(req))
 
+@app.get("/recover-admin")
+def admin_recovery_page():
+    return HTMLResponse((ROOT/"web"/"recover.html").read_text("utf8"))
+
+@app.post("/api/recover-admin")
+async def admin_recover(req:Request):
+    d=await payload(req,3000)
+    limited(req,"admin-recovery")
+    code=str(d.get("code","")).strip()
+    password=str(d.get("password",""))
+    confirm=str(d.get("confirm",""))
+    if not 12<=len(password)<=128:
+        error(400,"新密码长度必须为12至128个字符")
+    if password!=confirm:
+        error(400,"两次输入的新密码不一致")
+    token_hash=os.getenv("ACE_ADMIN_RECOVERY_HASH","").strip().lower()
+    try:
+        expires_at=int(os.getenv("ACE_ADMIN_RECOVERY_EXPIRES","0"))
+    except ValueError:
+        expires_at=0
+    now=int(time.time())
+    if not token_hash or now>=expires_at or not hmac.compare_digest(digest(code),token_hash):
+        error(400,"恢复码无效或已经过期")
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        c.execute("""CREATE TABLE IF NOT EXISTS admin_recovery_used
+                  (token_hash TEXT PRIMARY KEY, used_at INTEGER NOT NULL)""")
+        if c.execute("SELECT token_hash FROM admin_recovery_used WHERE token_hash=?",(token_hash,)).fetchone():
+            error(400,"恢复码已经使用")
+        admin=c.execute("SELECT id FROM users WHERE role='admin' ORDER BY id LIMIT 1").fetchone()
+        if not admin:
+            error(404,"管理员账号不存在")
+        c.execute("UPDATE users SET passhash=? WHERE id=?",(password_hash(password),admin["id"]))
+        c.execute("DELETE FROM sessions WHERE user_id=?",(admin["id"],))
+        c.execute("INSERT INTO admin_recovery_used(token_hash,used_at) VALUES(?,?)",(token_hash,now))
+        c.execute("COMMIT")
+    return {"ok":True}
+
 @app.post("/api/register")
 async def register(req:Request):
     d=await payload(req,5000);limited(req,d.get("login",""))
