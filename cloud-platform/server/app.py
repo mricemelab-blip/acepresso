@@ -61,6 +61,62 @@ def initialize():
                           ("课程管理员",admin,password_hash(password),int(time.time())))
 initialize()
 
+# One-time, idempotent enrollment provisioning. Secrets and plain invitation codes
+# are supplied through Railway environment variables, never committed to GitHub.
+def apply_enrollment_batch():
+    batch=os.getenv("ACE_ENROLL_BATCH","").strip()
+    seed=os.getenv("ACE_ENROLL_SEED","").strip()
+    admin_verifier=os.getenv("ACE_ENROLL_ADMIN_VERIFIER","").strip()
+    if not (batch and seed and admin_verifier):
+        return
+    if not re.fullmatch(r"[a-zA-Z0-9_-]{8,90}",batch) or not re.fullmatch(r"[a-fA-F0-9]{64}",seed):
+        raise RuntimeError("Enrollment configuration is invalid")
+    if not re.fullmatch(r"[a-fA-F0-9]{32}:[a-fA-F0-9]{128}",admin_verifier):
+        raise RuntimeError("Admin credential verifier is invalid")
+    key=bytes.fromhex(seed)
+    now=int(time.time())
+    cohort_name="ACEpresso首期·2026年11月"
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        c.execute("""CREATE TABLE IF NOT EXISTS enrollment_batches
+                     (batch_id TEXT PRIMARY KEY, applied_at INTEGER NOT NULL,
+                      leader_count INTEGER NOT NULL, student_count INTEGER NOT NULL)""")
+        if c.execute("SELECT 1 FROM enrollment_batches WHERE batch_id=?",(batch,)).fetchone():
+            c.execute("COMMIT")
+            print("ACEpresso enrollment batch already applied",flush=True)
+            return
+        admin_login=os.getenv("ACE_ADMIN_LOGIN","ace-director").strip().lower()
+        admin=c.execute("SELECT id FROM users WHERE role='admin' AND login=?",(admin_login,)).fetchone()
+        if not admin:
+            c.execute("ROLLBACK")
+            raise RuntimeError("Existing ACEpresso administrator not found")
+        c.execute("INSERT OR IGNORE INTO cohorts(title) VALUES(?)",(cohort_name,))
+        cid=c.execute("SELECT id FROM cohorts WHERE title=?",(cohort_name,)).fetchone()["id"]
+        gids=[]
+        for letter in "ABCDEFGH":
+            title=letter+"组"
+            c.execute("INSERT OR IGNORE INTO groups(cohort_id,title) VALUES(?,?)",(cid,title))
+            row=c.execute("SELECT id FROM groups WHERE cohort_id=? AND title=?",(cid,title)).fetchone()
+            gids.append(row["id"])
+        def make_invite(role,number,gid):
+            digest_part=hmac.new(key,f"{batch}:{role}:{number}".encode(),hashlib.sha256).hexdigest().upper()[:24]
+            code=f"ACE-{role[0].upper()}{number:02d}-{digest_part}"
+            c.execute("""INSERT INTO invites
+                         (code_hash,group_id,role,expires_at,used_by,created_by,created_at,revoked)
+                         VALUES(?,?,?,?,NULL,?,?,0)""",
+                      (digest(code),gid,role,now+60*86400,admin["id"],now))
+        for num,gid in enumerate(gids,1):
+            make_invite("leader",num,gid)
+        for num in range(1,61):
+            make_invite("student",num,gids[(num-1)%8])
+        c.execute("UPDATE users SET passhash=? WHERE id=?",(admin_verifier,admin["id"]))
+        c.execute("DELETE FROM sessions WHERE user_id=?",(admin["id"],))
+        c.execute("INSERT INTO enrollment_batches VALUES(?,?,8,60)",(batch,now))
+        c.execute("COMMIT")
+    print("ACEpresso enrollment batch applied: 8 leader invites, 60 student invites, 8 groups; admin credential rotated",flush=True)
+
+apply_enrollment_batch()
+
 @app.middleware("http")
 async def headers(req,call_next):
     response=await call_next(req)
@@ -363,6 +419,37 @@ async def invitations(req:Request):
                       (digest(code),gid,role,now+days*86400,u["id"],now))
             codes.append(code)
     return {"codes":codes,"role":role,"valid_days":days,"group_id":gid}
+
+@app.get("/api/leader/my-group")
+def leader_group(req:Request):
+    u=user(req)
+    if u["role"]!="leader":
+        error(403,"只有组长可管理学习小组")
+    with db() as c:
+        row=c.execute("""SELECT g.id,g.title,co.title AS cohort FROM groups g
+                         JOIN cohorts co ON co.id=g.cohort_id WHERE g.id=?""",
+                      (u["group_id"],)).fetchone()
+        if not row:error(404,"小组不存在")
+        students=c.execute("SELECT COUNT(*) AS n FROM users WHERE role='student' AND group_id=?",
+                           (u["group_id"],)).fetchone()["n"]
+        names=c.execute("SELECT name FROM users WHERE role='student' AND group_id=? ORDER BY id",
+                        (u["group_id"],)).fetchall()
+    return {"group_id":row["id"],"title":row["title"],"cohort":row["cohort"],
+            "student_count":students,"students":[r["name"] for r in names]}
+
+@app.post("/api/leader/my-group")
+async def leader_name_group(req:Request):
+    u=user(req)
+    if u["role"]!="leader":error(403,"只有组长可管理学习小组")
+    d=await payload(req,2500)
+    title=str(d.get("title","")).strip()
+    if not 2<=len(title)<=32:error(400,"小组名称需要2—32个字符")
+    with db() as c:
+        try:
+            c.execute("UPDATE groups SET title=? WHERE id=?",(title,u["group_id"]))
+        except sqlite3.IntegrityError:
+            error(409,"该班期已存在同名小组，请换一个名称")
+    return {"ok":True,"title":title,"group_id":u["group_id"]}
 
 @app.get("/api/teacher/submissions")
 def submissions(req:Request):
