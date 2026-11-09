@@ -290,11 +290,17 @@ async def admin_recover(req:Request):
 async def register(req:Request):
     d=await payload(req,5000);limited(req,d.get("login",""))
     login=str(d.get("login","")).strip().lower()
-    name=str(d.get("name","")).strip();pw=str(d.get("password",""))
-    invite=str(d.get("invite","")).strip().upper()
-    if not (re.fullmatch(r"[a-z0-9][a-z0-9._-]{2,49}",login) and
-            1<=len(name)<=50 and 10<=len(pw)<=128 and 10<=len(invite)<=70):
-        error(400,"姓名、账号、密码或邀请码格式不正确")
+    name=str(d.get("name","")).strip()
+    pw=str(d.get("password",""))
+    invite=re.sub(r"[\\s\\u200b\\ufeff]+","",str(d.get("invite",""))).upper()
+    if not re.fullmatch(r"[\\w.@-]{2,50}",login,flags=re.UNICODE):
+        error(400,"登录账号需2—50个字符，可使用中文、英文、数字、点、下划线和短横线，不要包含空格")
+    if not 1<=len(name)<=50:
+        error(400,"请填写姓名或学习昵称，最多50个字符")
+    if not 10<=len(pw)<=128:
+        error(400,"注册密码须为10—128个字符")
+    if not 10<=len(invite)<=70:
+        error(400,"请粘贴完整的邀请码（以 ACE- 开头），不要填在登录账号栏")
     now=int(time.time())
     with db() as c:
         c.execute("BEGIN IMMEDIATE")
