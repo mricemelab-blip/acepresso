@@ -292,8 +292,8 @@ async def register(req:Request):
     login=str(d.get("login","")).strip().lower()
     name=str(d.get("name","")).strip()
     pw=str(d.get("password",""))
-    invite=re.sub(r"[\\s\\u200b\\ufeff]+","",str(d.get("invite",""))).upper()
-    if not re.fullmatch(r"[\\w.@-]{2,50}",login,flags=re.UNICODE):
+    invite=re.sub(r"[\s\u200b\ufeff]+","",str(d.get("invite",""))).upper()
+    if not re.fullmatch(r"[\w.@-]{2,50}",login,flags=re.UNICODE):
         error(400,"登录账号需2—50个字符，可使用中文、英文、数字、点、下划线和短横线，不要包含空格")
     if not 1<=len(name)<=50:
         error(400,"请填写姓名或学习昵称，最多50个字符")
