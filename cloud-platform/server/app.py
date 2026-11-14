@@ -49,6 +49,16 @@ def initialize():
         CREATE TABLE IF NOT EXISTS reviews(student_id INTEGER NOT NULL REFERENCES users(id),reviewer_id INTEGER NOT NULL REFERENCES users(id),day INTEGER NOT NULL CHECK(day BETWEEN 1 AND 21),score INTEGER NOT NULL CHECK(score BETWEEN 0 AND 15),comment TEXT NOT NULL,updated_at INTEGER NOT NULL,PRIMARY KEY(student_id,day));
         CREATE TABLE IF NOT EXISTS attempts(ip TEXT NOT NULL,at INTEGER NOT NULL);
         CREATE INDEX IF NOT EXISTS attempts_ix ON attempts(ip,at);
+        CREATE TABLE IF NOT EXISTS leader_password_resets(
+          id INTEGER PRIMARY KEY,
+          user_id INTEGER NOT NULL REFERENCES users(id),
+          code_hash TEXT NOT NULL UNIQUE,
+          issued_by INTEGER NOT NULL REFERENCES users(id),
+          expires_at INTEGER NOT NULL,
+          used_at INTEGER,
+          created_at INTEGER NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS leader_reset_user_ix ON leader_password_resets(user_id,expires_at);
         """)
         c.execute("INSERT OR IGNORE INTO cohorts(title) VALUES('第一期')")
         cohort=c.execute("SELECT id FROM cohorts WHERE title='第一期'").fetchone()["id"]
@@ -377,6 +387,80 @@ async def progress(req:Request):
     with db() as c:c.execute("""INSERT INTO progress(user_id,data,updated_at) VALUES(?,?,?)
        ON CONFLICT(user_id) DO UPDATE SET data=excluded.data,updated_at=excluded.updated_at""",
        (u["id"],txt,int(time.time())))
+    return {"ok":True}
+
+@app.get("/api/admin/leaders")
+def admin_leader_list(req:Request):
+    u=user(req)
+    if u["role"]!="admin":error(403,"仅管理员可查看组长账号")
+    with db() as c:
+        rows=c.execute("""SELECT u.id,u.name,u.login,u.created_at,
+            g.title AS group_title,co.title AS cohort
+            FROM users u
+            LEFT JOIN groups g ON u.group_id=g.id
+            LEFT JOIN cohorts co ON g.cohort_id=co.id
+            WHERE u.role='leader' ORDER BY u.id""").fetchall()
+    return {"leaders":[dict(row) for row in rows]}
+
+@app.post("/api/admin/leader-reset")
+async def admin_issue_leader_reset(req:Request):
+    u=user(req)
+    if u["role"]!="admin":error(403,"仅管理员可以生成密码恢复码")
+    d=await payload(req,1500)
+    try: leader_id=int(d.get("leader_id",0))
+    except (TypeError,ValueError):error(400,"请选择已注册的组长")
+    if leader_id<1:error(400,"请选择已注册的组长")
+    code="ACE-RST-"+secrets.token_hex(20).upper()
+    hashed=digest(code)
+    now=int(time.time())
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        leader=c.execute("SELECT id,login,role FROM users WHERE id=? AND role='leader'",(leader_id,)).fetchone()
+        if not leader:error(404,"没有找到这个已注册组长账号")
+        c.execute("UPDATE leader_password_resets SET used_at=? WHERE user_id=? AND used_at IS NULL",(now,leader_id))
+        c.execute("""INSERT INTO leader_password_resets
+                     (user_id,code_hash,issued_by,expires_at,created_at)
+                     VALUES(?,?,?,?,?)""",
+                  (leader_id,hashed,u["id"],now+24*3600,now))
+        c.execute("COMMIT")
+    return {"code":code,"login":leader["login"],"expires_in_hours":24}
+
+@app.get("/recover-leader")
+def leader_recovery_page():
+    return HTMLResponse((ROOT/"web"/"recover-leader.html").read_text("utf8"))
+
+@app.post("/api/recover-leader")
+async def recover_leader(req:Request):
+    d=await payload(req,2500)
+    login=str(d.get("login","")).strip().lower()
+    code=str(d.get("code","")).strip().upper()
+    password=str(d.get("password",""))
+    confirm=str(d.get("confirm",""))
+    limited(req,"leader-reset-"+login)
+    if len(login)<2 or not code.startswith("ACE-RST-") or len(code)>100:
+        error(400,"账号或恢复码不正确，请核对管理员发送的信息")
+    if not 10<=len(password)<=128:
+        error(400,"新密码应为10至128个字符")
+    if password!=confirm:
+        error(400,"两次输入的新密码不一致")
+    hashval=digest(code)
+    now=int(time.time())
+    newhash=password_hash(password)
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        target=c.execute("SELECT id FROM users WHERE login=? AND role='leader'",(login,)).fetchone()
+        record=None
+        if target:
+            record=c.execute("""SELECT id FROM leader_password_resets
+              WHERE user_id=? AND code_hash=? AND used_at IS NULL AND expires_at>?
+              ORDER BY created_at DESC LIMIT 1""",
+              (target["id"],hashval,now)).fetchone()
+        if not target or not record:
+            error(400,"账号或恢复码不正确，或恢复码已使用、已过期")
+        c.execute("UPDATE users SET passhash=? WHERE id=?",(newhash,target["id"]))
+        c.execute("DELETE FROM sessions WHERE user_id=?",(target["id"],))
+        c.execute("UPDATE leader_password_resets SET used_at=? WHERE id=?",(now,record["id"]))
+        c.execute("COMMIT")
     return {"ok":True}
 
 @app.get("/api/admin/groups")
