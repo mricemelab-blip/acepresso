@@ -1,0 +1,17 @@
+name: ACEpresso student account recovery
+on:
+  push:
+    branches:
+      - acepresso-admin-student-recovery-20261116
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r cloud-platform/requirements.txt "httpx>=0.25" pytest
+      - run: python -m compileall -q cloud-platform/server
+      - run: pytest -q cloud-platform/tests/test_student_recovery.py
