@@ -1,4 +1,37 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ACEpresso｜邀请码管理</title><style>body{font:15px/1.6 system-ui,'PingFang SC',sans-serif;background:#f7f6f1;color:#242320;margin:0;padding:48px 24px}main{max-width:750px;margin:auto}h1{font-size:36px}section{background:#fff;border:1px solid #ddd;padding:25px;margin:20px 0}label{display:block;margin:14px 0 5px}select,input{padding:12px;width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:4px}button{margin-top:18px;padding:13px 20px;background:#29392f;color:white;border:0;cursor:pointer}pre{white-space:pre-wrap;word-break:break-all;background:#f3f1ec;padding:16px;line-height:2}small{color:#666}</style></head><body><main><p>3HFIT / ACEPRESSO</p><h1>邀请码管理</h1><p>管理员专用。邀请码仅在生成时显示一次；建议一位学员发放一个邀请码。</p><section><h2>生成邀请码</h2><label>学习小组</label><select id="group"></select><label>生成数量</label><input id="count" type="number" min="1" max="30" value="5"><label>有效期（天）</label><input id="days" type="number" min="1" max="90" value="14"><label>邀请身份</label><select id="role"><option value="student">学员</option><option value="leader">组长</option></select><button id="create">生成邀请码</button><pre id="codes">尚未生成。</pre><button id="copy" style="display:none">复制邀请码</button><p><small>任何代码都不写进网页源码。密码、注册信息和学习记录由服务端保存。</small></p></section><p><a href="/study">返回学员学习站</a>　｜　<a href="/teacher">进入组长批改台（管理员可查看全部小组）</a></p><section><h2>创建学习小组</h2><label>班期</label><input id="newCohort" value="第一期" maxlength="50"><label>小组名称</label><input id="newGroup" placeholder="例如 B组" maxlength="50"><button id="addGroup">创建小组</button><p id="groupMsg"></p></section><section id="leader-reset-section">
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ACEpresso｜邀请码管理</title><style>body{font:15px/1.6 system-ui,'PingFang SC',sans-serif;background:#f7f6f1;color:#242320;margin:0;padding:48px 24px}main{max-width:750px;margin:auto}h1{font-size:36px}section{background:#fff;border:1px solid #ddd;padding:25px;margin:20px 0}label{display:block;margin:14px 0 5px}select,input{padding:12px;width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:4px}button{margin-top:18px;padding:13px 20px;background:#29392f;color:white;border:0;cursor:pointer}pre{white-space:pre-wrap;word-break:break-all;background:#f3f1ec;padding:16px;line-height:2}small{color:#666}</style><style>
+#student-account-admin .student-search-grid{display:grid;grid-template-columns:minmax(160px,1fr) minmax(160px,1fr);gap:14px}
+#student-account-admin .student-search-grid label{margin-top:8px}
+#student-account-admin .student-result-row{display:flex;gap:11px;align-items:flex-start;border:1px solid #dedbd4;background:#fffefa;padding:13px 12px;margin:8px 0;cursor:pointer;font-weight:400}
+#student-account-admin .student-result-row:has(input:checked){border-color:#326e48;background:#eef5ef}
+#student-account-admin .student-result-row input{width:auto;margin:5px 3px 0 0}
+#student-account-admin .student-result-row strong{display:block;font-size:14px}
+#student-account-admin .student-result-row small{display:block;letter-spacing:0;color:#636a61;font-size:12px}
+#student-account-admin .student-result-row .student-login{font-family:system-ui,Arial,sans-serif}
+#student-account-admin #student-recovery-actions{border-top:1px solid #dedbd4;margin-top:18px;padding-top:15px}
+#student-account-admin #student-reset-result{white-space:pre-wrap;overflow-wrap:anywhere}
+#student-account-admin #copy-student-reset{background:#456755}
+@media(max-width:650px){#student-account-admin .student-search-grid{grid-template-columns:1fr}}
+</style></head><body><main><p>3HFIT / ACEPRESSO</p><h1>邀请码管理</h1><p>管理员专用。邀请码仅在生成时显示一次；建议一位学员发放一个邀请码。</p><section><h2>生成邀请码</h2><label>学习小组</label><select id="group"></select><label>生成数量</label><input id="count" type="number" min="1" max="30" value="5"><label>有效期（天）</label><input id="days" type="number" min="1" max="90" value="14"><label>邀请身份</label><select id="role"><option value="student">学员</option><option value="leader">组长</option></select><button id="create">生成邀请码</button><pre id="codes">尚未生成。</pre><button id="copy" style="display:none">复制邀请码</button><p><small>任何代码都不写进网页源码。密码、注册信息和学习记录由服务端保存。</small></p></section><p><a href="/study">返回学员学习站</a>　｜　<a href="/teacher">进入组长批改台（管理员可查看全部小组）</a></p><section><h2>创建学习小组</h2><label>班期</label><input id="newCohort" value="第一期" maxlength="50"><label>小组名称</label><input id="newGroup" placeholder="例如 B组" maxlength="50"><button id="addGroup">创建小组</button><p id="groupMsg"></p></section><section id="student-account-admin">
+<h2>学员账号查询与密码恢复</h2>
+<p>查找已注册学员的原账号，核对姓名及学习小组后，签发一次性恢复码。重设密码只修改原账号的密码，学习进度、作业记录和小组归属都会保留。</p>
+<div class="student-search-grid">
+<div><label for="student-name-filter">学员姓名或登录账号</label>
+<input id="student-name-filter" type="search" maxlength="50" placeholder="例如：曾思佳（姓名不确定可留空）"></div>
+<div><label for="student-group-filter">学习小组</label>
+<select id="student-group-filter"><option value="">全部小组（需填写姓名）</option></select></div>
+</div>
+<button type="button" id="search-student-accounts">查找原账号</button>
+<p id="student-lookup-status" role="status" aria-live="polite"></p>
+<div id="student-account-results" role="radiogroup" aria-label="匹配的学员账号"></div>
+<div id="student-recovery-actions" hidden>
+<p><strong id="student-selected-account"></strong></p>
+<p><small>请核对学员身份与小组后签发。恢复码只显示一次，24小时有效；新恢复码会使旧码失效。请仅通过私聊发送给本人。</small></p>
+<button type="button" id="issue-student-reset">生成该学员的一次性恢复码</button>
+<pre id="student-reset-result" aria-live="polite">尚未生成。</pre>
+<button type="button" id="copy-student-reset" hidden>复制恢复说明并私发给学员</button>
+</div>
+<p><a href="/recover-student">学员自行重设密码页面</a></p>
+</section><section id="leader-reset-section">
 <h2>组长密码恢复</h2>
 <p>仅用于已经完成邀请码注册的组长。先核对组长本人创建的登录账号，再生成该账号专属的一次性恢复码。原有小组、成员与作业不会被删除。</p>
 <label for="leader-select">选择已注册组长</label>
@@ -54,4 +87,106 @@ $('copy-leader-reset').onclick=async()=>{
  try{await navigator.clipboard.writeText(leaderRecoveryText);box.textContent=leaderRecoveryText+'\n\n已复制，可以私聊发送给这位组长。';}
  catch(e){box.textContent=leaderRecoveryText+'\n\n浏览器复制失败，请直接选中以上内容复制。';}
 };
-})();</script></body></html>
+})();</script><script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id);
+const searchBtn=$('search-student-accounts');
+const results=$('student-account-results');
+const notice=$('student-lookup-status');
+const actions=$('student-recovery-actions');
+const selectedText=$('student-selected-account');
+const codeBox=$('student-reset-result');
+const copyBtn=$('copy-student-reset');
+const groupSelect=$('student-group-filter');
+let chosen=null,privateCopy='';
+async function api(url,opt){
+ const response=await fetch(url,{credentials:'same-origin',...(opt||{})});
+ const payload=await response.json();
+ if(!response.ok)throw Error(payload.detail||'服务器请求失败');
+ return payload;
+}
+const label=x=>(x.cohort||'未分配班期')+' / '+(x.group_title||'未分配小组');
+function clearRecovery(){
+ chosen=null;privateCopy='';actions.hidden=true;
+ codeBox.textContent='尚未生成。';copyBtn.hidden=true;
+}
+async function loadGroups(){
+ try{
+  const data=await api('/api/admin/groups');
+  for(const g of data.groups){
+   const option=document.createElement('option');
+   option.value=String(g.id);
+   option.textContent=g.cohort+' / '+g.title;
+   groupSelect.append(option);
+  }
+ }catch(e){notice.textContent='无法读取小组：'+e.message}
+}
+async function search(){
+ clearRecovery();results.replaceChildren();
+ const q=$('student-name-filter').value.trim(),gid=groupSelect.value;
+ if(!q&&!gid){notice.textContent='请填写学员姓名，或先选择学习小组。';return}
+ searchBtn.disabled=true;notice.textContent='正在查找已注册学员……';
+ try{
+  const params=new URLSearchParams();
+  if(q)params.set('q',q);
+  if(gid)params.set('group_id',gid);
+  const found=await api('/api/admin/students?'+params.toString());
+  notice.textContent=found.students.length?'找到 '+found.students.length+' 个匹配账号。请核对姓名、小组和登录账号。':'没有匹配的已注册学员，请检查姓名、账号或小组。';
+  if(found.truncated)notice.textContent+='结果过多，请缩小搜索范围。';
+  for(const st of found.students){
+   const line=document.createElement('label');
+   line.className='student-result-row';
+   const radio=document.createElement('input');
+   radio.type='radio';radio.name='student-account';radio.value=String(st.id);
+   const detail=document.createElement('span');
+   const heading=document.createElement('strong');heading.textContent=st.name;
+   const account=document.createElement('small');account.className='student-login';
+   account.textContent='原登录账号：'+st.login;
+   const group=document.createElement('small');group.textContent=label(st);
+   const progress=document.createElement('small');
+   progress.textContent=st.has_progress?'该账号已有学习记录':'当前未检测到已保存学习记录';
+   detail.append(heading,account,group,progress);line.append(radio,detail);
+   radio.addEventListener('change',()=>{
+     chosen=st;privateCopy='';codeBox.textContent='尚未生成。';copyBtn.hidden=true;
+     selectedText.textContent='已选中：'+st.name+' · '+st.login+' · '+label(st);
+     actions.hidden=false;
+   });
+   results.append(line);
+  }
+ }catch(e){notice.textContent='查找失败：'+e.message}
+ finally{searchBtn.disabled=false}
+}
+async function issue(){
+ if(!chosen){notice.textContent='请先选中学员账号';return}
+ const current=chosen;
+ if(!confirm('确认向 '+current.name+'（'+current.login+'，'+label(current)+'）生成一次性密码恢复码吗？之前未使用的恢复码将失效。'))return;
+ const btn=$('issue-student-reset');
+ btn.disabled=true;codeBox.textContent='正在生成……';copyBtn.hidden=true;privateCopy='';
+ try{
+  const data=await api('/api/admin/student-reset',{
+   method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({student_id:current.id})
+  });
+  const url=location.origin+'/recover-student';
+  privateCopy='ACEpresso 学员密码恢复\n姓名：'+data.name+
+   '\n原登录账号：'+data.login+'\n所属小组：'+label(data)+
+   '\n恢复页面：'+url+'\n一次性恢复码：'+data.code+
+   '\n有效期：24小时（仅可使用一次）\n请在恢复页面设置新密码，然后用原登录账号登录。原学习记录和小组关系不会改变。';
+  codeBox.textContent=privateCopy;
+  copyBtn.hidden=false;
+ }catch(e){codeBox.textContent='生成失败：'+e.message}
+ finally{btn.disabled=false}
+}
+async function copy(){
+ try{await navigator.clipboard.writeText(privateCopy);
+     notice.textContent='恢复说明已复制。请只发给该学员本人。';
+ }catch(e){notice.textContent='复制失败，请手动复制下方恢复说明。'}
+}
+$('student-name-filter').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();search()}});
+searchBtn.addEventListener('click',search);
+$('issue-student-reset').addEventListener('click',issue);
+copyBtn.addEventListener('click',copy);
+loadGroups();
+})();
+</script></body></html>
