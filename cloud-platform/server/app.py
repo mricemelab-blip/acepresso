@@ -59,6 +59,16 @@ def initialize():
           created_at INTEGER NOT NULL
         );
         CREATE INDEX IF NOT EXISTS leader_reset_user_ix ON leader_password_resets(user_id,expires_at);
+        CREATE TABLE IF NOT EXISTS student_password_resets(
+          id INTEGER PRIMARY KEY,
+          user_id INTEGER NOT NULL REFERENCES users(id),
+          code_hash TEXT NOT NULL UNIQUE,
+          issued_by INTEGER NOT NULL REFERENCES users(id),
+          expires_at INTEGER NOT NULL,
+          used_at INTEGER,
+          created_at INTEGER NOT NULL
+        );
+        CREATE INDEX IF NOT EXISTS student_reset_user_ix ON student_password_resets(user_id,expires_at);
         """)
         c.execute("INSERT OR IGNORE INTO cohorts(title) VALUES('第一期')")
         cohort=c.execute("SELECT id FROM cohorts WHERE title='第一期'").fetchone()["id"]
@@ -460,6 +470,97 @@ async def recover_leader(req:Request):
         c.execute("UPDATE users SET passhash=? WHERE id=?",(newhash,target["id"]))
         c.execute("DELETE FROM sessions WHERE user_id=?",(target["id"],))
         c.execute("UPDATE leader_password_resets SET used_at=? WHERE id=?",(now,record["id"]))
+        c.execute("COMMIT")
+    return {"ok":True}
+
+
+@app.get("/api/admin/students")
+def admin_students(req:Request):
+    u=user(req)
+    if u["role"]!="admin":error(403,"仅管理员可查询学员账号")
+    q=(req.query_params.get("q") or "").strip()
+    raw_gid=(req.query_params.get("group_id") or "").strip()
+    if len(q)>50:error(400,"搜索内容不能超过50个字符")
+    try:group_id=int(raw_gid) if raw_gid else None
+    except ValueError:error(400,"学习小组编号无效")
+    if group_id is not None and group_id<1:error(400,"学习小组编号无效")
+    if not q and group_id is None:error(400,"请输入姓名、登录账号或选择一个学习小组")
+    where=["u.role='student'"]
+    params=[]
+    if q:
+        where.append("(instr(u.name,?)>0 OR instr(u.login,?)>0)")
+        params.extend((q,q.lower()))
+    if group_id is not None:
+        where.append("u.group_id=?")
+        params.append(group_id)
+    sql="""SELECT u.id,u.name,u.login,u.group_id,
+                  g.title AS group_title,co.title AS cohort,
+                  CASE WHEN p.user_id IS NULL THEN 0 ELSE 1 END AS has_progress
+           FROM users u
+           LEFT JOIN groups g ON g.id=u.group_id
+           LEFT JOIN cohorts co ON co.id=g.cohort_id
+           LEFT JOIN progress p ON p.user_id=u.id
+           WHERE """+" AND ".join(where)+""" ORDER BY co.title,g.title,u.name,u.id LIMIT 101"""
+    with db() as c:rows=c.execute(sql,params).fetchall()
+    return {"students":[dict(row) for row in rows[:100]],"truncated":len(rows)>100}
+
+@app.post("/api/admin/student-reset")
+async def admin_issue_student_reset(req:Request):
+    u=user(req)
+    if u["role"]!="admin":error(403,"仅管理员可生成学员密码恢复码")
+    d=await payload(req,1500)
+    try:student_id=int(d.get("student_id"))
+    except (TypeError,ValueError):error(400,"请选择已注册学员")
+    if student_id<1:error(400,"请选择已注册学员")
+    code="ACE-SRST-"+secrets.token_hex(20).upper()
+    now=int(time.time())
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        st=c.execute("""SELECT u.id,u.name,u.login,g.title AS group_title,
+                        co.title AS cohort FROM users u
+                        LEFT JOIN groups g ON g.id=u.group_id
+                        LEFT JOIN cohorts co ON co.id=g.cohort_id
+                        WHERE u.id=? AND u.role='student'""",(student_id,)).fetchone()
+        if not st:error(404,"没有找到此学员账号")
+        c.execute("UPDATE student_password_resets SET used_at=? WHERE user_id=? AND used_at IS NULL",(now,student_id))
+        c.execute("""INSERT INTO student_password_resets
+                  (user_id,code_hash,issued_by,expires_at,created_at) VALUES(?,?,?,?,?)""",
+                  (student_id,digest(code),u["id"],now+24*3600,now))
+        c.execute("COMMIT")
+    return {"code":code,"login":st["login"],"name":st["name"],
+            "cohort":st["cohort"],"group_title":st["group_title"],"expires_in_hours":24}
+
+@app.get("/recover-student")
+def student_recovery_page():
+    return HTMLResponse((ROOT/"web"/"recover-student.html").read_text("utf8"))
+
+@app.post("/api/recover-student")
+async def recover_student(req:Request):
+    d=await payload(req,2500)
+    login=str(d.get("login","")).strip().lower()
+    code=str(d.get("code","")).strip().upper()
+    password=str(d.get("password",""))
+    confirm=str(d.get("confirm",""))
+    limited(req,"student-reset-"+login)
+    if len(login)<2 or not re.fullmatch(r"ACE-SRST-[0-9A-F]{40}",code):
+        error(400,"登录账号或恢复码不正确")
+    if not 12<=len(password)<=128:error(400,"新密码应为12—128个字符")
+    if password!=confirm:error(400,"两次输入的新密码不一致")
+    now=int(time.time())
+    newhash=password_hash(password)
+    with db() as c:
+        c.execute("BEGIN IMMEDIATE")
+        target=c.execute("SELECT id FROM users WHERE login=? AND role='student'",(login,)).fetchone()
+        record=None
+        if target:
+            record=c.execute("""SELECT id FROM student_password_resets
+                   WHERE user_id=? AND code_hash=? AND used_at IS NULL AND expires_at>?
+                   ORDER BY created_at DESC LIMIT 1""",
+                   (target["id"],digest(code),now)).fetchone()
+        if not target or not record:error(400,"账号或恢复码不正确，或恢复码已使用、已过期")
+        c.execute("UPDATE users SET passhash=? WHERE id=?",(newhash,target["id"]))
+        c.execute("DELETE FROM sessions WHERE user_id=?",(target["id"],))
+        c.execute("UPDATE student_password_resets SET used_at=? WHERE id=?",(now,record["id"]))
         c.execute("COMMIT")
     return {"ok":True}
 
